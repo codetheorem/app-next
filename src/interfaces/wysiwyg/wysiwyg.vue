@@ -4,6 +4,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, computed } from '@vue/composition-api';
+import path from 'path';
 
 import 'tinymce/tinymce';
 import 'tinymce/themes/silver';
@@ -22,6 +23,8 @@ import 'tinymce/plugins/paste/plugin';
 import 'tinymce/plugins/preview/plugin';
 import 'tinymce/plugins/fullscreen/plugin';
 import 'tinymce/plugins/directionality/plugin';
+import contentStyle from '!!raw-loader!tinymce/skins/ui/oxide/content.css';
+import contentStyle2 from '!!raw-loader!tinymce/skins/content/default/content.css';
 
 import Editor from '@tinymce/tinymce-vue';
 
@@ -109,7 +112,12 @@ export default defineComponent({
 				skin: false,
 				skin_url: false,
 				content_css: false,
-				content_style: getEditorStyles(props.font as 'sans-serif' | 'serif' | 'monospace'),
+				content_style:
+					contentStyle.toString() +
+					'\n' +
+					contentStyle2.toString() +
+					'\n' +
+					getEditorStyles(props.font as 'sans-serif' | 'serif' | 'monospace'),
 				plugins:
 					'media table hr lists image link pagebreak code insertdatetime autoresize paste preview fullscreen directionality',
 				branding: false,
@@ -132,10 +140,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.body {
-	padding: 20px;
-}
-
 @import '~tinymce/skins/ui/oxide/skin.css';
 @import './tinymce-overrides.css';
 </style>
