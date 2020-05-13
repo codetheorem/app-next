@@ -1,5 +1,12 @@
 /* stylelint-disable font-family-no-missing-generic-family-keyword */
 
+/**
+ * Copyright (c) Tiny Technologies, Inc. All rights reserved.
+ * Licensed under the LGPL or a commercial license.
+ * For LGPL see License.txt in the project root for license information.
+ * For commercial licenses see https://www.tiny.cloud/
+ */
+
 .tox .tox-tbtn svg {
 	fill: var(--foreground-normal);
 }
@@ -145,7 +152,6 @@ body.dark .tox .tox-toolbar__overflow {
 
 .tox .tox-dialog__body-content {
 	padding: 24px 24px;
-
 }
 
 .tox .tox-dialog__footer {
