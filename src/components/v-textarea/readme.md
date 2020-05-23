@@ -28,10 +28,9 @@ Note: all other attached attributes are bound to the input HTMLELement in the co
 | `append`  | Append elements after the text content                   |      |
 
 ## Events
-| Events  | Description       | Value | Event   |
-|---------|-------------------|-------|---------|
-| `input` | Updates `v-model` | `any` |         |
-<!-- |         |                   |       | `input` | -->
+| Event   | Description       | Value |
+|---------|-------------------|-------|
+| `input` | Updates `v-model` | `any` |
 
 Note: all other listeners are bound to the input HTMLElement, allowing you to handle everything from `keydown` to `emptied`.
 

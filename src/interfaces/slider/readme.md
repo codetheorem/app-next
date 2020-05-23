@@ -1,10 +1,10 @@
 # Slider
 
 ## Props
-
-| Option         | Description              | Default |
-|----------------|--------------------------|---------|
-| `disabled`     | Disabled                 | `false` |
-| `minValue`     | Minimum value            | `null`  |
-| `maxValue`     | Maximum value            | `null`  |
-| `stepInterval` | Interval of number steps | `1`     |
+| Prop            | Description              | Default | Type      |
+|-----------------|--------------------------|---------|-----------|
+| `disabled`      | Disabled                 | `false` | `Boolean` |
+| `min-value`     | Minimum value            | `null`  | `Number`  |
+| `max-value`     | Maximum value            | `null`  | `Number`  |
+| `step-interval` | Interval of number steps | `1`     | `Number`  |
+| `value`         |                          | `null`  | `Number`  |

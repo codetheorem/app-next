@@ -19,9 +19,9 @@ If a tab item is not selected, it automaticly gets hidden.
 | `value` | v-model value | `undefined` | `(string or number)[]` |
 
 ## Events
-| Event   | Description     | Value                          |
-|---------|-----------------|--------------------------------|
-| `input` | Updates v-model | `readonly (string or number)[]`|
+| Event   | Description     | Value                           |
+|---------|-----------------|---------------------------------|
+| `input` | Updates v-model | `readonly (string or number)[]` |
 
 ## Slots
 | Slot      | Description | Data |

@@ -24,8 +24,7 @@ within a menu. If you ever find yourself doing this:
 | Slot        | Description                                                                         | Data |
 |-------------|-------------------------------------------------------------------------------------|------|
 | _default_   | Menu content                                                                        |      |
-<!-- | activator   | Activator element. Attaches click and mouse enter/leave handlers on wrapper element |      | -->
-| `activator` |                                                                                     |      |
+| `activator` | Activator element. Attaches click and mouse enter/leave handlers on wrapper element |      |
 
 ## CSS Variables
 | Variable             | Default |

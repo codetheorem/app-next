@@ -1,10 +1,11 @@
 # Textarea
 
 ## Props
-
-| Option        | Description                                                         | Default      |
-| ------------- | ------------------------------------------------------------------- | ------------ |
-| `placeholder` | Text to show when no input is entered                               | `null`       |
-| `trim`        | Trim leading and trailing whitespace                                | `true`       |
-| `font`        | Font to render the value in (`sans-serif`, `serif`, or `monospace`) | `sans-serif` |
-| `readonly`    | Readonly                                                            | `false`      |
+| Prop          | Description                                                         | Default        | Type                                                         |
+|---------------|---------------------------------------------------------------------|----------------|--------------------------------------------------------------|
+| `placeholder` | Text to show when no input is entered                               | `null`         | `String`                                                     |
+| `trim`        | Trim leading and trailing whitespace                                | `true`         | `Boolean`                                                    |
+| `font`        | Font to render the value in (`sans-serif`, `serif`, or `monospace`) | `'sans-serif'` | `String as PropType<'sans-serif' or 'serif' or 'monospace'>` |
+| `value`       |                                                                     | `null`         | `String`                                                     |
+| `disabled`    |                                                                     | `false`        | `Boolean`                                                    |
+<!-- | `readonly`    | Readonly                                                            | `false`        |                                                              | -->

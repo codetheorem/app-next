@@ -1,9 +1,8 @@
 # Notice
 
 ## Props
-
-| Prop       | Description                    | Default                |
-| ---------- | ------------------------------ | ---------------------- |
-| `color`    | Notice color                   | `normal`               |
-| `icon`     | Icon rendered before the text  | `null`                 |
-| `text`     | Text for notice                | `null`                 |
+| Prop    | Description                   | Default                   | Type     |
+|---------|-------------------------------|---------------------------|----------|
+| `color` | Notice color                  | `'normal'`                | `String` |
+| `icon`  | Icon rendered before the text | `'info'`                  | `String` |
+| `text`  | Text for notice               | `'No text configured...'` | `String` |

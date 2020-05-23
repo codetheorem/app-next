@@ -71,7 +71,7 @@ You can add any custom content before and after the slider (inline). This can be
 |-------------------------|------------------------------------|---------------------|------|
 | `append`                | Inserted after the slider track    | --                  |      |
 | `prepend`               | Inserted before the slider track   | --                  |      |
-| `thumb-label`           | Custom content for the thumb label | `{ value: number }` |      |
+| `thumb-label type-text` | Custom content for the thumb label | `{ value: number }` |      |
 
 ## CSS Variables
 | Variable                 | Default                    |

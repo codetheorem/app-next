@@ -3,10 +3,12 @@
 Pick one from a list of options.
 
 ## Props
-
-| Option        | Description                            | Default |
-|---------------|----------------------------------------|---------|
-| `placeholder` | Text to show when no input is entered  | `null`  |
-| `allow-none`  | Allow the user to deselect the value   | `false` |
-| `allow-other` | Allow the user to enter a custom value | `false` |
-| `choices`     | What choices to present to the user    | `null`  |
+| Prop          | Description                            | Default                    | Type       |
+|---------------|----------------------------------------|----------------------------|------------|
+| `placeholder` | Text to show when no input is entered  | `i18n.t('select_an_item')` | `String`   |
+| `allow-none`  | Allow the user to deselect the value   | `false`                    | `Boolean`  |
+| `allow-other` | Allow the user to enter a custom value | `false`                    | `Boolean`  |
+| `choices`     | What choices to present to the user    | `null`                     | `Option[]` |
+| `disabled`    |                                        | `false`                    | `Boolean`  |
+| `value`       |                                        | `null`                     | `String`   |
+| `icon`        |                                        | `null`                     | `String`   |

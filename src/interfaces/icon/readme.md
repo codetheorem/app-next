@@ -1,11 +1,11 @@
 # Icon Interface
 
 ## Props
-
-| Option     | Description | Default |
-| ---------- | ----------- | ------- |
-| `disabled` | Disabled    | `false` |
-| `width`    | Width       | `half`  |
+| Prop       | Description | Default    | Type      |
+|------------|-------------|------------|-----------|
+| `disabled` | Disabled    | `false`    | `Boolean` |
+| `width`    | Width       | `'half'`   | `String`  |
+| `value`    |             | `'search'` | `String`  |
 
 ## Events
 | Event   | Description | Value |

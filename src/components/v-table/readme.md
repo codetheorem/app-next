@@ -141,14 +141,15 @@ export default defineComponent({
 | `item-selected`  | Emitted when an item is selected or deselected | `{ item: any, value: boolean }` |
 | `select`         | Emitted when selected items change             | `any[]`                         |
 | `update:items`   |                                                |                                 |
-<!-- | `drop`           |                                                |                                 | -->
 | `manual-sort`    |                                                |                                 |
+<!-- | `drop`           |                                                |                                 | -->
 
 ## Slots
 | Slot                       | Description                      | Data |
 |----------------------------|----------------------------------|------|
-| `header.[value]`           | Override individual header cells |      |
-| `item.[value]`             | Override individual row cells    |      |
+<!-- | `header.[value]`           | Override individual header cells |      | -->
+<!-- | `item.[value]`             | Override individual row cells    |      | -->
+| ``header.${header.value}`` |                                  |      |
 <!-- readme-gen-ignore: header.[value], item.[value] -->
 
 ## CSS Variables

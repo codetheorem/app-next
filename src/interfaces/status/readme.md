@@ -3,10 +3,11 @@
 Renders a dropdown with the available status options.
 
 ## Props
-
-| Option           | Description                 | Default |
-|------------------|-----------------------------|---------|
-| `status_mapping` | What statuses are available | `null`  |
+| Prop             | Description                 | Default | Type      |
+|------------------|-----------------------------|---------|-----------|
+| `status_mapping` | What statuses are available | `null`  | `Object`  |
+| `value`          |                             | `null`  | `String`  |
+| `disabled`       |                             | `false` | `Boolean` |
 
 ### Status Mapping format
 
