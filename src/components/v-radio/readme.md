@@ -11,12 +11,15 @@ Classic radio buttons. Nothing special.
 ```
 
 ## Props
-| Prop          | Description                                  | Default |
-|---------------|----------------------------------------------|---------|
-| `value`*      | What value to save in `v-model` when checked |         |
-| `input-value` | Selected value. Used as value for `v-model`  |         |
-| `label`       | Label to render next to the radio            |         |
-| `disabled`    | Disable the radio button                     | `false` |
+| Prop          | Description                                  | Default                    | Type      |
+|---------------|----------------------------------------------|----------------------------|-----------|
+| `value`*      | What value to save in `v-model` when checked |                            | `String`  |
+| `input-value` | Selected value. Used as value for `v-model`  | `null`                     | `String`  |
+| `label`       | Label to render next to the radio            | `null`                     | `String`  |
+| `disabled`    | Disable the radio button                     | `false`                    | `Boolean` |
+| `icon-on`     |                                              | `'radio_button_checked'`   | `String`  |
+| `icon-off`    |                                              | `'radio_button_unchecked'` | `String`  |
+| `block`       |                                              | `false`                    | `Boolean` |
 
 ## Events
 | Event    | Description                                                   | Value    |

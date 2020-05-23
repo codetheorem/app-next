@@ -24,6 +24,6 @@
 n/a
 
 ## CSS Variables
-| Variable                      | Default         |
-|-------------------------------|-----------------|
+| Variable                      | Default          |
+|-------------------------------|------------------|
 | `--v-pagination-active-color` | `var(--primary)` |

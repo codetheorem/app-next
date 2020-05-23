@@ -1,6 +1,6 @@
 # Divider
 
-## Options
+## Props
 
 | Prop       | Description                    | Default                |
 | ---------- | ------------------------------ | ---------------------- |

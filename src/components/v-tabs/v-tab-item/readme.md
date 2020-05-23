@@ -34,9 +34,9 @@ If you're using a custom value in the `value` prop, make sure the corresponding 
 ```
 
 ## Props
-| Prop    | Description                             | Default |
-|---------|-----------------------------------------|---------|
-| `value` | Custom value to use for selection state | --      |
+| Prop    | Description                             | Default | Type     |
+|---------|-----------------------------------------|---------|----------|
+| `value` | Custom value to use for selection state | `null`  | `String` |
 
 ## Events
 n/a

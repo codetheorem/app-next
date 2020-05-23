@@ -7,9 +7,7 @@
 ## Props
 | Prop          | Description | Default  | Type                                                  |
 |---------------|-------------|----------|-------------------------------------------------------|
-| `value`       |             | `null`   | `[Number, String, Object]`                            |
-| `collection`* |             |          | `String`                                              |
-| `field`*      |             |          | `String`                                              |
+| `value`       |             | `null`   | `[Number, Object]`                                    |
 | `template`    |             | `null`   | `String`                                              |
 | `select-mode` |             | `'auto'` | `String as PropType<'auto' or 'dropdown' or 'modal'>` |
 | `disabled`    |             | `false`  | `Boolean`                                             |

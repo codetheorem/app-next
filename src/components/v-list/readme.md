@@ -23,24 +23,22 @@
 n/a
 
 ## Slots
-
 | Slot      | Description  | Data |
-| --------- | ------------ | ---- |
+|-----------|--------------|------|
 | _default_ | List content |      |
 
 ## CSS Variables
-
-| Variable                           | Default                          |
-| ---------------------------------- | -------------------------------- |
-| `--v-list-padding`                 | `8px 0`                          |
-| `--v-list-max-height`              | `none`                           |
-| `--v-list-max-width`               | `none`                           |
-| `--v-list-min-width`               | `none`                           |
-| `--v-list-min-height`              | `none`                           |
-| `--v-list-color`                   | `var(--foreground-normal)`        |
-| `--v-list-color-hover`             | `var(--foreground-normal)`        |
-| `--v-list-color-active`            | `var(--foreground-normal)`        |
-| `--v-list-background-color-hover`  | `var(--background-normal-alt)`  |
+| Variable                           | Default                        |
+|------------------------------------|--------------------------------|
+| `--v-list-padding`                 | `4px 0`                        |
+| `--v-list-max-height`              | `none`                         |
+| `--v-list-max-width`               | `none`                         |
+| `--v-list-min-width`               | `none`                         |
+| `--v-list-min-height`              | `none`                         |
+| `--v-list-color`                   | `var(--foreground-normal)`     |
+| `--v-list-color-hover`             | `var(--foreground-normal)`     |
+| `--v-list-color-active`            | `var(--foreground-normal)`     |
+| `--v-list-background-color-hover`  | `var(--background-normal-alt)` |
 | `--v-list-background-color-active` | `var(--background-normal-alt)` |
 
 ---

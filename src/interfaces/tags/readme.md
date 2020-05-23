@@ -1,6 +1,6 @@
 # Tags
 
-## Options
+## Props
 
 | Option        | Description                                         | Default       |
 | ------------- | --------------------------------------------------- | ------------- |
@@ -12,3 +12,8 @@
 | `iconRight`   | Icon to appear on the inside right of the input box | `local_offer` |
 | `allowCustom` | Allows the user to input their own tags             | `true`        |
 | `presets`     | List of preset values users can choose from         | `[]`          |
+
+## Events
+| Event   | Description | Value |
+|---------|-------------|-------|
+| `input` |             |       |

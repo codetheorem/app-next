@@ -2,7 +2,7 @@
 
 Renders a dropdown with the available status options.
 
-## Options
+## Props
 
 | Option           | Description                 | Default |
 |------------------|-----------------------------|---------|

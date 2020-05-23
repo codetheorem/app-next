@@ -1,6 +1,6 @@
 # Numeric
 
-## Options
+## Props
 
 | Option         | Description                        | Default |
 | -------------- | ---------------------------------- | ------- |

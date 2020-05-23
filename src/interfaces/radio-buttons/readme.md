@@ -1,6 +1,6 @@
 # Radio Buttons
 
-## Options
+## Props
 
 | Option        | Description                                         | Default                  |
 |---------------|-----------------------------------------------------|--------------------------|
@@ -9,3 +9,8 @@
 | `icon-on`     | What icon to show when the radio is checked         | `radio_button_checked`   |
 | `icon-off`    | What icon to show when the radio is unchecked       | `radio_button_unchecked` |
 | `color`       | What color to use for the active state of the radio | `var(--primary)`         |
+
+## Events
+| Event   | Description | Value |
+|---------|-------------|-------|
+| `input` |             |       |

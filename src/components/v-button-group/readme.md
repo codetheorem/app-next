@@ -27,14 +27,14 @@ export default defineComponent({
 ```
 
 ## Props
-| Prop        | Description                                             | Default     | Type                                      |
-|-------------|---------------------------------------------------------|-------------|-------------------------------------------|
-| `mandatory` | Require an item to be selected                          | `false`     | `Boolean`                                 |
-| `max`       | Only allow a maximum of n items                         | `-1`        | `Number`                                  |
-| `multiple`  | Allow multiple items to be selected                     | `false`     | `Boolean`                                 |
-| `value`     | The v-model value. Selection of indexes / custom values | `undefined` | `Array as PropType<(string or number)[]>` |
-| `rounded`   | Adds rounded corners to the sides                       | `false`     | `Boolean`                                 |
-| `tile`      | Adds sharp corners to the sides                         | `false`     | `Boolean`                                 |
+| Prop        | Description                                             | Default     | Type                   |
+|-------------|---------------------------------------------------------|-------------|------------------------|
+| `mandatory` | Require an item to be selected                          | `false`     | `Boolean`              |
+| `max`       | Only allow a maximum of n items                         | `-1`        | `Number`               |
+| `multiple`  | Allow multiple items to be selected                     | `false`     | `Boolean`              |
+| `value`     | The v-model value. Selection of indexes / custom values | `undefined` | `(string or number)[]` |
+| `rounded`   | Adds rounded corners to the sides                       | `false`     | `Boolean`              |
+| `tile`      | Adds sharp corners to the sides                         | `false`     | `Boolean`              |
 
 
 ## Slots
@@ -49,9 +49,9 @@ export default defineComponent({
 
 
 ## CSS Variables
-| Variable                                   | Default                                           |
-|--------------------------------------------|---------------------------------------------------|
-| `--v-button-group-background-color-active` | `var(--button-primary-background-color-disabled)` |
+| Variable                                   | Default              |
+|--------------------------------------------|----------------------|
+| `--v-button-group-background-color-active` | `var(--primary-alt)` |
 
 
 

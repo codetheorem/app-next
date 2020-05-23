@@ -63,13 +63,20 @@ The loading slot is rendered _on top_ of the content that was there before. Make
 | `exact`      |                                                                           | `false`    | `Boolean`                                          |
 | `secondary`  |                                                                           | `false`    | `Boolean`                                          |
 | `value`      |                                                                           | `null`     | `[Number, String]`                                 |
+| `href`       |                                                                           | `null`     | `String`                                           |
+| `dashed`     |                                                                           | `false`    | `Boolean`                                          |
+| `tile`       |                                                                           | `false`    | `Boolean`                                          |
+| `align`      |                                                                           | `'center'` | `String`                                           |
+| `download`   |                                                                           | `null`     | `String`                                           |
 <!-- readme-gen-igonre: x-small, small, large, x-large -->
 
 ## Slots
-| Slot      | Description                                  | Data |
-|-----------|----------------------------------------------|------|
-| _default_ | Button content                               |      |
-| `loading` | Content that's rendered during loading state |      |
+| Slot            | Description                                  | Data |
+|-----------------|----------------------------------------------|------|
+| _default_       | Button content                               |      |
+| `loading`       | Content that's rendered during loading state |      |
+| `prepend-outer` |                                              |      |
+| `append-outer`  |                                              |      |
 
 ## Events
 | Event   | Description           | Value        |
@@ -77,16 +84,19 @@ The loading slot is rendered _on top_ of the content that was there before. Make
 | `click` | User clicks on button | `MouseEvent` |
 
 ## CSS Variables
-| Variable                                | Default                                            |
-|-----------------------------------------|----------------------------------------------------|
-| `--v-button-width`                      | `auto`                                             |
-| `--v-button-height`                     | `44px`                                             |
-| `--v-button-color`                      | `var(--foreground-inverted)`           |
-| `--v-button-color-hover`                | `var(--foreground-inverted)`     |
+| Variable                                | Default                      |
+|-----------------------------------------|------------------------------|
+| `--v-button-width`                      | `auto`                       |
+| `--v-button-height`                     | `44px`                       |
+| `--v-button-color`                      | `var(--foreground-inverted)` |
+| `--v-button-color-hover`                | `var(--foreground-inverted)` |
 | `--v-button-color-activated`            | `var(--foreground-inverted)` |
-| `--v-button-color-disabled`             | `var(--primary)`  |
-| `--v-button-background-color`           | `var(--primary)`           |
-| `--v-button-background-color-hover`     | `var(--primary)`     |
-| `--v-button-background-color-activated` | `var(--primary)` |
-| `--v-button-background-color-disabled`  | `var(--primary-alt)`  |
-| `--v-button-font-size`                  | `16px`                                             |
+| `--v-button-color-disabled`             | `var(--foreground-subdued)`  |
+| `--v-button-background-color`           | `var(--primary)`             |
+| `--v-button-background-color-hover`     | `var(--primary-125)`         |
+| `--v-button-background-color-activated` | `var(--primary)`             |
+| `--v-button-background-color-disabled`  | `var(--background-normal)`   |
+| `--v-button-font-size`                  | `16px`                       |
+| `--v-button-font-weight`                | `600`                        |
+| `--v-button-line-height`                | `22px`                       |
+| `--v-button-min-width`                  | `140px`                      |

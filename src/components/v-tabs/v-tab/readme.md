@@ -12,10 +12,10 @@ Individual tab. To be used inside a `v-tabs` context.
 ```
 
 ## Props
-| Prop       | Description                                            | Default |
-|------------|--------------------------------------------------------|---------|
-| `disabled` | Disable the tab                                        | `false` |
-| `value`    | A custom value to be used in the selection of `v-tabs` |         |
+| Prop       | Description                                            | Default | Type      |
+|------------|--------------------------------------------------------|---------|-----------|
+| `disabled` | Disable the tab                                        | `false` | `Boolean` |
+| `value`    | A custom value to be used in the selection of `v-tabs` | `null`  | `String`  |
 
 ## Events
 n/a
@@ -26,9 +26,9 @@ n/a
 | _default_ |             | `{ active: boolean, toggle: () => void; }` |
 
 ## CSS Variables
-| Variable                          | Default                         |
-|-----------------------------------|---------------------------------|
+| Variable                          | Default                    |
+|-----------------------------------|----------------------------|
 | `--v-tab-color`                   | `var(--foreground-normal)` |
-| `--v-tab-background-color`        | `var(--background-page)` |
+| `--v-tab-background-color`        | `var(--background-page)`   |
 | `--v-tab-color-active`            | `var(--foreground-normal)` |
-| `--v-tab-background-color-active` | `var(--background-page)` |
+| `--v-tab-background-color-active` | `var(--background-page)`   |

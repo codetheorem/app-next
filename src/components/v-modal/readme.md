@@ -47,16 +47,16 @@ A modal is basically an elaborate pre-configured dialog. It supports an optional
 ```
 
 ## Props
-
-| Prop         | Description                                                     | Default |
-|--------------|-----------------------------------------------------------------|---------|
-| `title`*     | Title for the modal                                             |         |
-| `subtitle`   | Optional subtitle for the modal                                 |         |
-| `active`     | If the modal is active. Used in `v-model`                       | `false` |
-| `persistent` | Prevent the user from exiting the modal by clicking the overlay | `false` |
+| Prop         | Description                                                     | Default     | Type      |
+|--------------|-----------------------------------------------------------------|-------------|-----------|
+| `title`*     | Title for the modal                                             |             | `String`  |
+| `subtitle`   | Optional subtitle for the modal                                 | `null`      | `String`  |
+| `active`     | If the modal is active. Used in `v-model`                       | `undefined` | `Boolean` |
+| `persistent` | Prevent the user from exiting the modal by clicking the overlay | `false`     | `Boolean` |
+| `no-padding` |                                                                 | `false`     | `Boolean` |
+| `form-width` |                                                                 | `false`     |           |
 
 ## Events
-
 | Event    | Description              | Value     |
 |----------|--------------------------|-----------|
 | `toggle` | Sync the `v-model` value | `boolean` |
@@ -64,10 +64,15 @@ A modal is basically an elaborate pre-configured dialog. It supports an optional
 ## Slots
 | Slot        | Description                                            | Data                    |
 |-------------|--------------------------------------------------------|-------------------------|
-| _default_   | Modal content                                          |                         |
+<!-- | _default_   | Modal content                                          |                         | -->
 | `activator` | Element to enable the modal                            | `{ on: () => void }`    |
-| `sidebar`   | Sidebar content for the modal. Often used for `v-tabs` |                         |
-| `footer`    | Footer content. Often used for action buttons          | `{ close: () => void }` |
+<!-- | `sidebar`   | Sidebar content for the modal. Often used for `v-tabs` |                         | -->
+<!-- | `footer`    | Footer content. Often used for action buttons          | `{ close: () => void }` | -->
 
 ## CSS Variables
 n/a
+
+## CSS Variables
+| Variable              | Default |
+|-----------------------|---------|
+| `--v-modal-max-width` | `916px` |

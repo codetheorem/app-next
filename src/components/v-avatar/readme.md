@@ -33,7 +33,7 @@
 n/a
 
 ## CSS Variables
-| Variable           | Default         |
-|--------------------|-----------------|
-| `--v-avatar-color` | `var(--action)` |
-| `--v-avatar-size`  | `48px`          |
+| Variable           | Default                    |
+|--------------------|----------------------------|
+| `--v-avatar-color` | `var(--background-normal)` |
+| `--v-avatar-size`  | `48px`                     |

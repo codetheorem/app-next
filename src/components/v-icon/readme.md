@@ -47,17 +47,18 @@ Oftentimes, you'll use the icon next to some text, for example in a button. When
 ```
 
 ## Props
-| Prop      | Description                                                       | Default | Type      |
-|-----------|-------------------------------------------------------------------|---------|-----------|
-| `name`*   | Name of the icon                                                  | --      | `String`  |
-| `outline` | Use outline Material Icons. Note: only works for non-custom icons | `false` | `Boolean` |
-| `x-small` | Render the icon extra small                                       | `false` |           |
-| `small`   | Render the icon small                                             | `false` |           |
-| `large`   | Render the icon large                                             | `false` |           |
-| `x-large` | Render the icon extra large                                       | `false` |           |
-| `left`    | Use when icon is left of text                                     | `false` | `Boolean` |
-| `right`   | Use when icon is right of text                                    | `false` | `Boolean` |
-| `sup`     |                                                                   | `false` | `Boolean` |
+| Prop       | Description                                                       | Default | Type      |
+|------------|-------------------------------------------------------------------|---------|-----------|
+| `name`*    | Name of the icon                                                  | --      | `String`  |
+| `outline`  | Use outline Material Icons. Note: only works for non-custom icons | `false` | `Boolean` |
+| `x-small`  | Render the icon extra small                                       | `false` |           |
+| `small`    | Render the icon small                                             | `false` |           |
+| `large`    | Render the icon large                                             | `false` |           |
+| `x-large`  | Render the icon extra large                                       | `false` |           |
+| `left`     | Use when icon is left of text                                     | `false` | `Boolean` |
+| `right`    | Use when icon is right of text                                    | `false` | `Boolean` |
+| `sup`      |                                                                   | `false` | `Boolean` |
+| `disabled` |                                                                   | `false` | `Boolean` |
 <!-- readme-gen-igonre: x-small, small, large, x-large -->
 
 ## Events

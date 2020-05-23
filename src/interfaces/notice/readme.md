@@ -1,6 +1,6 @@
 # Notice
 
-## Options
+## Props
 
 | Prop       | Description                    | Default                |
 | ---------- | ------------------------------ | ---------------------- |

@@ -48,14 +48,15 @@ n/a
 | _default_ |             |      |
 
 ## CSS Variables
-| Variable                    | Default            |
-|-----------------------------|--------------------|
-| `--v-card-min-width`        | `none`             |
-| `--v-card-max-width`        | `400px`            |
-| `--v-card-min-height`       | `none`             |
-| `--v-card-max-height`       | `none`             |
-| `--v-card-padding`          | `16px`             |
+| Variable                    | Default                     |
+|-----------------------------|-----------------------------|
+| `--v-card-min-width`        | `none`                      |
+| `--v-card-max-width`        | `400px`                     |
+| `--v-card-min-height`       | `none`                      |
+| `--v-card-max-height`       | `min-content`               |
+| `--v-card-padding`          | `16px`                      |
 | `--v-card-background-color` | `var(--background-subdued)` |
+| `--v-card-height`           | `auto`                      |
 
 ---
 

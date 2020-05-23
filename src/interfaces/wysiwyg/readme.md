@@ -2,7 +2,7 @@
 
 Rich Text editor based on TineMCE.
 
-## Options
+## Props
 
 | Option              | Description                                                                                      | Default      |
 |---------------------|--------------------------------------------------------------------------------------------------|--------------|
@@ -31,3 +31,8 @@ hr,
 code,
 fullscreen
 ```
+
+## Events
+| Event   | Description | Value |
+|---------|-------------|-------|
+| `input` |             |       |

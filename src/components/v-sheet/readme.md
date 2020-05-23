@@ -35,13 +35,13 @@ n/a
 n/a
 
 ## CSS Variables
-| Variable                     | Default               |
-|------------------------------|-----------------------|
-| `--v-sheet-background-color` | `var(--highlight)`    |
-| `--v-sheet-height`           | `auto`                |
-| `--v-sheet-min-height`       | `var(--input-height)` |
-| `--v-sheet-max-height`       | `none`                |
-| `--v-sheet-width`            | `auto`                |
-| `--v-sheet-min-width`        | `none`                |
-| `--v-sheet-max-width`        | `none`                |
-| `--v-sheet-padding`          | `8px`                 |
+| Variable                     | Default                     |
+|------------------------------|-----------------------------|
+| `--v-sheet-background-color` | `var(--background-subdued)` |
+| `--v-sheet-height`           | `auto`                      |
+| `--v-sheet-min-height`       | `var(--input-height)`       |
+| `--v-sheet-max-height`       | `none`                      |
+| `--v-sheet-width`            | `auto`                      |
+| `--v-sheet-min-width`        | `none`                      |
+| `--v-sheet-max-width`        | `none`                      |
+| `--v-sheet-padding`          | `8px`                       |

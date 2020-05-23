@@ -33,10 +33,10 @@ export default defineComponent({
 ```
 
 ## Props
-| Prop       | Description                        | Default     | Type                                      |
-|------------|------------------------------------|-------------|-------------------------------------------|
-| `vertical` | Render the tabs vertically         | `false`     | `Boolean`                                 |
-| `value`    | v-model value for active selection | `undefined` | `Array as PropType<(string or number)[]>` |
+| Prop       | Description                        | Default     | Type                   |
+|------------|------------------------------------|-------------|------------------------|
+| `vertical` | Render the tabs vertically         | `false`     | `Boolean`              |
+| `value`    | v-model value for active selection | `undefined` | `(string or number)[]` |
 
 
 ## Events
@@ -50,6 +50,6 @@ export default defineComponent({
 | _default_ |             |      |
 
 ## CSS Variables
-| Variable                   | Default                   |
-|----------------------------|---------------------------|
+| Variable                   | Default                    |
+|----------------------------|----------------------------|
 | `--v-tabs-underline-color` | `var(--foreground-normal)` |

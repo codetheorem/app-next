@@ -9,10 +9,9 @@ Allows for collapsable content
 ```
 
 ## Props
-
-| Prop     | Description         | Default |
-|----------|---------------------|---------|
-| `active` | Used with `v-model` | `false` |
+| Prop     | Description         | Default     | Type      |
+|----------|---------------------|-------------|-----------|
+| `active` | Used with `v-model` | `undefined` | `Boolean` |
 
 ## Events
 | Event    | Description                 | Value     |
@@ -20,7 +19,6 @@ Allows for collapsable content
 | `toggle` | New active value of divider | `boolean` |
 
 ## Slots
-
 | Slot      | Description                   | Data                  |
 |-----------|-------------------------------|-----------------------|
 | _default_ | Content of the detail section |                       |

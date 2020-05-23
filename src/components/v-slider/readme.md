@@ -67,15 +67,15 @@ You can add any custom content before and after the slider (inline). This can be
 | `input`  | Fires continuously                          | `number` |
 
 ## Slots
-| Slot          | Description                        | Props               | Data |
-|---------------|------------------------------------|---------------------|------|
-| `append`      | Inserted after the slider track    | --                  |      |
-| `prepend`     | Inserted before the slider track   | --                  |      |
-| `thumb-label` | Custom content for the thumb label | `{ value: number }` |      |
+| Slot                    | Description                        | Props               | Data |
+|-------------------------|------------------------------------|---------------------|------|
+| `append`                | Inserted after the slider track    | --                  |      |
+| `prepend`               | Inserted before the slider track   | --                  |      |
+| `thumb-label`           | Custom content for the thumb label | `{ value: number }` |      |
 
 ## CSS Variables
-| Variable                 | Default                         |
-|--------------------------|---------------------------------|
-| `--v-slider-color`       | `var(--input-border-color)`     |
-| `--v-slider-fill-color`  | `var(--input-foreground-color)` |
-| `--v-slider-thumb-color` | `var(--input-foreground-color)` |
+| Variable                 | Default                    |
+|--------------------------|----------------------------|
+| `--v-slider-color`       | `var(--border-normal)`     |
+| `--v-slider-fill-color`  | `var(--foreground-normal)` |
+| `--v-slider-thumb-color` | `var(--foreground-normal)` |

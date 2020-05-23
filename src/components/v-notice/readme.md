@@ -5,12 +5,14 @@
 ```
 
 ## Props
-| Prop      | Description                                                        | Default | Type                |
-|-----------|--------------------------------------------------------------------|---------|---------------------|
-| `success` | Shows the success notice                                           | `false` | `Boolean`           |
-| `warning` | Shows the warning notice                                           | `false` | `Boolean`           |
-| `danger`  | Shows the danger notice                                            | `false` | `Boolean`           |
-| `icon`    | Custom icon name, or false if you want to hide the icon completely | `null`  | `[String, Boolean]` |
+| Prop      | Description                                                        | Default    | Type                                                                           |
+|-----------|--------------------------------------------------------------------|------------|--------------------------------------------------------------------------------|
+<!-- | `success` | Shows the success notice                                           | `false`    | `Boolean`                                                                      | -->
+<!-- | `warning` | Shows the warning notice                                           | `false`    | `Boolean`                                                                      | -->
+<!-- | `danger`  | Shows the danger notice                                            | `false`    | `Boolean`                                                                      | -->
+| `icon`    | Custom icon name, or false if you want to hide the icon completely | `null`     | `[String, Boolean]`                                                            |
+| `type`    |                                                                    | `'normal'` | `String as PropType<'normal' or 'info' or 'success' or 'warning' or 'danger'>` |
+| `center`  |                                                                    | `false`    | `Boolean`                                                                      |
 
 ## Slots
 | Slot      | Description | Data |
@@ -21,8 +23,8 @@
 n/a
 
 ## CSS Variables
-| Variable                      | Default                   |
-|-------------------------------|---------------------------|
-| `--v-notice-color`            | `var(--foreground-color)` |
-| `--v-notice-background-color` | `var(--action-light)`     |
-| `--v-notice-icon-color`       | `var(--action)`           |
+| Variable                      | Default                     |
+|-------------------------------|-----------------------------|
+| `--v-notice-color`            | `var(--foreground-subdued)` |
+| `--v-notice-background-color` | `var(--background-subdued)` |
+| `--v-notice-icon-color`       | `var(--foreground-subdued)` |

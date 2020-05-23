@@ -1,6 +1,6 @@
 # Slider
 
-## Options
+## Props
 
 | Option         | Description              | Default |
 |----------------|--------------------------|---------|

@@ -14,16 +14,14 @@ If a tab item is not selected, it automaticly gets hidden.
 ```
 
 ## Props
-
-| Prop    | Description   | Default |
-|---------|---------------|---------|
-| `value` | v-model value | --      |
+| Prop    | Description   | Default     | Type                   |
+|---------|---------------|-------------|------------------------|
+| `value` | v-model value | `undefined` | `(string or number)[]` |
 
 ## Events
-
 | Event   | Description     | Value                          |
 |---------|-----------------|--------------------------------|
-| `input` | Updates v-model | `readonly (string | number)[]` |
+| `input` | Updates v-model | `readonly (string or number)[]`|
 
 ## Slots
 | Slot      | Description | Data |

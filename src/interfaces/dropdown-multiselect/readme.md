@@ -2,7 +2,7 @@
 
 Pick one from a list of options.
 
-## Options
+## Props
 
 | Option        | Description                            | Default |
 |---------------|----------------------------------------|---------|

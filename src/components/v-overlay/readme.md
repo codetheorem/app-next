@@ -40,7 +40,7 @@ The colors can be changed via the css variable `--v-overlay-color`.
 | `click` |             | `MouseEvent` |
 
 ## CSS Variables
-| Variable              | Default                |
-|-----------------------|------------------------|
-| `--v-overlay-color`   | `var(--overlay-color)` |
-| `--v-overlay-z-index` | `500`                  |
+| Variable              | Default                 |
+|-----------------------|-------------------------|
+| `--v-overlay-color`   | `rgba(38, 50, 56, 0.9)` |
+| `--v-overlay-z-index` | `500`                   |

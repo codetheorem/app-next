@@ -2,7 +2,7 @@
 
 Simple single styled checkbox
 
-## Options
+## Props
 
 | Option     | Description                                        | Default                   |
 |------------|----------------------------------------------------|---------------------------|

@@ -50,7 +50,7 @@ There are two events, one when clicking on the chip called `click` and one when 
 | `close`      | Displays a close icon which triggers the close event | `false`   | `Boolean` |
 | `close-icon` | Which icon should be displayed instead of `close `   | `'close'` | `String`  |
 | `outlined`   | No background                                        | `false`   | `Boolean` |
-| `label`      | Label style                                          | `false`   | `Boolean` |
+| `label`      | Label style                                          | `true`    | `Boolean` |
 | `disabled`   | Disabled state                                       | `false`   | `Boolean` |
 | `x-small`    | Render extra small                                   | `false`   |           |
 | `small`      | Render small                                         | `false`   |           |
@@ -71,9 +71,12 @@ There are two events, one when clicking on the chip called `click` and one when 
 | `update:active` |                                                                                                |       |
 
 ## CSS Variables
-| Variable                          | Default                               |
-|-----------------------------------|---------------------------------------|
-| `--v-chip-color`                  | `var(--foreground-normal)`       |
-| `--v-chip-background-color`       | `var(--border-normal)`           |
-| `--v-chip-color-hover`            | `var(--foreground-normal)` |
-| `--v-chip-background-color-hover` | `var(--border-normal)`     |
+| Variable                          | Default              |
+|-----------------------------------|----------------------|
+| `--v-chip-color`                  | `var(--white)`       |
+| `--v-chip-background-color`       | `var(--primary)`     |
+| `--v-chip-color-hover`            | `var(--white)`       |
+| `--v-chip-background-color-hover` | `var(--primary-125)` |
+| `--v-chip-close-color`            | `var(--danger)`      |
+| `--v-chip-close-color-disabled`   | `var(--primary)`     |
+| `--v-chip-close-color-hover`      | `var(--primary-125)` |
