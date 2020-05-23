@@ -1,19 +1,17 @@
 import VueI18n from 'vue-i18n';
 import { RouteConfig } from 'vue-router';
+import { Ref } from '@vue/composition-api';
 
-export type ModuleOptions = {
+export type ModuleConfig = {
 	id: string;
-	register: (context: ModuleContext) => ModuleConfig;
-};
-
-export interface ModuleConfig {
-	routes: RouteConfig[];
+	hidden?: boolean | Ref<boolean>;
 	icon: string;
 	name: string | VueI18n.TranslateResult;
-}
-
-export interface Module extends ModuleConfig {
-	id: string;
-}
+	routes?: RouteConfig[];
+	link?: string;
+	color?: string;
+};
 
 export type ModuleContext = { i18n: VueI18n };
+
+export type ModuleDefineParam = ModuleConfig | ((context: ModuleContext) => ModuleConfig);

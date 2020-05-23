@@ -1,42 +1,57 @@
 <template>
-	<div class="v-tab" :class="{ active, disabled }" @click="onClick">
+	<v-list-item
+		v-if="vertical"
+		class="v-tab vertical"
+		:active="active"
+		:disabled="disabled"
+		@click="onClick"
+	>
+		<slot v-bind="{ active, toggle }" />
+	</v-list-item>
+	<div v-else class="v-tab horizontal" :class="{ active, disabled }" @click="onClick">
 		<slot v-bind="{ active, toggle }" />
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { useGroupable } from '@/compositions/groupable';
+import { defineComponent, inject, ref } from '@vue/composition-api';
+import { useGroupable } from '@/composables/groupable';
 
 export default defineComponent({
 	props: {
 		disabled: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		value: {
 			type: String,
-			default: null
-		}
+			default: null,
+		},
 	},
 	setup(props) {
-		const { active, toggle } = useGroupable(props.value);
-		return { active, toggle, onClick };
+		const { active, toggle } = useGroupable(props.value, 'v-tabs');
+		const vertical = inject('v-tabs-vertical', ref(false));
+
+		return { active, toggle, onClick, vertical };
 
 		function onClick() {
 			if (props.disabled === false) toggle();
 		}
-	}
+	},
 });
 </script>
 
-<style lang="scss" scoped>
-.v-tab {
-	--v-tab-color: var(--input-foreground-color);
-	--v-tab-background-color: var(--input-background-color);
-	--v-tab-color-active: var(--input-foreground-color);
-	--v-tab-background-color-active: var(--input-background-color);
+<style>
+body {
+	--v-tab-color: var(--foreground-normal);
+	--v-tab-background-color: var(--background-page);
+	--v-tab-color-active: var(--foreground-normal);
+	--v-tab-background-color-active: var(--background-page);
+}
+</style>
 
+<style lang="scss" scoped>
+.v-tab.horizontal {
 	color: var(--v-tab-color);
 	font-weight: 500;
 	font-size: 12px;

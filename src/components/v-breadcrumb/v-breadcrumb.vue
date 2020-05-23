@@ -32,22 +32,26 @@ export default defineComponent({
 	props: {
 		items: {
 			type: Array as PropType<Breadcrumb[]>,
-			default: () => []
-		}
+			default: () => [],
+		},
 	},
 	setup() {
 		return {};
-	}
+	},
 });
 </script>
 
+<style>
+body {
+	--v-breadcrumb-color: var(--foreground-subdued);
+	--v-breadcrumb-color-hover: var(--foreground-normal);
+	--v-breadcrumb-color-disabled: var(--foreground-subdued);
+	--v-breadcrumb-divider-color: var(--foreground-subdued);
+}
+</style>
+
 <style lang="scss" scoped>
 .v-breadcrumb {
-	--v-breadcrumb-color: var(--foreground-color-secondary);
-	--v-breadcrumb-color-hover: var(--foreground-color);
-	--v-breadcrumb-color-disabled: var(--foreground-color-tertiary);
-	--v-breadcrumb-divider-color: var(--foreground-color-tertiary);
-
 	display: flex;
 	align-items: center;
 

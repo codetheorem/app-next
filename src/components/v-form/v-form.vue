@@ -1,13 +1,20 @@
 <template>
 	<div class="v-form" ref="el" :class="gridClass">
-		<div v-for="field in formFields" class="field" :key="field.field" :class="field.width">
-			<label>{{ field.name }}</label>
-			<interface-text-input
-				:value="values[field.field]"
-				:options="field.options"
-				@input="onInput(field, $event)"
-			/>
-		</div>
+		<form-field
+			v-for="field in formFields"
+			:field="field"
+			:key="field.field"
+			:value="(edits || {})[field.field]"
+			:initial-value="(initialValues || {})[field.field]"
+			:disabled="disabled"
+			:batch-mode="batchMode"
+			:batch-active="batchActiveFields.includes(field.field)"
+			:primary-key="primaryKey"
+			:loading="loading"
+			@input="setValue(field, $event)"
+			@unset="unsetValue(field)"
+			@toggle-batch="toggleBatchField(field)"
+		/>
 	</div>
 </template>
 
@@ -15,116 +22,241 @@
 import { defineComponent, PropType, computed, ref } from '@vue/composition-api';
 import { useFieldsStore } from '@/stores/fields';
 import { Field } from '@/stores/fields/types';
-import { useElementSize } from '@/compositions/use-element-size';
+import { useElementSize } from '@/composables/use-element-size';
 import { isEmpty } from '@/utils/is-empty';
 import { clone } from 'lodash';
+import { FormField as TFormField } from './types';
+import interfaces from '@/interfaces';
+import marked from 'marked';
+import getDefaultInterfaceForType from '@/utils/get-default-interface-for-type';
+import FormField from './form-field.vue';
 
 type FieldValues = {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[field: string]: any;
 };
 
 export default defineComponent({
+	components: { FormField },
 	model: {
-		prop: 'edits'
+		prop: 'edits',
 	},
 	props: {
 		collection: {
 			type: String,
-			required: true
+			default: undefined,
+		},
+		fields: {
+			type: Array as PropType<TFormField[]>,
+			default: undefined,
 		},
 		initialValues: {
 			type: Object as PropType<FieldValues>,
-			default: null
+			default: null,
 		},
 		edits: {
 			type: Object as PropType<FieldValues>,
-			default: null
-		}
+			default: null,
+		},
+		loading: {
+			type: Boolean,
+			default: false,
+		},
+		batchMode: {
+			type: Boolean,
+			default: false,
+		},
+		primaryKey: {
+			type: [String, Number],
+			required: true,
+		},
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	setup(props, { emit }) {
 		const el = ref<Element>(null);
-
 		const fieldsStore = useFieldsStore();
-
-		const fieldsInCollection = computed(() =>
-			fieldsStore.state.fields.filter(field => field.collection === props.collection)
-		);
-
-		const formFields = computed(() => {
-			let fields = [...fieldsInCollection.value];
-
-			// Filter out the fields that are marked hidden on detail
-			fields = fields.filter(field => {
-				const hiddenDetail = field.hidden_detail;
-				if (isEmpty(hiddenDetail)) return true;
-				return hiddenDetail === false;
-			});
-
-			// Sort the fields on the sort column value
-			fields = fields.sort((a, b) => {
-				if (a.sort == b.sort) return 0;
-				if (a.sort === null) return 1;
-				if (b.sort === null) return -1;
-				return a.sort > b.sort ? 1 : -1;
-			});
-
-			// Change the class to half-right if the current element is preceded by another half width field
-			// this makes them align side by side
-			fields = fields.map((field, index, fields) => {
-				if (index === 0) return field;
-
-				if (field.width === 'half') {
-					const prevField = fields[index - 1];
-
-					if (prevField.width === 'half') {
-						field.width = 'half-right';
-					}
-				}
-
-				return field;
-			});
-
-			return fields;
-		});
-
-		const { width } = useElementSize(el);
-
-		const gridClass = computed<string | null>(() => {
-			if (el.value === null) return null;
-
-			if (width.value > 612 && width.value <= 700) {
-				return 'grid';
-			} else {
-				return 'grid with-fill';
-			}
-
-			return null;
-		});
 
 		const values = computed(() => {
 			return Object.assign({}, props.initialValues, props.edits);
 		});
 
-		return { el, width, formFields, gridClass, values, onInput };
+		const { formFields, gridClass } = useForm();
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		function onInput(field: Field, value: any) {
-			const edits = clone(props.edits);
+		const { toggleBatchField, batchActiveFields } = useBatch();
+
+		return {
+			el,
+			formFields,
+			gridClass,
+			values,
+			setValue,
+			batchActiveFields,
+			toggleBatchField,
+			unsetValue,
+			marked,
+		};
+
+		function useForm() {
+			const fields = computed(() => {
+				if (props.collection) {
+					return fieldsStore.state.fields.filter(
+						(field) => field.collection === props.collection
+					);
+				}
+
+				if (props.fields) {
+					return props.fields;
+				}
+
+				throw new Error('[v-form]: You need to pass either the collection or fields prop.');
+			});
+
+			const formFields = computed(() => {
+				let formFields = [...fields.value];
+
+				/**
+				 * @NOTE
+				 *
+				 * This can be optimized by combining a bunch of these maps and filters
+				 */
+
+				// Filter out the fields that are marked hidden on detail
+				formFields = formFields.filter((field) => {
+					const hiddenDetail = field.hidden_detail;
+					if (isEmpty(hiddenDetail)) return true;
+					return hiddenDetail === false;
+				});
+
+				// Sort the fields on the sort column value
+				formFields = formFields.sort((a, b) => {
+					if (a.sort == b.sort) return 0;
+					if (a.sort === null || a.sort === undefined) return 1;
+					if (b.sort === null || b.sort === undefined) return -1;
+					return a.sort > b.sort ? 1 : -1;
+				});
+
+				// Make sure all form fields have a width associated with it
+				formFields = formFields.map((field) => {
+					if (!field.width) {
+						field.width = 'full';
+					}
+
+					return field;
+				});
+
+				formFields = formFields.map((field) => {
+					const interfaceUsed = interfaces.find((int) => int.id === field.interface);
+					const interfaceExists = interfaceUsed !== undefined;
+
+					if (interfaceExists === false) {
+						field.interface = getDefaultInterfaceForType(field.type);
+					}
+
+					if (interfaceUsed?.hideLabel === true) {
+						(field as TFormField).hideLabel = true;
+					}
+
+					if (interfaceUsed?.hideLoader === true) {
+						(field as TFormField).hideLoader = true;
+					}
+
+					return field;
+				});
+
+				// Change the class to half-right if the current element is preceded by another half width field
+				// this makes them align side by side
+				formFields = formFields.map((field, index, formFields) => {
+					if (index === 0) return field;
+
+					if (field.width === 'half') {
+						const prevField = formFields[index - 1];
+
+						if (prevField.width === 'half') {
+							field.width = 'half-right';
+						}
+					}
+
+					return field;
+				});
+
+				return formFields;
+			});
+
+			const { width } = useElementSize(el);
+
+			const gridClass = computed<string | null>(() => {
+				if (el.value === null) return null;
+
+				if (width.value > 612 && width.value <= 792) {
+					return 'grid';
+				} else {
+					return 'grid with-fill';
+				}
+
+				return null;
+			});
+
+			return { formFields, gridClass, isDisabled };
+
+			function isDisabled(field: Field) {
+				return (
+					props.loading ||
+					props.disabled === true ||
+					field.readonly === true ||
+					(props.batchMode && batchActiveFields.value.includes(field.field) === false)
+				);
+			}
+		}
+
+		function setValue(field: Field, value: any) {
+			const edits = props.edits ? clone(props.edits) : {};
 			edits[field.field] = value;
 			emit('input', edits);
 		}
-	}
+
+		function unsetValue(field: Field) {
+			if (props.edits?.hasOwnProperty(field.field)) {
+				const newEdits = { ...props.edits };
+				delete newEdits[field.field];
+				emit('input', newEdits);
+			}
+		}
+
+		function useBatch() {
+			const batchActiveFields = ref<string[]>([]);
+
+			return { batchActiveFields, toggleBatchField };
+
+			function toggleBatchField(field: Field) {
+				if (batchActiveFields.value.includes(field.field)) {
+					batchActiveFields.value = batchActiveFields.value.filter(
+						(fieldKey) => fieldKey !== field.field
+					);
+
+					unsetValue(field);
+				} else {
+					batchActiveFields.value = [...batchActiveFields.value, field.field];
+				}
+			}
+		}
+	},
 });
 </script>
 
+<style>
+body {
+	--v-form-column-width: var(--form-column-width);
+	--v-form-column-max-width: var(--form-column-max-width);
+	--v-form-row-max-height: calc(var(--v-form-column-width) * 2);
+	--v-form-horizontal-gap: var(--form-horizontal-gap);
+	--v-form-vertical-gap: var(--form-vertical-gap);
+}
+</style>
+
 <style lang="scss" scoped>
 .v-form {
-	--v-form-column-width: 300px;
-	--v-form-row-max-height: calc(var(--v-form-column-width) * 2);
-	--v-form-horizontal-gap: 12px;
-	--v-form-vertical-gap: 52px;
-
 	&.grid {
 		display: grid;
 		grid-template-columns: [start] minmax(0, 1fr) [half] minmax(0, 1fr) [full];
@@ -132,9 +264,9 @@ export default defineComponent({
 
 		&.with-fill {
 			grid-template-columns:
-				[start] minmax(0, var(--v-form-column-width)) [half] minmax(
+				[start] minmax(0, var(--v-form-column-max-width)) [half] minmax(
 					0,
-					var(--v-form-column-width)
+					var(--v-form-column-max-width)
 				)
 				[full] 1fr [fill];
 		}

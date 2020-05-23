@@ -1,0 +1,257 @@
+<template>
+	<v-modal :active="active" title="Field" persistent>
+		<template #sidebar>
+			<setup-tabs
+				:current-tab.sync="currentTab"
+				:tabs="tabs"
+				:field="field"
+				:local-type="localType"
+				:is-new="existingField === null"
+			/>
+		</template>
+
+		<div class="content">
+			<field-setup-field
+				v-if="currentTab[0] === 'field'"
+				v-model="field"
+				:local-type.sync="localType"
+				:is-new="existingField === null"
+			/>
+			<field-setup-relationship
+				v-if="currentTab[0] === 'relationship'"
+				v-model="field"
+				:local-type.sync="localType"
+				:is-new="existingField === null"
+			/>
+			<field-setup-interface
+				v-if="currentTab[0] === 'interface'"
+				v-model="field"
+				:local-type.sync="localType"
+				:is-new="existingField === null"
+			/>
+			<field-setup-display
+				v-if="currentTab[0] === 'display'"
+				v-model="field"
+				:local-type.sync="localType"
+				:is-new="existingField === null"
+			/>
+			<field-setup-advanced
+				v-if="currentTab[0] === 'advanced'"
+				v-model="field"
+				:local-type.sync="localType"
+				:is-new="existingField === null"
+			/>
+		</div>
+
+		<template #footer>
+			<setup-actions
+				:current-tab.sync="currentTab"
+				:tabs="tabs"
+				:field="field"
+				:local-type="localType"
+				:is-new="existingField === null"
+				:saving="saving"
+				@cancel="$emit('toggle', false)"
+				@save="save"
+			/>
+		</template>
+	</v-modal>
+</template>
+
+<script lang="ts">
+import { defineComponent, PropType, watch, ref, computed } from '@vue/composition-api';
+import { Field } from '@/stores/fields/types';
+import i18n from '@/lang';
+import FieldSetupField from './field-setup-field.vue';
+import FieldSetupRelationship from './field-setup-relationship.vue';
+import FieldSetupInterface from './field-setup-interface.vue';
+import FieldSetupDisplay from './field-setup-display.vue';
+import FieldSetupAdvanced from './field-setup-advanced.vue';
+import SetupTabs from './setup-tabs.vue';
+import SetupActions from './setup-actions.vue';
+import useFieldsStore from '@/stores/fields/';
+
+import { LocalType } from './types';
+
+export default defineComponent({
+	components: {
+		FieldSetupField,
+		FieldSetupRelationship,
+		FieldSetupInterface,
+		FieldSetupDisplay,
+		FieldSetupAdvanced,
+		SetupTabs,
+		SetupActions,
+	},
+	model: {
+		prop: 'active',
+		event: 'toggle',
+	},
+	props: {
+		existingField: {
+			type: Object as PropType<Field>,
+			default: null,
+		},
+		collection: {
+			type: String,
+			required: true,
+		},
+		active: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	setup(props, { emit }) {
+		const fieldsStore = useFieldsStore();
+
+		const { field, localType } = usefield();
+		const { tabs, currentTab } = useTabs();
+		const { save, saving } = useSave();
+
+		return { field, tabs, currentTab, localType, save, saving };
+
+		function usefield() {
+			const defaults = {
+				id: null,
+				collection: props.collection,
+				field: null,
+				datatype: null,
+				unique: false,
+				primary_key: false,
+				auto_increment: false,
+				default_value: null,
+				note: null,
+				signed: false,
+				type: null,
+				sort: null,
+				interface: null,
+				options: null,
+				display: null,
+				display_options: null,
+				hidden_detail: false,
+				hidden_browse: false,
+				required: false,
+				locked: false,
+				translation: null,
+				readonly: false,
+				width: 'full',
+				validation: null,
+				group: null,
+				length: null,
+			};
+
+			const field = ref<any>({ ...defaults });
+			const localType = ref<LocalType>(null);
+
+			watch(
+				() => props.existingField,
+				(existingField: Field) => {
+					if (existingField) {
+						field.value = existingField;
+
+						if (existingField.type === 'file') {
+							localType.value = 'file';
+						} else if (existingField.type === 'files') {
+							localType.value = 'files';
+						} else if (['o2m', 'm2o'].includes(existingField.type)) {
+							localType.value = 'relational';
+						} else {
+							localType.value = 'standard';
+						}
+					} else {
+						field.value = { ...defaults };
+						localType.value = null;
+					}
+				}
+			);
+
+			return { field, localType };
+		}
+
+		function useTabs() {
+			const currentTab = ref(['field']);
+			const tabs = computed(() => {
+				const tabs = [
+					{
+						text: i18n.t('field_setup'),
+						value: 'field',
+					},
+					{
+						text: i18n.t('interface_setup'),
+						value: 'interface',
+					},
+					{
+						text: i18n.t('display_setup'),
+						value: 'display',
+					},
+					{
+						text: i18n.t('advanced_options'),
+						value: 'advanced',
+					},
+				];
+
+				if (localType.value === 'relational') {
+					tabs.splice(1, 0, {
+						text: i18n.t('relationship_setup'),
+						value: 'relationship',
+					});
+				}
+
+				return tabs;
+			});
+
+			return { currentTab, tabs };
+		}
+
+		function useSave() {
+			const saving = ref(false);
+			const saveError = ref(null);
+
+			return { save, saving, saveError };
+
+			async function save() {
+				saving.value = true;
+
+				try {
+					if (field.value.id === null) {
+						await fieldsStore.createField(props.collection, field.value);
+					} else {
+						if (field.value.hasOwnProperty('name')) {
+							delete field.value.name;
+						}
+
+						await fieldsStore.updateField(
+							props.existingField.collection,
+							props.existingField.field,
+							field.value
+						);
+					}
+					emit('toggle', false);
+				} catch (error) {
+					saveError.value = error;
+				} finally {
+					saving.value = false;
+				}
+			}
+		}
+	},
+});
+</script>
+
+<style lang="scss" scoped>
+.spacer {
+	flex-grow: 1;
+}
+
+.content {
+	::v-deep {
+		.type-title {
+			margin-bottom: 48px;
+		}
+
+		.type-label {
+			margin-bottom: 8px;
+		}
+	}
+}
+</style>

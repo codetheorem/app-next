@@ -2,10 +2,11 @@
 	<div class="v-button-group" :class="{ rounded, tile }">
 		<v-item-group
 			:value="value"
-			@input="update"
 			:mandatory="mandatory"
 			:max="max"
 			:multiple="multiple"
+			scope="button-group"
+			@input="update"
 		>
 			<slot />
 		</v-item-group>
@@ -19,28 +20,28 @@ export default defineComponent({
 	props: {
 		mandatory: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		max: {
 			type: Number,
-			default: -1
+			default: -1,
 		},
 		multiple: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		value: {
 			type: Array as PropType<(string | number)[]>,
-			default: undefined
+			default: undefined,
 		},
 		rounded: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		tile: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	setup(props, { emit }) {
 		function update(newSelection: readonly (string | number)[]) {
@@ -48,16 +49,21 @@ export default defineComponent({
 		}
 
 		return { update };
-	}
+	},
 });
 </script>
+
+<style>
+body {
+	--v-button-group-background-color-active: var(--primary-alt);
+}
+</style>
+
 <style lang="scss" scoped>
 .v-button-group {
-	--v-button-group-background-color-active: var(--button-primary-background-color-disabled);
-
 	.v-item-group {
 		::v-deep .v-button {
-			--button-border-radius: 0px;
+			--border-radius: 0px;
 
 			&:active {
 				transform: unset;
@@ -69,34 +75,32 @@ export default defineComponent({
 			}
 
 			&:first-child {
-				--button-border-radius: var(--input-border-radius) 0px 0px
-					var(--input-border-radius);
+				--border-radius: var(--border-radius) 0px 0px var(--border-radius);
 			}
 
 			&:last-child {
-				--button-border-radius: 0px var(--input-border-radius) var(--input-border-radius)
-					0px;
+				--border-radius: 0px var(--border-radius) var(--border-radius) 0px;
 			}
 		}
 	}
 
 	&.tile .v-item-group ::v-deep .v-button {
 		&:first-child {
-			--button-border-radius: 0px;
+			--border-radius: 0px;
 		}
 
 		&:last-child {
-			--button-border-radius: 0px;
+			--border-radius: 0px;
 		}
 	}
 
 	&.rounded:not(.tile) .v-item-group ::v-deep .v-button {
 		&:first-child {
-			--button-border-radius: var(--v-button-height) 0px 0px var(--v-button-height);
+			--border-radius: var(--v-button-height) 0px 0px var(--v-button-height);
 		}
 
 		&:last-child {
-			--button-border-radius: 0px var(--v-button-height) var(--v-button-height) 0px;
+			--border-radius: 0px var(--v-button-height) var(--v-button-height) 0px;
 		}
 	}
 }

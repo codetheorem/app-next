@@ -13,16 +13,12 @@ describe('Interfaces / Text Input', () => {
 		const component = shallowMount(InterfaceTextInput, {
 			localVue,
 			propsData: {
-				options: {
-					monospace: false,
-					trim: false,
-					showCharacterCount: false,
-					placeholder: 'Enter value...'
-				}
+				trim: false,
+				placeholder: 'Enter value...',
 			},
 			listeners: {
-				input: () => {}
-			}
+				input: () => {},
+			},
 		});
 		expect(component.find(VInput).exists()).toBe(true);
 	});

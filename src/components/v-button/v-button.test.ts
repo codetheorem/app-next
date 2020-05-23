@@ -15,8 +15,8 @@ describe('Button', () => {
 		const component = mount(VButton, {
 			localVue,
 			slots: {
-				default: 'Click me'
-			}
+				default: 'Click me',
+			},
 		});
 
 		expect(component.text()).toContain('Click me');
@@ -26,19 +26,19 @@ describe('Button', () => {
 		const component = mount(VButton, {
 			localVue,
 			propsData: {
-				outlined: true
-			}
+				outlined: true,
+			},
 		});
 
-		expect(component.classes()).toContain('outlined');
+		expect(component.find('.button').classes()).toContain('outlined');
 	});
 
 	it('Adds the full-width class for full-width buttons', () => {
 		const component = mount(VButton, {
 			localVue,
 			propsData: {
-				fullWidth: true
-			}
+				fullWidth: true,
+			},
 		});
 
 		expect(component.classes()).toContain('full-width');
@@ -48,38 +48,38 @@ describe('Button', () => {
 		const component = mount(VButton, {
 			localVue,
 			propsData: {
-				rounded: true
-			}
+				rounded: true,
+			},
 		});
 
-		expect(component.classes()).toContain('rounded');
+		expect(component.find('.button').classes()).toContain('rounded');
 	});
 
 	it('Adds the icon class for icon buttons', () => {
 		const component = mount(VButton, {
 			localVue,
 			propsData: {
-				icon: true
-			}
+				icon: true,
+			},
 		});
 
-		expect(component.classes()).toContain('icon');
+		expect(component.find('.button').classes()).toContain('icon');
 	});
 
 	it('Adds the loading class for loading buttons', () => {
 		const component = mount(VButton, {
 			localVue,
 			propsData: {
-				loading: true
-			}
+				loading: true,
+			},
 		});
 
-		expect(component.classes()).toContain('loading');
+		expect(component.find('.button').classes()).toContain('loading');
 	});
 
 	it('Emits the click event on click of the button', () => {
 		const component = mount(VButton, {
-			localVue
+			localVue,
 		});
 
 		component.find('button').trigger('click');
@@ -90,8 +90,8 @@ describe('Button', () => {
 		const component = mount(VButton, {
 			localVue,
 			propsData: {
-				disabled: true
-			}
+				disabled: true,
+			},
 		});
 
 		component.find('button').trigger('click');
@@ -102,8 +102,8 @@ describe('Button', () => {
 		const component = mount(VButton, {
 			localVue,
 			propsData: {
-				loading: true
-			}
+				loading: true,
+			},
 		});
 
 		component.find('button').trigger('click');
@@ -115,8 +115,8 @@ describe('Button', () => {
 			localVue,
 			router: router,
 			propsData: {
-				to: '/'
-			}
+				to: '/',
+			},
 		});
 
 		expect((component.vm as any).component).toBe('router-link');

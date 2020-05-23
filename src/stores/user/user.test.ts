@@ -23,12 +23,12 @@ describe('Stores / User', () => {
 	});
 
 	describe('Hydrate', () => {
-		it('Calls the right endpoint', () => {
+		it('Calls the right endpoint', async () => {
 			(api.get as jest.Mock).mockImplementation(() =>
 				Promise.resolve({
 					data: {
-						data: []
-					}
+						data: [],
+					},
 				})
 			);
 
@@ -36,8 +36,12 @@ describe('Stores / User', () => {
 			projectsStore.state.currentProjectKey = 'my-project';
 			const userStore = useUserStore(req);
 
-			userStore.hydrate().then(() => {
-				expect(api.get).toHaveBeenCalledWith('/my-project/users/me');
+			userStore.hydrate();
+
+			expect(api.get).toHaveBeenCalledWith('/my-project/users/me', {
+				params: {
+					fields: '*,avatar.data,role.*',
+				},
 			});
 		});
 	});
@@ -48,6 +52,42 @@ describe('Stores / User', () => {
 			jest.spyOn(userStore, 'reset');
 			await userStore.dehydrate();
 			expect(userStore.reset).toHaveBeenCalled();
+		});
+	});
+
+	describe('Track Page', () => {
+		it('Calls the right endpoint on tracking', async () => {
+			const userStore = useUserStore(req);
+			const projectsStore = useProjectsStore(req);
+
+			userStore.state.currentUser = {
+				id: 5,
+				last_page: 'test',
+			} as any;
+
+			projectsStore.state.currentProjectKey = 'my-project';
+
+			await userStore.trackPage('/example');
+
+			expect(api.patch).toHaveBeenCalledWith('/my-project/users/me/tracking/page', {
+				last_page: '/example',
+			});
+		});
+
+		it('Updates the store with the new last page', async () => {
+			const userStore = useUserStore(req);
+			const projectsStore = useProjectsStore(req);
+
+			userStore.state.currentUser = {
+				id: 5,
+				last_page: 'test',
+			} as any;
+
+			projectsStore.state.currentProjectKey = 'my-project';
+
+			await userStore.trackPage('/example');
+
+			expect(userStore.state.currentUser!.last_page).toBe('/example');
 		});
 	});
 });

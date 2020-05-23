@@ -21,35 +21,35 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from '@vue/composition-api';
-import useSizeClass, { sizeProps } from '@/compositions/size-class';
+import useSizeClass, { sizeProps } from '@/composables/size-class';
 
 export default defineComponent({
 	props: {
 		active: {
 			type: Boolean,
-			default: null
+			default: null,
 		},
 		close: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		closeIcon: {
 			type: String,
-			default: 'close'
+			default: 'close',
 		},
 		outlined: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		label: {
 			type: Boolean,
-			default: false
+			default: true,
 		},
 		disabled: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
-		...sizeProps
+		...sizeProps,
 	},
 	setup(props, { emit }) {
 		const _localActive = ref(true);
@@ -62,7 +62,7 @@ export default defineComponent({
 			set: (active: boolean) => {
 				emit('update:active', active);
 				_localActive.value = active;
-			}
+			},
 		});
 
 		const sizeClass = useSizeClass(props);
@@ -79,25 +79,33 @@ export default defineComponent({
 			_active.value = !_active.value;
 			emit('close', event);
 		}
-	}
+	},
 });
 </script>
 
+<style>
+body {
+	--v-chip-color: var(--white);
+	--v-chip-background-color: var(--primary);
+	--v-chip-color-hover: var(--white);
+	--v-chip-background-color-hover: var(--primary-125);
+	--v-chip-close-color: var(--danger);
+	--v-chip-close-color-disabled: var(--primary);
+	--v-chip-close-color-hover: var(--primary-125);
+}
+</style>
+
 <style lang="scss" scoped>
 .v-chip {
-	--v-chip-color: var(--input-foreground-color);
-	--v-chip-background-color: var(--input-border-color);
-	--v-chip-color-hover: var(--input-foreground-color-hover);
-	--v-chip-background-color-hover: var(--input-border-color-hover);
-
 	display: inline-flex;
 	align-items: center;
 	height: 32px;
-	padding: 0 12px;
+	padding: 0 8px;
 	color: var(--v-chip-color);
 	font-weight: var(--weight-normal);
+	line-height: 22px;
 	background-color: var(--v-chip-background-color);
-	border: var(--input-border-width) solid var(--v-chip-background-color);
+	border: var(--border-width) solid var(--v-chip-background-color);
 	border-radius: 16px;
 
 	&:hover {
@@ -107,17 +115,19 @@ export default defineComponent({
 		cursor: pointer;
 	}
 
-	&.label {
-		border-radius: var(--border-radius);
-	}
-
 	&.outlined {
 		background-color: transparent;
 	}
 
 	&.disabled {
-		color: var(--chip-primary-text-color-disabled);
-		background-color: var(--chip-primary-background-color-disabled);
+		color: var(--v-chip-color);
+		background-color: var(--v-chip-background-color);
+		border-color: var(--v-chip-background-color);
+		&:hover {
+			color: var(--v-chip-color);
+			background-color: var(--v-chip-background-color);
+			border-color: var(--v-chip-background-color);
+		}
 	}
 
 	&.x-small {
@@ -127,7 +137,7 @@ export default defineComponent({
 	}
 
 	&.small {
-		height: 24px;
+		height: 26px;
 		font-size: 14px;
 		border-radius: 12px;
 	}
@@ -146,6 +156,10 @@ export default defineComponent({
 		border-radius: 24px;
 	}
 
+	&.label {
+		border-radius: var(--border-radius);
+	}
+
 	.chip-content {
 		display: inline-flex;
 		align-items: center;
@@ -159,7 +173,7 @@ export default defineComponent({
 			width: 14px;
 			height: 14px;
 			margin-left: 4px;
-			background-color: var(--chip-primary-close-color);
+			background-color: var(--v-chip-close-color);
 			border-radius: 10px;
 
 			.close {
@@ -167,15 +181,15 @@ export default defineComponent({
 			}
 
 			&.disabled {
-				background-color: var(--chip-primary-close-color-disabled);
+				background-color: var(--v-chip-close-color-disabled);
 
 				&:hover {
-					background-color: var(--chip-primary-close-color-disabled);
+					background-color: var(--v-chip-close-color-disabled);
 				}
 			}
 
 			&:hover {
-				background-color: var(--chip-primary-close-color-hover);
+				background-color: var(--v-chip-close-color-hover);
 			}
 		}
 	}

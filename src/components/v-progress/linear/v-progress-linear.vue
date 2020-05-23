@@ -7,13 +7,13 @@
 			fixed,
 			indeterminate,
 			rounded,
-			top
+			top,
 		}"
 	>
 		<div
 			class="inner"
 			:style="{
-				width: value + '%'
+				width: value + '%',
 			}"
 		/>
 		<slot :value="value" />
@@ -27,43 +27,47 @@ export default defineComponent({
 	props: {
 		absolute: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		bottom: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		fixed: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		indeterminate: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		rounded: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		top: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		value: {
 			type: Number,
-			default: 0
-		}
-	}
+			default: 0,
+		},
+	},
 });
 </script>
 
+<style>
+body {
+	--v-progress-linear-height: 4px;
+	--v-progress-linear-color: var(--foreground-normal);
+	--v-progress-linear-background-color: var(--border-normal);
+	--v-progress-linear-transition: 400ms;
+}
+</style>
+
 <style lang="scss" scoped>
 .v-progress-linear {
-	--v-progress-linear-height: 4px;
-	--v-progress-linear-color: var(--input-foreground-color);
-	--v-progress-linear-background-color: var(--input-border-color);
-	--v-progress-linear-transition: 400ms;
-
 	position: relative;
 	display: flex;
 	align-items: center;

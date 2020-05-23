@@ -29,12 +29,9 @@ export async function login(credentials: LoginCredentials) {
 	const projectsStore = useProjectsStore();
 	const { currentProjectKey } = projectsStore.state;
 
-	const { email, password } = credentials;
-
 	await api.post(`/${currentProjectKey}/auth/authenticate`, {
+		...credentials,
 		mode: 'cookie',
-		email: email,
-		password: password
 	});
 
 	await hydrate();
@@ -42,7 +39,7 @@ export async function login(credentials: LoginCredentials) {
 
 export enum LogoutReason {
 	SIGN_OUT = 'SIGN_OUT',
-	ERROR_SESSION_EXPIRED = 'ERROR_SESSION_EXPIRED'
+	ERROR_SESSION_EXPIRED = 'ERROR_SESSION_EXPIRED',
 }
 
 export type LogoutOptions = {
@@ -56,7 +53,7 @@ export type LogoutOptions = {
 export async function logout(optionsRaw: LogoutOptions = {}) {
 	const defaultOptions: Required<LogoutOptions> = {
 		navigate: true,
-		reason: LogoutReason.SIGN_OUT
+		reason: LogoutReason.SIGN_OUT,
 	};
 
 	const options = { ...defaultOptions, ...optionsRaw };
@@ -67,17 +64,17 @@ export async function logout(optionsRaw: LogoutOptions = {}) {
 	// You can't logout of a project if you're not in a project
 	if (currentProjectKey === null) return;
 
-	await dehydrate();
-
 	// Only if the user manually signed out should we kill the session by hitting the logout endpoint
 	if (options.reason === LogoutReason.SIGN_OUT) {
 		await api.post(`/${currentProjectKey}/auth/logout`);
 	}
 
+	await dehydrate();
+
 	if (options.navigate === true) {
 		const location: RawLocation = {
 			path: `/${currentProjectKey}/login`,
-			query: { reason: options.reason }
+			query: { reason: options.reason },
 		};
 
 		router.push(location);

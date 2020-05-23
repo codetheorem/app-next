@@ -6,7 +6,7 @@
 			nav,
 			'three-line': lines === 3,
 			'two-line': lines === 2,
-			'one-line': lines === 1
+			'one-line': lines === 1,
 		}"
 	>
 		<slot></slot>
@@ -15,56 +15,60 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, toRefs } from '@vue/composition-api';
-import { useGroupableParent } from '@/compositions/groupable';
+import { useGroupableParent } from '@/composables/groupable';
 
 export default defineComponent({
 	props: {
 		dense: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		nav: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		lines: {
 			type: Number as PropType<1 | 2 | 3>,
-			default: null
+			default: null,
 		},
 		multiple: {
 			type: Boolean,
-			default: true
-		}
+			default: true,
+		},
 	},
 	setup(props) {
 		useGroupableParent(
 			{},
 			{
 				mandatory: ref(false),
-				multiple: toRefs(props).multiple
+				multiple: toRefs(props).multiple,
 			}
 		);
 
 		return {};
-	}
+	},
 });
 </script>
 
-<style lang="scss" scoped>
-.v-list {
-	--v-list-padding: 8px 0;
+<style>
+body {
+	--v-list-padding: 4px 0;
 	--v-list-max-height: none;
 	--v-list-max-width: none;
 	--v-list-min-width: none;
 	--v-list-min-height: none;
-	--v-list-color: var(--foreground-color);
-	--v-list-color-hover: var(--foreground-color);
-	--v-list-color-active: var(--foreground-color);
-	--v-list-background-color: var(--background-color);
-	--v-list-background-color-hover: var(--background-color-hover);
-	--v-list-background-color-active: var(--background-color-active);
+	--v-list-color: var(--foreground-normal);
+	--v-list-color-hover: var(--foreground-normal);
+	--v-list-color-active: var(--foreground-normal);
+	--v-list-background-color-hover: var(--background-normal-alt);
+	--v-list-background-color-active: var(--background-normal-alt);
+}
+</style>
 
-	width: 100%;
+<style lang="scss" scoped>
+.v-list {
+	position: static;
+	display: block;
 	min-width: var(--v-list-min-width);
 	max-width: var(--v-list-max-width);
 	min-height: var(--v-list-min-height);
@@ -72,11 +76,16 @@ export default defineComponent({
 	padding: var(--v-list-padding);
 	overflow: auto;
 	color: var(--v-list-color);
-	background-color: var(--v-list-background-color);
-	border-radius: var(--input-border-radius);
+	line-height: 22px;
+	border-radius: var(--border-radius);
 
 	&.nav {
-		--v-list-padding: 8px;
+		--v-list-padding: 12px;
+	}
+
+	::v-deep .v-divider {
+		max-width: calc(100% - 16px);
+		margin: 8px;
 	}
 }
 </style>

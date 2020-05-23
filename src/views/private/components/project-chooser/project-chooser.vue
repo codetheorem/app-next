@@ -1,34 +1,79 @@
 <template>
-	<div class="project-chooser">
-		<span>{{ currentProjectKey }}</span>
-		<select :value="currentProjectKey" @change="navigateToProject">
-			<option v-for="project in projects" :key="project.key" :value="project.key">
-				{{ (project.api && project.api.project_name) || project.key }}
-			</option>
-		</select>
+	<div class="project-chooser" :class="{ active }">
+		<button
+			ref="activator"
+			class="toggle"
+			:disabled="projects.length === 1"
+			@click="active = !active"
+		>
+			<latency-indicator />
+			<span class="name">{{ currentProject.name }}</span>
+			<v-icon class="icon" name="expand_more" />
+		</button>
+		<transition-expand>
+			<div
+				v-if="active"
+				class="options-wrapper"
+				v-click-outside="{
+					handler: () => (active = false),
+					middleware: onClickOutsideMiddleware,
+				}"
+			>
+				<div class="options">
+					<v-divider />
+
+					<router-link
+						v-for="project in projects"
+						class="router-link"
+						:key="project.key"
+						:to="`/${project.key}/collections`"
+					>
+						<v-radio
+							:inputValue="currentProjectKey"
+							:value="project.key"
+							:label="project.name || project.key"
+						/>
+					</router-link>
+				</div>
+			</div>
+		</transition-expand>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from '@vue/composition-api';
+import { defineComponent, toRefs, ref } from '@vue/composition-api';
 import { useProjectsStore } from '@/stores/projects';
 import router from '@/router';
+import LatencyIndicator from '../latency-indicator';
 
 export default defineComponent({
+	components: { LatencyIndicator },
 	setup() {
 		const projectsStore = useProjectsStore();
-		const { projects, currentProjectKey } = toRefs(projectsStore.state);
+		const { currentProjectKey } = toRefs(projectsStore.state);
+		const active = ref(false);
+		const activator = ref<Element>(null);
+
+		const currentProject = projectsStore.currentProject;
 
 		return {
-			projects,
+			projects: projectsStore.formatted,
 			currentProjectKey,
 			navigateToProject,
-			projectsStore
+			projectsStore,
+			currentProject,
+			active,
+			onClickOutsideMiddleware,
+			activator,
 		};
 
-		function navigateToProject(event: InputEvent) {
+		function onClickOutsideMiddleware(event: Event) {
+			return !activator.value?.contains(event.target as Node);
+		}
+
+		function navigateToProject(key: string) {
 			router
-				.push(`/${(event.target as HTMLSelectElement).value}/collections`)
+				.push(`/${key}/collections`)
 				/** @NOTE
 				 * Vue Router considers a navigation change _in_ the navigation guard a rejection
 				 * so when this push goes from /collections to /login, it will throw.
@@ -39,27 +84,76 @@ export default defineComponent({
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				.catch(() => {});
 		}
-	}
+	},
 });
 </script>
 
 <style lang="scss" scoped>
 .project-chooser {
 	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 64px;
-	background-color: var(--highlight);
+	color: var(--foreground-normal);
+	background-color: var(--background-normal-alt);
 
-	select {
-		position: absolute;
-		top: 0;
-		left: 0;
+	.toggle {
+		display: flex;
+		align-items: center;
 		width: 100%;
-		height: 100%;
-		cursor: pointer;
-		opacity: 0;
+		height: 64px;
+		padding: 0 20px;
+		text-align: left;
+
+		.latency-indicator {
+			margin-right: 12px;
+		}
+
+		.name {
+			flex-grow: 1;
+		}
+
+		.icon {
+			color: var(--foreground-subdued);
+			transform: rotate(0deg);
+			opacity: 0;
+			transition: opacity var(--fast) var(--transition),
+				transform var(--medium) var(--transition);
+		}
+
+		&:hover .icon {
+			opacity: 1;
+		}
+	}
+
+	&.active .toggle .icon {
+		transform: rotate(180deg);
+		opacity: 1;
+	}
+
+	.options-wrapper {
+		position: absolute;
+		z-index: 3;
+		width: 100%;
+	}
+
+	.options {
+		padding: 20px;
+		padding-top: 0;
+		background-color: var(--background-normal-alt);
+		box-shadow: 0px 8px 12px 0px rgba(38, 50, 56, 0.25);
+	}
+
+	.v-divider {
+		--v-divider-color: var(--background-normal);
+
+		margin-bottom: 20px;
+	}
+
+	.router-link {
+		display: block;
+		text-decoration: none;
+
+		&:not(:last-child) {
+			margin-bottom: 12px;
+		}
 	}
 }
 </style>

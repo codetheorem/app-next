@@ -1,9 +1,9 @@
 <template>
-	<div class="v-table" :class="{ loading }">
+	<div class="v-table" :class="{ loading, inline, disabled }">
 		<table
-			:summary="_headers.map(header => header.text).join(', ')"
+			:summary="_headers.map((header) => header.text).join(', ')"
 			:style="{
-				'--grid-columns': columnStyle
+				'--grid-columns': columnStyle,
 			}"
 		>
 			<table-header
@@ -15,6 +15,9 @@
 				:all-items-selected="allItemsSelected"
 				:fixed="fixedHeader"
 				:show-manual-sort="showManualSort"
+				:must-sort="mustSort"
+				:has-item-append-slot="hasItemAppendSlot"
+				:manual-sort-key="manualSortKey"
 				@toggle-select-all="onToggleSelectAll"
 			>
 				<template v-for="header in _headers" #[`header.${header.value}`]>
@@ -22,13 +25,18 @@
 				</template>
 			</table-header>
 			<thead v-if="loading" class="loading-indicator" :class="{ sticky: fixedHeader }">
-				<th scope="colgroup" :style="{ gridColumn: loadingColSpan }">
+				<th scope="colgroup" :style="{ gridColumn: fullColSpan }">
 					<v-progress-linear indeterminate v-if="loading" />
 				</th>
 			</thead>
 			<tbody v-if="loading && items.length === 0">
 				<tr class="loading-text">
-					<td :style="{ gridColumn: loadingColSpan }">{{ loadingText }}</td>
+					<td :style="{ gridColumn: fullColSpan }">{{ loadingText }}</td>
+				</tr>
+			</tbody>
+			<tbody v-if="!loading && items.length === 0">
+				<tr class="no-items-text">
+					<td :style="{ gridColumn: fullColSpan }">{{ noItemsText }}</td>
 				</tr>
 			</tbody>
 			<draggable
@@ -36,26 +44,31 @@
 				v-model="_items"
 				tag="tbody"
 				handle=".drag-handle"
-				:disabled="_sort.by !== '$manual'"
-				@end="onEndDrag"
+				:disabled="disabled || _sort.by !== manualSortKey"
+				@change="onSortChange"
+				:set-data="hideDragImage"
 			>
 				<table-row
 					v-for="item in _items"
 					:key="item[itemKey]"
 					:headers="_headers"
 					:item="item"
-					:show-select="showSelect"
-					:show-manual-sort="showManualSort"
+					:show-select="!disabled && showSelect"
+					:show-manual-sort="!disabled && showManualSort"
 					:is-selected="getSelectedState(item)"
 					:subdued="loading"
-					:sorted-manually="_sort.by === '$manual'"
-					:has-click-listener="hasRowClick"
+					:sorted-manually="_sort.by === manualSortKey"
+					:has-click-listener="!disabled && hasRowClick"
 					:height="rowHeight"
 					@click="hasRowClick ? $emit('click:row', item) : null"
 					@item-selected="onItemSelected"
 				>
 					<template v-for="header in _headers" #[`item.${header.value}`]>
 						<slot :item="item" :name="`item.${header.value}`" />
+					</template>
+
+					<template v-if="hasItemAppendSlot" #item-append>
+						<slot name="item-append" :item="item" />
 					</template>
 				</table-row>
 			</draggable>
@@ -72,93 +85,126 @@ import TableRow from './table-row/';
 import { sortBy, clone, forEach, pick } from 'lodash';
 import { i18n } from '@/lang/';
 import draggable from 'vuedraggable';
+import hideDragImage from '@/utils/hide-drag-image';
 
 const HeaderDefaults: Header = {
 	text: '',
 	value: '',
 	align: 'left',
 	sortable: true,
-	width: null
+	width: null,
 };
 
 export default defineComponent({
 	components: {
 		TableHeader,
 		TableRow,
-		draggable
+		draggable,
 	},
 	model: {
 		prop: 'selection',
-		event: 'select'
+		event: 'select',
 	},
 	props: {
 		headers: {
 			type: Array as PropType<HeaderRaw[]>,
-			required: true
+			required: true,
 		},
 		items: {
 			type: Array as PropType<Item[]>,
-			required: true
+			required: true,
 		},
 		itemKey: {
 			type: String,
-			default: 'id'
+			default: 'id',
 		},
 		sort: {
 			type: Object as PropType<Sort>,
-			default: null
+			default: null,
+		},
+		mustSort: {
+			type: Boolean,
+			default: false,
 		},
 		showSelect: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		showResize: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		showManualSort: {
 			type: Boolean,
-			default: false
+			default: false,
+		},
+		manualSortKey: {
+			type: String,
+			default: null,
 		},
 		selection: {
-			type: Array as PropType<Item[]>,
-			default: () => []
+			type: Array as PropType<any>,
+			default: () => [],
 		},
 		fixedHeader: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		loading: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		loadingText: {
 			type: String,
-			default: i18n.t('loading')
+			default: i18n.t('loading'),
+		},
+		noItemsText: {
+			type: String,
+			default: i18n.t('no_items'),
 		},
 		serverSort: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		rowHeight: {
 			type: Number,
-			default: 48
-		}
+			default: 48,
+		},
+		selectionUseKeys: {
+			type: Boolean,
+			default: false,
+		},
+		inline: {
+			type: Boolean,
+			default: false,
+		},
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
 	},
-	setup(props, { emit, listeners }) {
+	setup(props, { emit, listeners, slots }) {
 		const _headers = computed({
 			get: () => {
-				return props.headers.map((header: HeaderRaw) => ({
-					...HeaderDefaults,
-					...header
-				}));
+				return props.headers
+					.map((header: HeaderRaw) => ({
+						...HeaderDefaults,
+						...header,
+					}))
+					.map((header) => {
+						if (header.width && header.width < 24) {
+							header.width = 24;
+						}
+
+						return header;
+					});
 			},
 			set: (newHeaders: Header[]) => {
 				emit(
 					'update:headers',
 					// We'll return the original headers with the updated values, so we don't stage
 					// all the default values
-					newHeaders.map(header => {
+					newHeaders.map((header) => {
 						const keysThatArentDefault: string[] = [];
 
 						forEach(header, (value, key: string) => {
@@ -172,14 +218,14 @@ export default defineComponent({
 						return pick(header, keysThatArentDefault);
 					})
 				);
-			}
+			},
 		});
 
 		// In case the sort prop isn't used, we'll use this local sort state as a fallback.
 		// This allows the table to allow inline sorting on column ootb without the need for
 		const _localSort = ref<Sort>({
 			by: null,
-			desc: false
+			desc: false,
 		});
 
 		const _sort = computed({
@@ -187,19 +233,23 @@ export default defineComponent({
 			set: (newSort: Sort) => {
 				emit('update:sort', newSort);
 				_localSort.value = newSort;
-			}
+			},
 		});
 
-		const loadingColSpan = computed<string>(() => {
-			let length = _headers.value.length;
-			if (props.showSelect) length = length + 1;
-			if (props.showManualSort) length = length + 1;
+		const hasItemAppendSlot = computed(() => slots['item-append'] !== undefined);
+
+		const fullColSpan = computed<string>(() => {
+			let length = _headers.value.length + 1; // +1 account for spacer
+			if (props.showSelect) length++;
+			if (props.showManualSort) length++;
+			if (hasItemAppendSlot.value) length++;
+
 			return `1 / span ${length}`;
 		});
 
 		const _items = computed({
 			get: () => {
-				if (props.serverSort === true || _sort.value.by === '$manual') {
+				if (props.serverSort === true || _sort.value.by === props.manualSortKey) {
 					return props.items;
 				}
 
@@ -211,11 +261,11 @@ export default defineComponent({
 			},
 			set: (value: object[]) => {
 				emit('update:items', value);
-			}
+			},
 		});
 
 		const allItemsSelected = computed<boolean>(() => {
-			return props.selection.length === props.items.length;
+			return props.loading === false && props.selection.length === props.items.length;
 		});
 
 		const someItemsSelected = computed<boolean>(() => {
@@ -226,17 +276,18 @@ export default defineComponent({
 
 		const columnStyle = computed<string>(() => {
 			let gridTemplateColumns = _headers.value
-				.map((header, index, array) => {
-					if (index !== array.length - 1) {
-						return header.width ? `${header.width}px` : 'min-content';
-					} else {
-						return `minmax(min-content, 1fr)`;
-					}
+				.map((header) => {
+					return header.width ? `${header.width}px` : '160px';
 				})
 				.reduce((acc, val) => (acc += ' ' + val), '');
 
-			if (props.showSelect) gridTemplateColumns = 'auto ' + gridTemplateColumns;
-			if (props.showManualSort) gridTemplateColumns = 'auto ' + gridTemplateColumns;
+			if (props.showSelect) gridTemplateColumns = '36px ' + gridTemplateColumns;
+			if (props.showManualSort) gridTemplateColumns = '36px ' + gridTemplateColumns;
+
+			gridTemplateColumns = gridTemplateColumns + ' 1fr';
+
+			if (hasItemAppendSlot.value) gridTemplateColumns += ' auto';
+
 			return gridTemplateColumns;
 		});
 
@@ -249,79 +300,131 @@ export default defineComponent({
 			onItemSelected,
 			onToggleSelectAll,
 			someItemsSelected,
-			onEndDrag,
+			onSortChange,
 			hasRowClick,
-			loadingColSpan,
-			columnStyle
+			fullColSpan,
+			columnStyle,
+			hasItemAppendSlot,
+			hideDragImage,
 		};
 
 		function onItemSelected(event: ItemSelectEvent) {
+			if (props.disabled) return;
+
 			emit('item-selected', event);
 
-			const selection: Item[] = clone(props.selection);
+			let selection = clone(props.selection) as any[];
 
 			if (event.value === true) {
-				selection.push(event.item);
+				if (props.selectionUseKeys) {
+					selection.push(event.item[props.itemKey]);
+				} else {
+					selection.push(event.item);
+				}
 			} else {
-				const itemIndex: number = selection.findIndex(
-					(item: Item) => item[props.itemKey] === event.item[props.itemKey]
-				);
+				selection = selection.filter((item) => {
+					if (props.selectionUseKeys) {
+						return item !== event.item[props.itemKey];
+					}
 
-				selection.splice(itemIndex, 1);
+					return item[props.itemKey] !== event.item[props.itemKey];
+				});
 			}
 
 			emit('select', selection);
 		}
 
 		function getSelectedState(item: Item) {
-			const selectedKeys = props.selection.map((item: Item) => item[props.itemKey]);
+			const selectedKeys = props.selectionUseKeys
+				? props.selection
+				: props.selection.map((item: any) => item[props.itemKey]);
 			return selectedKeys.includes(item[props.itemKey]);
 		}
 
 		function onToggleSelectAll(value: boolean) {
+			if (props.disabled) return;
+
 			if (value === true) {
-				emit('select', clone(props.items));
+				if (props.selectionUseKeys) {
+					emit(
+						'select',
+						clone(props.items).map((item) => item[props.itemKey])
+					);
+				} else {
+					emit('select', clone(props.items));
+				}
 			} else {
 				emit('select', []);
 			}
 		}
 
-		interface VueDraggableDropEvent extends CustomEvent {
-			oldIndex: number;
-			newIndex: number;
+		interface VueDraggableChangeEvent extends CustomEvent {
+			moved?: {
+				oldIndex: number;
+				newIndex: number;
+
+				element: Record<string, any>;
+			};
 		}
 
-		function onEndDrag(event: VueDraggableDropEvent) {
-			emit('drop', { oldIndex: event.oldIndex, newIndex: event.newIndex });
+		function onSortChange(event: VueDraggableChangeEvent) {
+			if (props.disabled) return;
+
+			if (event.moved) {
+				emit('manual-sort', {
+					item: event.moved.element,
+					oldIndex: event.moved.oldIndex,
+					newIndex: event.moved.newIndex,
+				});
+			}
 		}
-	}
+	},
 });
 </script>
 
-<style lang="scss" scoped>
-.v-table {
+<style>
+body {
 	--v-table-height: auto;
 	--v-table-sticky-offset-top: 0;
+	--v-table-color: var(--foreground-normal);
+	--v-table-background-color: var(--background-page);
+}
+</style>
 
+<style lang="scss" scoped>
+.v-table {
 	position: relative;
 	height: var(--v-table-height);
 	overflow-y: auto;
 
 	table {
-		display: grid;
-		grid-template-columns: var(--grid-columns);
 		min-width: 100%;
+		border-collapse: collapse;
 		border-spacing: 0;
 
+		tbody {
+			display: contents;
+		}
+
 		::v-deep {
-			tbody,
-			thead,
-			tr {
+			thead {
 				display: contents;
+			}
+
+			tr,
+			.loading-indicator {
+				display: grid;
+				grid-template-columns: var(--grid-columns);
+			}
+
+			.loading-indicator {
+				position: relative;
 			}
 
 			td,
 			th {
+				color: var(--v-table-color);
+
 				&.align-left {
 					text-align: left;
 				}
@@ -337,7 +440,7 @@ export default defineComponent({
 
 			.sortable-ghost {
 				.cell {
-					background-color: var(--highlight);
+					background-color: var(--background-subdued);
 				}
 			}
 		}
@@ -355,9 +458,12 @@ export default defineComponent({
 
 			.v-progress-linear {
 				--v-progress-linear-height: 2px;
+				--v-progress-linear-color: var(--border-normal-alt);
 
-				position: relative;
-				top: -1px;
+				position: absolute;
+				top: -2px;
+				left: 0;
+				width: 100%;
 			}
 
 			th {
@@ -367,18 +473,33 @@ export default defineComponent({
 			&.sticky th {
 				position: sticky;
 				top: 48px;
-				z-index: +1;
-			}
-		}
-
-		.loading-text {
-			color: var(--input-foreground-color-empty);
-			text-align: center;
-
-			td {
-				padding: 16px;
+				z-index: 2;
 			}
 		}
 	}
+
+	.loading-text,
+	.no-items-text {
+		text-align: center;
+
+		td {
+			padding: 16px;
+			color: var(--foreground-subdued);
+		}
+	}
+
+	&.inline {
+		border: 2px solid var(--border-normal);
+		border-radius: var(--border-radius);
+
+		table ::v-deep .table-row:last-of-type .cell {
+			border-bottom: none;
+		}
+	}
+}
+
+.disabled {
+	--v-table-color: var(--foreground-subdued);
+	--v-table-background-color: var(--background-subdued);
 }
 </style>

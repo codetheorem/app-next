@@ -1,9 +1,10 @@
 <template>
 	<span
 		class="v-icon"
-		:class="[sizeClass, { 'has-click': hasClick, left, right }]"
+		:class="[sizeClass, { 'has-click': !disabled && hasClick, left, right }]"
 		:role="hasClick ? 'button' : null"
 		@click="emitClick"
+		:tabindex="hasClick ? 0 : null"
 	>
 		<component v-if="customIconName" :is="customIconName" />
 		<i v-else :class="{ outline }">{{ name }}</i>
@@ -12,35 +13,77 @@
 
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api';
-import CustomIconBox from './custom-icons/box.vue';
-import useSizeClass, { sizeProps } from '@/compositions/size-class';
+import useSizeClass, { sizeProps } from '@/composables/size-class';
 
-const customIcons: string[] = ['box'];
+import CustomIconBox from './custom-icons/box.vue';
+import CustomIconGrid1 from './custom-icons/grid_1.vue';
+import CustomIconGrid2 from './custom-icons/grid_2.vue';
+import CustomIconGrid3 from './custom-icons/grid_3.vue';
+import CustomIconGrid4 from './custom-icons/grid_4.vue';
+import CustomIconGrid5 from './custom-icons/grid_5.vue';
+import CustomIconGrid6 from './custom-icons/grid_6.vue';
+import CustomIconSignalWifi1Bar from './custom-icons/signal_wifi_1_bar.vue';
+import CustomIconSignalWifi2Bar from './custom-icons/signal_wifi_2_bar.vue';
+import CustomIconSignalWifi3Bar from './custom-icons/signal_wifi_3_bar.vue';
+import CustomIconFlipHorizontal from './custom-icons/flip_horizontal.vue';
+import CustomIconFlipVertical from './custom-icons/flip_vertical.vue';
+
+const customIcons: string[] = [
+	'box',
+	'grid_1',
+	'grid_2',
+	'grid_3',
+	'grid_4',
+	'grid_5',
+	'grid_6',
+	'signal_wifi_1_bar',
+	'signal_wifi_2_bar',
+	'signal_wifi_3_bar',
+	'flip_horizontal',
+	'flip_vertical',
+];
 
 export default defineComponent({
-	components: { CustomIconBox },
+	components: {
+		CustomIconBox,
+		CustomIconGrid1,
+		CustomIconGrid2,
+		CustomIconGrid3,
+		CustomIconGrid4,
+		CustomIconGrid5,
+		CustomIconGrid6,
+		CustomIconSignalWifi1Bar,
+		CustomIconSignalWifi2Bar,
+		CustomIconSignalWifi3Bar,
+		CustomIconFlipHorizontal,
+		CustomIconFlipVertical,
+	},
 	props: {
 		name: {
 			type: String,
-			required: true
+			required: true,
 		},
 		outline: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		sup: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		left: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		right: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
-		...sizeProps
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
+		...sizeProps,
 	},
 
 	setup(props, { emit, listeners }) {
@@ -50,7 +93,8 @@ export default defineComponent({
 		});
 
 		const customIconName = computed<string | null>(() => {
-			if (customIcons.includes(props.name)) return `custom-icon-${props.name}`;
+			if (customIcons.includes(props.name))
+				return `custom-icon-${props.name}`.replace(/_/g, '-');
 			return null;
 		});
 
@@ -60,21 +104,26 @@ export default defineComponent({
 			sizeClass,
 			customIconName,
 			hasClick,
-			emitClick
+			emitClick,
 		};
 
 		function emitClick(event: MouseEvent) {
+			if (props.disabled) return;
 			emit('click', event);
 		}
-	}
+	},
 });
 </script>
 
-<style lang="scss" scoped>
-.v-icon {
+<style>
+body {
 	--v-icon-color: currentColor;
 	--v-icon-size: 24px;
+}
+</style>
 
+<style lang="scss" scoped>
+.v-icon {
 	position: relative;
 	display: inline-block;
 	width: var(--v-icon-size);
@@ -85,7 +134,7 @@ export default defineComponent({
 	vertical-align: middle;
 
 	i {
-		display: inline-block;
+		display: block;
 		font-weight: normal;
 		font-size: var(--v-icon-size);
 		/* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
@@ -95,7 +144,6 @@ export default defineComponent({
 		letter-spacing: normal;
 		white-space: nowrap;
 		text-transform: none;
-		vertical-align: middle;
 		word-wrap: normal;
 		font-feature-settings: 'liga';
 
@@ -106,7 +154,7 @@ export default defineComponent({
 	}
 
 	svg {
-		display: block;
+		display: inline-block;
 		color: inherit;
 		fill: currentColor;
 	}
@@ -118,11 +166,7 @@ export default defineComponent({
 	&.sup {
 		--v-icon-size: 8px;
 
-		vertical-align: 0;
-
-		i {
-			vertical-align: 5px;
-		}
+		vertical-align: 5px;
 	}
 
 	&.x-small {

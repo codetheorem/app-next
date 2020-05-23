@@ -6,35 +6,35 @@ const localVue = createLocalVue();
 localVue.use(VueCompositionAPI);
 localVue.component('v-item-group', VTabs);
 
-jest.mock('@/compositions/groupable', () => ({
+jest.mock('@/composables/groupable', () => ({
 	useGroupableParent: () => {
 		return {
 			items: {
 				value: [
 					{
 						active: {
-							value: false
-						}
+							value: false,
+						},
 					},
 					{
 						active: {
-							value: false
-						}
+							value: false,
+						},
 					},
 					{
 						active: {
-							value: true
-						}
+							value: true,
+						},
 					},
 					{
 						active: {
-							value: false
-						}
-					}
-				]
-			}
+							value: false,
+						},
+					},
+				],
+			},
 		} as any;
-	}
+	},
 }));
 
 describe('Components / Tabs', () => {
@@ -49,7 +49,7 @@ describe('Components / Tabs', () => {
 
 		expect((component.vm as any).slideStyle).toEqual({
 			'--_v-tabs-items': 4,
-			'--_v-tabs-selected': 2
+			'--_v-tabs-selected': 2,
 		});
 	});
 });

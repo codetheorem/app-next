@@ -5,11 +5,11 @@ import VTabItem from './v-tab-item.vue';
 const localVue = createLocalVue();
 localVue.use(VueCompositionAPI);
 
-jest.mock('@/compositions/groupable', () => ({
+jest.mock('@/composables/groupable', () => ({
 	useGroupable: () => ({
 		active: { value: null },
-		toggle: jest.fn()
-	})
+		toggle: jest.fn(),
+	}),
 }));
 
 describe('Components / Tabs / Tab', () => {
@@ -17,8 +17,8 @@ describe('Components / Tabs / Tab', () => {
 		const component = shallowMount(VTabItem, {
 			localVue,
 			data: () => ({
-				active: true
-			})
+				active: true,
+			}),
 		});
 		expect(component.find('.v-tab-item').exists()).toBe(true);
 	});
@@ -27,8 +27,8 @@ describe('Components / Tabs / Tab', () => {
 		const component = shallowMount(VTabItem, {
 			localVue,
 			data: () => ({
-				active: false
-			})
+				active: false,
+			}),
 		});
 		expect(component.find('.v-tab-item').exists()).toBe(false);
 	});

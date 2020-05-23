@@ -1,51 +1,78 @@
 <template>
-	<button
+	<component
+		:is="customValue ? 'div' : 'button'"
 		class="v-checkbox"
 		@click="toggleInput"
 		type="button"
 		role="checkbox"
 		:aria-pressed="isChecked ? 'true' : 'false'"
 		:disabled="disabled"
-		:class="{ checked: isChecked }"
+		:class="{ checked: isChecked, indeterminate, block }"
 	>
-		<v-icon :name="icon" />
-		<span class="label">
-			<slot name="label">{{ label }}</slot>
+		<div class="prepend" v-if="$scopedSlots.prepend"><slot name="prepend" /></div>
+		<v-icon class="checkbox" :name="icon" @click.stop="toggleInput" />
+		<span class="label type-text">
+			<slot name="label" v-if="customValue === false">{{ label }}</slot>
+			<input @click.stop class="custom-input" v-else v-model="_value" />
 		</span>
-	</button>
+		<div class="append" v-if="$scopedSlots.append"><slot name="append" /></div>
+	</component>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api';
+import useSync from '../../composables/use-sync';
 
 export default defineComponent({
 	model: {
 		prop: 'inputValue',
-		event: 'change'
+		event: 'change',
 	},
 	props: {
 		value: {
 			type: String,
-			default: null
+			default: null,
 		},
 		inputValue: {
 			type: [Boolean, Array],
-			default: false
+			default: false,
 		},
 		label: {
 			type: String,
-			default: null
+			default: null,
 		},
 		disabled: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		indeterminate: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
+		iconOn: {
+			type: String,
+			default: 'check_box',
+		},
+		iconOff: {
+			type: String,
+			default: 'check_box_outline_blank',
+		},
+		iconIndeterminate: {
+			type: String,
+			default: 'indeterminate_check_box',
+		},
+		block: {
+			type: Boolean,
+			default: false,
+		},
+		customValue: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	setup(props, { emit }) {
+		const _value = useSync(props, 'value', emit);
+
 		const isChecked = computed<boolean>(() => {
 			if (props.inputValue instanceof Array) {
 				return props.inputValue.includes(props.value);
@@ -55,14 +82,14 @@ export default defineComponent({
 		});
 
 		const icon = computed<string>(() => {
-			if (props.indeterminate) return 'indeterminate_check_box';
-			return isChecked.value ? 'check_box' : 'check_box_outline_blank';
+			if (props.indeterminate === true) return props.iconIndeterminate;
+			return isChecked.value ? props.iconOn : props.iconOff;
 		});
 
-		return { isChecked, toggleInput, icon };
+		return { isChecked, toggleInput, icon, _value };
 
 		function toggleInput(): void {
-			if (props.indeterminate) {
+			if (props.indeterminate === true) {
 				emit('update:indeterminate', false);
 			}
 
@@ -80,17 +107,21 @@ export default defineComponent({
 				emit('change', !isChecked.value);
 			}
 		}
-	}
+	},
 });
 </script>
 
+<style>
+body {
+	--v-checkbox-color: var(--primary);
+}
+</style>
+
 <style lang="scss" scoped>
-@import '@/styles/mixins/type-styles';
 @import '@/styles/mixins/no-wrap';
 
 .v-checkbox {
-	--v-checkbox-color: var(--input-foreground-color);
-
+	position: relative;
 	display: flex;
 	align-items: center;
 	font-size: 0;
@@ -102,37 +133,99 @@ export default defineComponent({
 
 	.label:not(:empty) {
 		margin-left: 8px;
+		color: var(--foreground-subdued);
+		transition: color var(--fast) var(--transition);
 
-		@include type-body-sans;
+		input {
+			width: 100%;
+			background-color: transparent;
+			border: none;
+			border-bottom: 2px solid var(--border-normal);
+			border-radius: 0;
+		}
+
 		@include no-wrap;
 	}
 
-	& .v-icon {
-		--v-icon-color: var(--input-border-color);
+	& .checkbox {
+		--v-icon-color: var(--foreground-subdued);
+
+		transition: color var(--fast) var(--transition);
 	}
 
 	&:disabled {
 		cursor: not-allowed;
 
 		.label {
-			color: var(--foreground-color-secondary);
+			color: var(--foreground-subdued);
 		}
 
-		.v-icon {
-			--v-icon-color: var(--input-border-color);
+		.checkbox {
+			--v-icon-color: var(--foreground-subdued);
 		}
 	}
 
 	&:not(:disabled):hover {
-		.v-icon {
-			--v-icon-color: var(--input-border-color-hover);
+		.checkbox {
+			--v-icon-color: var(--foreground-normal);
+		}
+		.label {
+			color: var(--foreground-normal);
 		}
 	}
 
-	&:not(:disabled).checked {
-		.v-icon {
+	&.block {
+		position: relative;
+		width: 100%;
+		height: var(--input-height);
+		padding: 10px; // 14 - 4 (border)
+		border: 2px solid var(--background-subdued);
+		border-radius: var(--border-radius);
+
+		&::before {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 0;
+			width: 100%;
+			height: 100%;
+			background-color: var(--background-subdued);
+			border-radius: var(--border-radius);
+			content: '';
+		}
+
+		> * {
+			z-index: 1;
+		}
+	}
+
+	&:not(:disabled):not(.indeterminate).checked {
+		.checkbox {
 			--v-icon-color: var(--v-checkbox-color);
 		}
+
+		&.block {
+			border-color: var(--v-checkbox-color);
+
+			.label {
+				color: var(--v-checkbox-color);
+			}
+
+			&::before {
+				background-color: var(--v-checkbox-color);
+				opacity: 0.1;
+			}
+		}
+
+		input {
+			border-color: var(--v-checkbox-color);
+		}
+	}
+
+	.prepend,
+	.append {
+		display: contents;
+		font-size: 1rem;
 	}
 }
 </style>

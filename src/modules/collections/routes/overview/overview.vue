@@ -1,67 +1,132 @@
 <template>
 	<private-view class="collections-overview" :title="$tc('collection', 2)">
 		<template #title-outer:prepend>
-			<v-button rounded disabled icon secondary><v-icon name="box" /></v-button>
+			<v-button class="header-icon" rounded disabled icon secondary>
+				<v-icon name="box" />
+			</v-button>
 		</template>
 
 		<template #navigation>
 			<collections-navigation />
 		</template>
 
-		<v-table :headers="tableHeaders" :items="navItems" @click:row="navigateToCollection">
+		<v-table
+			v-if="navItems.length > 0"
+			:headers="tableHeaders"
+			:items="navItems"
+			@click:row="navigateToCollection"
+		>
 			<template #item.icon="{ item }">
 				<v-icon class="icon" :name="item.icon" />
 			</template>
 		</v-table>
+
+		<v-info icon="box" :title="$t('no_collections')" v-else center>
+			<template v-if="isAdmin">
+				{{ $t('no_collections_copy_admin') }}
+			</template>
+			<template #append v-if="isAdmin">
+				<v-button :to="dataModelLink">{{ $t('create_collection') }}</v-button>
+			</template>
+			<template v-else>
+				{{ $t('no_collections_copy') }}
+			</template>
+		</v-info>
+
+		<template #drawer>
+			<drawer-detail icon="info_outline" :title="$t('information')" close>
+				<div
+					class="format-markdown"
+					v-html="marked($t('page_help_collections_overview'))"
+				/>
+			</drawer-detail>
+			<drawer-detail icon="help_outline" :title="$t('help_and_docs')">
+				<div
+					class="format-markdown"
+					v-html="marked($t('page_help_collections_overview'))"
+				/>
+			</drawer-detail>
+		</template>
 	</private-view>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, computed } from '@vue/composition-api';
 import CollectionsNavigation from '../../components/navigation/';
 import { i18n } from '@/lang';
-import useNavigation, { NavItem } from '../../compositions/use-navigation';
+import useNavigation, { NavItem } from '../../composables/use-navigation';
 import router from '@/router';
+import useUserStore from '@/stores/user';
+import useProjectsStore from '@/stores/projects';
+import marked from 'marked';
 
 export default defineComponent({
 	name: 'collections-overview',
 	components: {
-		CollectionsNavigation
+		CollectionsNavigation,
 	},
 	props: {},
 	setup() {
+		const userStore = useUserStore();
+		const projectsStore = useProjectsStore();
+
 		const tableHeaders = [
 			{
 				text: '',
 				value: 'icon',
 				width: 42,
-				sortable: false
+				sortable: false,
 			},
 			{
 				text: i18n.tc('collection', 1),
 				value: 'name',
-				width: 300
+				width: 300,
 			},
 			{
 				text: i18n.t('note'),
-				value: 'note'
-			}
+				value: 'note',
+			},
 		];
+
 		const { navItems } = useNavigation();
-		return { tableHeaders, navItems, navigateToCollection };
+
+		const isAdmin = computed(() => userStore.state.currentUser?.role.id === 1);
+
+		const dataModelLink = computed(() => {
+			return `/${projectsStore.state.currentProjectKey}/settings/data-model`;
+		});
+
+		return {
+			tableHeaders,
+			navItems,
+			navigateToCollection,
+			isAdmin,
+			dataModelLink,
+			marked,
+		};
+
 		function navigateToCollection(navItem: NavItem) {
 			router.push(navItem.to);
 		}
-	}
+	},
 });
 </script>
 
 <style lang="scss" scoped>
 .icon {
-	--v-icon-color: var(--foreground-color-secondary);
+	--v-icon-color: var(--foreground-subdued);
 
 	::v-deep i {
 		vertical-align: unset;
 	}
+}
+
+.header-icon {
+	--v-button-color-disabled: var(--foreground-normal);
+}
+
+.v-table {
+	padding: var(--content-padding);
+	padding-top: 0;
 }
 </style>

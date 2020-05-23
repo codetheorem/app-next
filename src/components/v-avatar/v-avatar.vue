@@ -6,32 +6,36 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import useSizeClass, { sizeProps } from '@/compositions/size-class';
+import useSizeClass, { sizeProps } from '@/composables/size-class';
 
 export default defineComponent({
 	props: {
 		size: {
 			type: Number,
-			default: null
+			default: null,
 		},
 		tile: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
-		...sizeProps
+		...sizeProps,
 	},
 	setup(props) {
 		const sizeClass = useSizeClass(props);
 		return { sizeClass };
-	}
+	},
 });
 </script>
 
+<style>
+body {
+	--v-avatar-color: var(--background-normal);
+	--v-avatar-size: 48px;
+}
+</style>
+
 <style lang="scss" scoped>
 .v-avatar {
-	--v-avatar-color: var(--action);
-	--v-avatar-size: 48px;
-
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -39,11 +43,11 @@ export default defineComponent({
 	width: var(--v-avatar-size);
 	height: var(--v-avatar-size);
 	overflow: hidden;
-	color: var(--white);
+	color: var(--foreground-subdued);
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	background-color: var(--v-avatar-color);
-	border-radius: 50%;
+	border-radius: var(--border-radius);
 
 	&.tile {
 		border-radius: 0;
@@ -51,6 +55,8 @@ export default defineComponent({
 
 	&.x-small {
 		--v-avatar-size: 24px;
+
+		border-radius: 2px;
 	}
 
 	&.small {
@@ -58,11 +64,11 @@ export default defineComponent({
 	}
 
 	&.large {
-		--v-avatar-size: 56px;
+		--v-avatar-size: 64px;
 	}
 
 	&.x-large {
-		--v-avatar-size: 64px;
+		--v-avatar-size: 80px;
 	}
 
 	::v-deep {

@@ -1,8 +1,11 @@
-import { withKnobs } from '@storybook/addon-knobs';
+import { withKnobs, text, boolean } from '@storybook/addon-knobs';
 import Vue from 'vue';
 import VInput from './v-input.vue';
 import markdown from './readme.md';
 import withPadding from '../../../.storybook/decorators/with-padding';
+import { defineComponent, ref } from '@vue/composition-api';
+import VMenu from '@/components/v-menu';
+import RawValue from '../../../.storybook/raw-value.vue';
 
 Vue.component('v-input', VInput);
 Vue.directive('focus', {});
@@ -12,44 +15,71 @@ export default {
 	component: VInput,
 	decorators: [withKnobs, withPadding],
 	parameters: {
-		notes: markdown
-	}
+		notes: markdown,
+	},
 };
 
-export const basic = () => ({
-	data() {
-		return {
-			value: ''
-		};
-	},
-	template: `
-<div>
-<v-input v-model="value" placeholder="Enter content..." />
-<pre style="max-width: max-content; margin-top: 20px; background-color: #eee; font-family: monospace; padding: 0.5rem; border-radius: 8px;">
-value: {{ value }}
-</pre>
-</div>
-`
-});
+export const basic = () =>
+	defineComponent({
+		components: { RawValue },
+		props: {
+			placeholder: {
+				default: text('Placeholder', 'Enter a value...', 'Options'),
+			},
+			trim: {
+				default: boolean('Trim', false, 'Options'),
+			},
+		},
+		setup() {
+			const value = ref(null);
+			return { value };
+		},
+		template: `
+			<div>
+				<v-input v-model="value" v-bind="{placeholder, trim}" />
+				<raw-value>{{ value }}</raw-value>
+			</div>
+		`,
+	});
 
 export const monospace = () => ({
 	data() {
 		return {
-			value: ''
+			value: '',
 		};
 	},
 	template: `
 <div>
-<v-input v-model="value" placeholder="Enter content..." monospace />
+<v-input v-model="value" placeholder="Enter content..." :style="{'--v-input-font-family': 'var(--family-monospace)'}" />
 </div>
-`
+`,
 });
 
 export const disabled = () => `<v-input value="I'm disabled" disabled />`;
 
 export const fullWidth = () => `
-<v-input placeholder="Enter content..." full-width />
+<v-input placeholder="Enter content..." />
 `;
+
+export const forceSlug = () =>
+	defineComponent({
+		components: { RawValue },
+		props: {
+			separator: {
+				default: text('Slug Separator', '-'),
+			},
+		},
+		setup() {
+			const value = ref(null);
+			return { value };
+		},
+		template: `
+			<div>
+				<v-input slug :slug-separator="separator" v-model="value" placeholder="Enter url friendly title..." />
+				<raw-value>{{ value }}</raw-value>
+			</div>
+		`,
+	});
 
 export const prefixSuffix = () => `
 <div>
@@ -61,7 +91,7 @@ export const prefixSuffix = () => `
 export const withSlots = () => ({
 	data() {
 		return {
-			value: ''
+			value: '',
 		};
 	},
 	template: `
@@ -85,5 +115,30 @@ export const withSlots = () => ({
 		<template #append>append</template>
 	</v-input>
 	</div>
-	`
+	`,
 });
+
+export const withMenu = () =>
+	defineComponent({
+		components: { VMenu },
+		template: `
+			<div>
+				<v-menu placement="bottom-start" close-on-content-click attached>
+					<template #activator="{ toggle, active }">
+						<v-input placeholder="Enter value...">
+							<template #append><v-icon @click="toggle" name="public" :style="{
+								'--v-icon-color': active ? 'var(--blue)' : 'currentColor'
+							}" /></template>
+						</v-input>
+					</template>
+
+					<v-list>
+						<v-list-item v-for="i in [1, 2, 3]" :key="i" @click="() => {}">
+							Item {{i}}
+						</v-list-item>
+					</v-list>
+				</v-menu>
+				<portal-target name="outlet" />
+			</div>
+		`,
+	});

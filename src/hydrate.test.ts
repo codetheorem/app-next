@@ -3,6 +3,8 @@ import VueCompositionAPI from '@vue/composition-api';
 import { useAppStore } from '@/stores/app';
 import { useStores, hydrate, dehydrate } from './hydrate';
 
+jest.mock('@/api');
+
 describe('Stores / App', () => {
 	beforeAll(() => {
 		Vue.use(VueCompositionAPI);
@@ -31,11 +33,11 @@ describe('Stores / App', () => {
 				{
 					id: 'test1',
 					hydrate() {
-						return new Promise(resolve => {
+						return new Promise((resolve) => {
 							setTimeout(() => resolve(), 15);
 						});
-					}
-				}
+					},
+				},
 			]);
 
 			expect(appStore.state.hydrating).toBe(true);
@@ -48,15 +50,15 @@ describe('Stores / App', () => {
 		it('Calls the hydrate function for all stores', async () => {
 			const mockStores: any = [
 				{
-					hydrate: jest.fn(() => Promise.resolve())
+					hydrate: jest.fn(() => Promise.resolve()),
 				},
 				{
-					dehydrate: jest.fn(() => Promise.resolve())
+					dehydrate: jest.fn(() => Promise.resolve()),
 				},
 				{
 					hydrate: jest.fn(() => Promise.resolve()),
-					dehydrate: jest.fn(() => Promise.resolve())
-				}
+					dehydrate: jest.fn(() => Promise.resolve()),
+				},
 			];
 
 			useAppStore({});
@@ -81,8 +83,8 @@ describe('Stores / App', () => {
 
 			const mockStores: any = [
 				{
-					hydrate: jest.fn(() => Promise.resolve())
-				}
+					hydrate: jest.fn(() => Promise.resolve()),
+				},
 			];
 
 			await hydrate([]);
@@ -96,8 +98,8 @@ describe('Stores / App', () => {
 
 			const mockStores: any = [
 				{
-					hydrate: jest.fn(() => Promise.resolve())
-				}
+					hydrate: jest.fn(() => Promise.resolve()),
+				},
 			];
 
 			await hydrate(mockStores);
@@ -110,8 +112,8 @@ describe('Stores / App', () => {
 				{
 					hydrate: jest.fn(() => {
 						throw 'test';
-					})
-				}
+					}),
+				},
 			];
 
 			const appStore = useAppStore({});
@@ -126,12 +128,12 @@ describe('Stores / App', () => {
 		it('Calls the dehydrate function for all stores', async () => {
 			const mockStores: any = [
 				{
-					dehydrate: jest.fn(() => Promise.resolve())
+					dehydrate: jest.fn(() => Promise.resolve()),
 				},
 				{},
 				{
-					dehydrate: jest.fn(() => Promise.resolve())
-				}
+					dehydrate: jest.fn(() => Promise.resolve()),
+				},
 			];
 
 			const appStore = useAppStore({});
@@ -157,8 +159,8 @@ describe('Stores / App', () => {
 		it('Does not dehydrate when store is already dehydrated', async () => {
 			const mockStores: any = [
 				{
-					dehydrate: jest.fn(() => Promise.resolve())
-				}
+					dehydrate: jest.fn(() => Promise.resolve()),
+				},
 			];
 
 			const appStore = useAppStore({});

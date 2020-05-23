@@ -1,8 +1,14 @@
 <template>
 	<thead class="table-header" :class="{ dragging }">
 		<tr :class="{ fixed }">
-			<th v-if="showManualSort" class="manual cell" @click="toggleManualSort" scope="col">
-				<v-icon name="sort" class="drag-handle" small />
+			<th
+				v-if="showManualSort"
+				class="manual cell"
+				:class="{ 'sorted-manually': sort.by === manualSortKey }"
+				@click="toggleManualSort"
+				scope="col"
+			>
+				<v-icon v-tooltip="$t('toggle_manual_sorting')" name="sort" small />
 			</th>
 
 			<th v-if="showSelect" class="select cell" scope="col">
@@ -14,7 +20,7 @@
 			</th>
 
 			<th
-				v-for="(header, index) in headers"
+				v-for="header in headers"
 				:key="header.value"
 				:class="getClassesForHeader(header)"
 				class="cell"
@@ -30,18 +36,21 @@
 				</div>
 				<span
 					class="resize-handle"
-					v-if="showResize && index !== headers.length - 1"
+					v-if="showResize"
 					@click.stop
 					@mousedown="onResizeHandleMouseDown(header, $event)"
 				/>
 			</th>
+
+			<th class="spacer cell" scope="col" />
+			<th v-if="hasItemAppendSlot" class="spacer cell" scope="col" />
 		</tr>
 	</thead>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, PropType } from '@vue/composition-api';
-import useEventListener from '@/compositions/use-event-listener';
+import useEventListener from '@/composables/use-event-listener';
 import { Header, Sort } from '../types';
 import { throttle, clone } from 'lodash';
 
@@ -49,36 +58,48 @@ export default defineComponent({
 	props: {
 		headers: {
 			type: Array as PropType<Header[]>,
-			required: true
+			required: true,
 		},
 		sort: {
 			type: Object as PropType<Sort>,
-			required: true
+			required: true,
 		},
 		showSelect: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		showResize: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		showManualSort: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		someItemsSelected: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		allItemsSelected: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		fixed: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
+		mustSort: {
+			type: Boolean,
+			default: false,
+		},
+		hasItemAppendSlot: {
+			type: Boolean,
+			default: false,
+		},
+		manualSortKey: {
+			type: String,
+			default: null,
+		},
 	},
 	setup(props, { emit }) {
 		const dragging = ref<boolean>(false);
@@ -99,7 +120,7 @@ export default defineComponent({
 			onMouseMove,
 			onResizeHandleMouseDown,
 			toggleManualSort,
-			toggleSelectAll
+			toggleSelectAll,
 		};
 
 		function getClassesForHeader(header: Header) {
@@ -124,33 +145,35 @@ export default defineComponent({
 			return classes;
 		}
 
-		/**
-		 * If current sort is not this field, use this field in ascending order
-		 * If current sort is field, reverse sort order to descending
-		 * If current sort is field and sort is desc, set sort field to null (default)
-		 */
 		function changeSort(header: Header) {
 			if (header.sortable === false) return;
 			if (dragging.value === true) return;
 
 			if (header.value === props.sort.by) {
-				if (props.sort.desc === false) {
-					emit('update:sort', {
+				if (props.mustSort) {
+					return emit('update:sort', {
 						by: props.sort.by,
-						desc: true
-					});
-				} else {
-					emit('update:sort', {
-						by: null,
-						desc: false
+						desc: !props.sort.desc,
 					});
 				}
-			} else {
-				emit('update:sort', {
-					by: header.value,
-					desc: false
+
+				if (props.sort.desc === false) {
+					return emit('update:sort', {
+						by: props.sort.by,
+						desc: true,
+					});
+				}
+
+				return emit('update:sort', {
+					by: null,
+					desc: false,
 				});
 			}
+
+			return emit('update:sort', {
+				by: header.value,
+				desc: false,
+			});
 		}
 
 		function toggleSelectAll() {
@@ -175,7 +198,7 @@ export default defineComponent({
 					if (existing.value === dragHeader.value?.value) {
 						return {
 							...existing,
-							width: Math.max(50, newWidth)
+							width: Math.max(50, newWidth),
 						};
 					}
 
@@ -192,19 +215,19 @@ export default defineComponent({
 		}
 
 		function toggleManualSort() {
-			if (props.sort.by === '$manual') {
+			if (props.sort.by === props.manualSortKey) {
 				emit('update:sort', {
 					by: null,
-					desc: false
+					desc: false,
 				});
 			} else {
 				emit('update:sort', {
-					by: '$manual',
-					desc: false
+					by: props.manualSortKey,
+					desc: false,
 				});
 			}
 		}
-	}
+	},
 });
 </script>
 
@@ -212,15 +235,15 @@ export default defineComponent({
 .table-header {
 	.cell {
 		position: relative;
-		height: 48px;
-		padding: 0 20px;
+		height: 50px; // +2px for bottom border
+		padding: 0 12px;
 		font-weight: 500;
 		font-size: 14px;
-		background-color: var(--input-background-color);
-		border-bottom: 1px solid var(--input-border-color);
+		background-color: var(--v-table-background-color);
+		border-bottom: 2px solid var(--border-subdued);
 
 		&.select,
-		&.sort {
+		&.manual {
 			display: flex;
 			align-items: center;
 		}
@@ -229,6 +252,7 @@ export default defineComponent({
 			display: flex;
 			align-items: center;
 			height: 100%;
+			font-weight: 600;
 
 			> span {
 				overflow: hidden;
@@ -239,15 +263,17 @@ export default defineComponent({
 	}
 
 	.sortable {
+		cursor: pointer;
 		.sort-icon {
 			margin-left: 4px;
+			color: var(--foreground-subdued);
 			transform: scaleY(-1);
 			opacity: 0;
 			transition: opacity var(--fast) var(--transition);
 		}
 
 		&:hover .sort-icon {
-			opacity: 0.5;
+			opacity: 1;
 		}
 
 		&.sort-asc,
@@ -273,10 +299,24 @@ export default defineComponent({
 		padding-right: 0;
 	}
 
-	.fixed th {
+	.fixed {
 		position: sticky;
 		top: var(--v-table-sticky-offset-top);
-		z-index: 2;
+		z-index: 3;
+	}
+
+	.manual {
+		color: var(--foreground-subdued);
+		cursor: pointer;
+
+		.v-icon {
+			position: relative;
+			left: 2px;
+		}
+
+		&.sorted-manually {
+			color: var(--foreground-normal);
+		}
 	}
 
 	.resize-handle {
@@ -286,20 +326,27 @@ export default defineComponent({
 		width: 5px;
 		height: 100%;
 		cursor: ew-resize;
+		opacity: 0;
+		transition: opacity var(--fast) var(--transition);
 
 		&::after {
 			position: relative;
+			top: 20%;
 			left: 2px;
 			display: block;
-			width: 1px;
-			height: 100%;
-			background-color: var(--input-border-color);
+			width: 2px;
+			height: 60%;
+			background-color: var(--border-subdued);
 			content: '';
 		}
 
 		&:hover::after {
-			background-color: var(--input-action-color-hover);
+			background-color: var(--foreground-subdued);
 		}
+	}
+
+	&:hover .resize-handle {
+		opacity: 1;
 	}
 }
 </style>

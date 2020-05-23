@@ -4,12 +4,18 @@ import { useFieldsStore } from '@/stores/fields/';
 import { useUserStore } from '@/stores/user/';
 import { useRequestsStore } from '@/stores/requests/';
 import { useCollectionPresetsStore } from '@/stores/collection-presets/';
+import { useSettingsStore } from '@/stores/settings/';
+import { useProjectsStore } from '@/stores/projects/';
+import { useLatencyStore } from '@/stores/latency';
+import { usePermissionsStore } from '@/stores/permissions';
+import { useRelationsStore } from '@/stores/relations';
+import { setLanguage, Language } from '@/lang';
 
 type GenericStore = {
 	id: string;
 	hydrate?: () => Promise<void>;
 	dehydrate?: () => Promise<void>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 	[key: string]: any;
 };
 
@@ -19,15 +25,21 @@ export function useStores(
 		useFieldsStore,
 		useUserStore,
 		useRequestsStore,
-		useCollectionPresetsStore
+		useCollectionPresetsStore,
+		useSettingsStore,
+		useProjectsStore,
+		useLatencyStore,
+		usePermissionsStore,
+		useRelationsStore,
 	]
 ) {
-	return stores.map(useStore => useStore()) as GenericStore[];
+	return stores.map((useStore) => useStore()) as GenericStore[];
 }
 
 /* istanbul ignore next: useStores has a test already */
 export async function hydrate(stores = useStores()) {
 	const appStore = useAppStore();
+	const userStore = useUserStore();
 
 	if (appStore.state.hydrated) return;
 	if (appStore.state.hydrating) return;
@@ -35,9 +47,19 @@ export async function hydrate(stores = useStores()) {
 	appStore.state.hydrating = true;
 
 	try {
-		for (const store of stores) {
-			await store.hydrate?.();
-		}
+		/**
+		 * @NOTE
+		 * Multiple stores rely on the userStore to be set, so they can fetch user specific data. The
+		 * following makes sure that the user store is always fetched first, before we hydrate anything
+		 * else.
+		 */
+		await userStore.hydrate();
+
+		setLanguage((userStore.state.currentUser?.locale as Language) || 'en-US');
+
+		await Promise.all(
+			stores.filter(({ id }) => id !== 'userStore').map((store) => store.hydrate?.())
+		);
 	} catch (error) {
 		appStore.state.error = error;
 	} finally {

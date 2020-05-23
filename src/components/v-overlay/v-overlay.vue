@@ -12,12 +12,12 @@ export default defineComponent({
 	props: {
 		active: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		absolute: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	setup(props, { emit, listeners }) {
 		const hasClick = computed<boolean>(() => listeners.hasOwnProperty('click'));
@@ -27,15 +27,19 @@ export default defineComponent({
 		function onClick(event: MouseEvent) {
 			emit('click', event);
 		}
-	}
+	},
 });
 </script>
 
+<style>
+body {
+	--v-overlay-color: rgba(38, 50, 56, 0.9);
+	--v-overlay-z-index: 500;
+}
+</style>
+
 <style lang="scss" scoped>
 .v-overlay {
-	--v-overlay-color: var(--overlay-color);
-	--v-overlay-z-index: 500;
-
 	position: fixed;
 	top: 0;
 	left: 0;

@@ -1,4 +1,4 @@
-import { withKnobs, text, boolean } from '@storybook/addon-knobs';
+import { withKnobs, text, select } from '@storybook/addon-knobs';
 import Vue from 'vue';
 import VNotice from './v-notice.vue';
 import VIcon from '../v-icon/';
@@ -13,39 +13,33 @@ export default {
 	component: VNotice,
 	decorators: [withKnobs, withPadding],
 	parameters: {
-		notes: markdown
-	}
+		notes: markdown,
+	},
 };
 
 export const withText = () => ({
 	props: {
 		text: {
-			default: text('Text', 'This is a notice')
+			default: text('Text', 'This is a notice'),
 		},
-		success: {
-			default: boolean('Success', false)
+		type: {
+			default: select('Type', ['info', 'success', 'warning', 'danger'], 'info'),
 		},
-		warning: {
-			default: boolean('Warning', false)
-		},
-		danger: {
-			default: boolean('Danger', false)
-		}
 	},
-	template: `<v-notice :success="success" :warning="warning" :danger="danger">{{text}}</v-notice>`
+	template: `<v-notice :type="type">{{text}}</v-notice>`,
 });
 
 export const withCustomColors = () => ({
 	props: {
 		color: {
-			default: text('Color', 'red')
+			default: text('Color', 'red'),
 		},
 		backgroundColor: {
-			default: text('Background Color', 'papayawhip')
+			default: text('Background Color', 'papayawhip'),
 		},
 		iconColor: {
-			default: text('Icon Color', 'blue')
-		}
+			default: text('Icon Color', 'blue'),
+		},
 	},
 	template: `
 	<v-notice
@@ -55,22 +49,22 @@ export const withCustomColors = () => ({
 			'--v-notice-icon-color': iconColor
 		}"
 	>This is a notice</v-notice>
-	`
+	`,
 });
 
 export const withCustomIcon = () => ({
 	props: {
 		icon: {
-			default: text('Icon', 'translate')
-		}
+			default: text('Icon', 'translate'),
+		},
 	},
 	template: `
 	<v-notice :icon="icon">This is a notice</v-notice>
-	`
+	`,
 });
 
 export const noIcon = () => ({
 	template: `
 	<v-notice :icon="false">This is a notice</v-notice>
-	`
+	`,
 });

@@ -19,41 +19,45 @@
 
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api';
-import useSizeClass, { sizeProps } from '@/compositions/size-class';
+import useSizeClass, { sizeProps } from '@/composables/size-class';
 
 export default defineComponent({
 	props: {
 		indeterminate: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		value: {
 			type: Number,
-			default: 0
+			default: 0,
 		},
-		...sizeProps
+		...sizeProps,
 	},
 	setup(props) {
 		const sizeClass = useSizeClass(props);
 
 		const circleStyle = computed(() => ({
-			'stroke-dasharray': (props.value / 100) * 78.5 + ', 78.5'
+			'stroke-dasharray': (props.value / 100) * 78.5 + ', 78.5',
 		}));
 
 		return { sizeClass, circleStyle };
-	}
+	},
 });
 </script>
 
-<style lang="scss" scoped>
-.v-progress-circular {
-	--v-progress-circular-color: var(--input-foreground-color);
-	--v-progress-circular-background-color: var(--input-border-color);
+<style>
+body {
+	--v-progress-circular-color: var(--foreground-normal);
+	--v-progress-circular-background-color: var(--border-normal);
 	--v-progress-circular-transition: 400ms;
 	--v-progress-circular-speed: 2s;
 	--v-progress-circular-size: 28px;
 	--v-progress-circular-line-size: 3px;
+}
+</style>
 
+<style lang="scss" scoped>
+.v-progress-circular {
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -67,8 +71,10 @@ export default defineComponent({
 	}
 
 	&.small {
-		--v-progress-circular-size: 16px;
+		--v-progress-circular-size: 20px;
 		--v-progress-circular-line-size: 3px;
+
+		margin: 2px;
 	}
 
 	&.large {

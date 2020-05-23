@@ -1,18 +1,31 @@
 import { i18n } from '@/lang/';
-import { Module, ModuleOptions, ModuleContext } from './types';
+import { ModuleDefineParam, ModuleContext, ModuleConfig } from './types';
 
-export function defineModule(options: ModuleOptions): Module {
-	const context: ModuleContext = { i18n };
+export function defineModule(
+	config: ModuleDefineParam | ((context: ModuleContext) => ModuleConfig)
+): ModuleConfig {
+	let options: ModuleConfig;
 
-	const config = {
-		id: options.id,
-		...options.register(context)
-	};
+	if (typeof config === 'function') {
+		const context: ModuleContext = { i18n };
+		options = config(context);
+	} else {
+		options = config;
+	}
 
-	config.routes = config.routes.map(route => ({
-		...route,
-		path: `/:project/${config.id}${route.path}`
-	}));
+	if (options.routes !== undefined) {
+		options.routes = options.routes.map((route) => {
+			if (route.path) {
+				route.path = `/:project/${options.id}${route.path}`;
+			}
 
-	return config;
+			if (route.redirect) {
+				route.redirect = `/:project/${options.id}${route.redirect}`;
+			}
+
+			return route;
+		});
+	}
+
+	return options;
 }

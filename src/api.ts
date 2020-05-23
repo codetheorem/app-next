@@ -1,9 +1,10 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { useRequestsStore } from '@/stores/requests';
 import { LogoutReason, logout, checkAuth } from '@/auth';
+import getRootPath from '@/utils/get-root-path';
 
 const api = axios.create({
-	baseURL: getRootPath()
+	baseURL: getRootPath(),
 });
 
 interface RequestConfig extends AxiosRequestConfig {
@@ -14,7 +15,7 @@ interface Response extends AxiosResponse {
 	config: RequestConfig;
 }
 
-export interface Error extends AxiosError {
+export interface RequestError extends AxiosError {
 	response: Response;
 }
 
@@ -24,7 +25,7 @@ export const onRequest = (config: AxiosRequestConfig) => {
 
 	const requestConfig: RequestConfig = {
 		id: id,
-		...config
+		...config,
 	};
 
 	return requestConfig;
@@ -37,7 +38,7 @@ export const onResponse = (response: AxiosResponse | Response) => {
 	return response;
 };
 
-export const onError = async (error: Error) => {
+export const onError = async (error: RequestError) => {
 	const requestsStore = useRequestsStore();
 	const id = (error.response.config as RequestConfig).id;
 	requestsStore.endRequest(id);
@@ -64,13 +65,5 @@ export const onError = async (error: Error) => {
 
 api.interceptors.request.use(onRequest);
 api.interceptors.response.use(onResponse, onError);
-
-export function getRootPath(): string {
-	const path = window.location.pathname;
-	const parts = path.split('/');
-	const adminIndex = parts.indexOf('admin');
-	const rootPath = parts.slice(0, adminIndex).join('/') + '/';
-	return rootPath;
-}
 
 export default api;

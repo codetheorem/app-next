@@ -1,22 +1,22 @@
-import VueRouter, { NavigationGuard, RouteConfig } from 'vue-router';
-import Debug from '@/routes/debug.vue';
+import VueRouter, { NavigationGuard, RouteConfig, Route } from 'vue-router';
 import { useProjectsStore } from '@/stores/projects';
 import LoginRoute from '@/routes/login';
+import InstallRoute from '@/routes/install';
+import LogoutRoute from '@/routes/logout';
+import ResetPasswordRoute from '@/routes/reset-password';
 import ProjectChooserRoute from '@/routes/project-chooser';
-import { checkAuth, logout } from '@/auth';
+import { checkAuth } from '@/auth';
 import { hydrate, dehydrate } from '@/hydrate';
 import useAppStore from '@/stores/app';
+import useUserStore from '@/stores/user';
+import PrivateNotFoundRoute from '@/routes/private-not-found';
+
+import getRootPath from '@/utils/get-root-path';
 
 export const onBeforeEnterProjectChooser: NavigationGuard = (to, from, next) => {
 	const projectsStore = useProjectsStore();
 	projectsStore.state.currentProjectKey = null;
 	next();
-};
-
-export const onBeforeEnterLogout: NavigationGuard = async (to, from, next) => {
-	const currentProjectKey = to.params.project;
-	await logout({ navigate: false });
-	next(`/${currentProjectKey}/login`);
 };
 
 export const defaultRoutes: RouteConfig[] = [
@@ -25,34 +25,48 @@ export const defaultRoutes: RouteConfig[] = [
 		path: '/',
 		component: ProjectChooserRoute,
 		meta: {
-			public: true
+			public: true,
 		},
-		beforeEnter: onBeforeEnterProjectChooser
+		beforeEnter: onBeforeEnterProjectChooser,
 	},
 	{
 		name: 'install',
 		path: '/install',
-		component: LoginRoute,
+		component: InstallRoute,
 		meta: {
-			public: true
-		}
+			public: true,
+		},
 	},
 	{
 		path: '/:project',
-		redirect: '/:project/login'
+		redirect: '/:project/login',
 	},
 	{
 		name: 'login',
 		path: '/:project/login',
 		component: LoginRoute,
+		props: (route) => ({
+			ssoErrorCode: route.query.error ? route.query.code : null,
+		}),
 		meta: {
-			public: true
-		}
+			public: true,
+		},
+	},
+	{
+		name: 'reset-password',
+		path: '/:project/reset-password',
+		component: ResetPasswordRoute,
+		meta: {
+			public: true,
+		},
 	},
 	{
 		name: 'logout',
 		path: '/:project/logout',
-		beforeEnter: onBeforeEnterLogout
+		component: LogoutRoute,
+		meta: {
+			public: true,
+		},
 	},
 	/**
 	 * @NOTE
@@ -69,25 +83,23 @@ export const defaultRoutes: RouteConfig[] = [
 	{
 		name: 'private-404',
 		path: '/:project/*',
-		// This will be Private404
-		component: Debug
+		component: PrivateNotFoundRoute,
 	},
-	{
-		name: 'public-404',
-		path: '*',
-		// This will be Public404
-		component: Debug
-	}
 ];
 
 const router = new VueRouter({
-	mode: 'hash',
-	routes: defaultRoutes
+	mode: 'history',
+	base: getRootPath() + 'admin/',
+	routes: defaultRoutes,
 });
 
 export function replaceRoutes(routeFilter: (routes: RouteConfig[]) => RouteConfig[]): void {
 	const newRoutes = routeFilter([...defaultRoutes]);
-	const newRouter = new VueRouter({ routes: newRoutes });
+	const newRouter = new VueRouter({
+		mode: 'history',
+		base: getRootPath() + 'admin/',
+		routes: newRoutes,
+	});
 
 	// @ts-ignore - Matcher is not officially part of the public API (https://github.com/vuejs/vue-router/issues/2844#issuecomment-509529927)
 	router.matcher = newRouter.matcher;
@@ -109,9 +121,11 @@ export const onBeforeEach: NavigationGuard = async (to, from, next) => {
 	}
 
 	// Keep the projects store currentProjectKey in sync with the route
+	// If we switch projects to a public route, we don't need the store to be hyrdated
 	if (to.params.project && projectsStore.state.currentProjectKey !== to.params.project) {
 		// If the store is hydrated for the current project, make sure to dehydrate it
-		if (appStore.state.hydrated === true) {
+		if (to.meta?.public !== true && appStore.state.hydrated === true) {
+			appStore.state.hydrating = true;
 			await dehydrate();
 		}
 
@@ -125,12 +139,14 @@ export const onBeforeEach: NavigationGuard = async (to, from, next) => {
 
 	// The store can only be hydrated if you're an authenticated user. If the store is hydrated, we
 	// can safely assume you're logged in
-	if (appStore.state.hydrated === false) {
+	if (to.meta?.public !== true && appStore.state.hydrated === false) {
 		const authenticated = await checkAuth();
 
 		if (authenticated === true) {
+			appStore.state.hydrating = false;
 			await hydrate();
 		} else if (to.meta?.public !== true) {
+			appStore.state.hydrating = false;
 			return next(`/${to.params.project}/login`);
 		}
 	}
@@ -138,7 +154,20 @@ export const onBeforeEach: NavigationGuard = async (to, from, next) => {
 	return next();
 };
 
+export const onAfterEach = (to: Route) => {
+	const userStore = useUserStore();
+
+	if (to.meta.public !== true) {
+		// The timeout gives the page some breathing room to load. No need to clog up the thread with
+		// this call while more important things are loading
+		setTimeout(() => {
+			userStore.trackPage(to.fullPath);
+		}, 2500);
+	}
+};
+
 router.beforeEach(onBeforeEach);
+router.afterEach(onAfterEach);
 
 export default router;
 

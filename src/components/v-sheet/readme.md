@@ -18,7 +18,7 @@ The color can be changed via the css variable called `--v-sheet-color`.
 <v-sheet/>
 <style>
 .v-sheet {
-    --v-sheet-color: var(-red-600);
+	--v-sheet-color: var(-red-600);
 }
 </style>
 ```

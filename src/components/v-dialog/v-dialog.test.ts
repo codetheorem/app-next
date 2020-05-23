@@ -1,11 +1,13 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VueCompositionAPI from '@vue/composition-api';
+import PortalVue from 'portal-vue';
 import VDialog from './v-dialog.vue';
 import VOverlay from '@/components/v-overlay';
 
 const localVue = createLocalVue();
 localVue.use(VueCompositionAPI);
 localVue.component('v-overlay', VOverlay);
+localVue.use(PortalVue);
 
 describe('Components / Dialog', () => {
 	beforeEach(() => {
@@ -22,8 +24,8 @@ describe('Components / Dialog', () => {
 			localVue,
 			propsData: {
 				persistent: false,
-				active: false
-			}
+				active: false,
+			},
 		});
 
 		(component.vm as any).emitToggle();
@@ -36,8 +38,8 @@ describe('Components / Dialog', () => {
 			localVue,
 			propsData: {
 				persistent: true,
-				active: false
-			}
+				active: false,
+			},
 		});
 
 		(component.vm as any).emitToggle();
@@ -48,7 +50,7 @@ describe('Components / Dialog', () => {
 
 	it('Adds the nudge class', () => {
 		const component = shallowMount(VDialog, {
-			localVue
+			localVue,
 		});
 
 		(component.vm as any).nudge();

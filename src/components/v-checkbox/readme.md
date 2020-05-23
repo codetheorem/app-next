@@ -30,7 +30,7 @@ The colors can be changed via the css variables `--v-checkbox-color`.
 }
 
 .example-4 {
-	--v-checkbox-color: var(--input-border-color);
+	--v-checkbox-color: var(--border-normal);
 }
 </style>
 ```

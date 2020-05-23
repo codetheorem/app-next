@@ -2,12 +2,14 @@
 	<div class="v-dialog">
 		<slot name="activator" v-bind="{ on: () => $emit('toggle', true) }" />
 
-		<div class="container" :class="[{ active }, className]">
-			<v-overlay :active="active" absolute @click="emitToggle" />
-			<div class="content">
-				<slot />
-			</div>
-		</div>
+		<portal to="outlet">
+			<transition name="dialog">
+				<div v-if="active" class="container" :class="[className]">
+					<v-overlay active absolute @click="emitToggle" />
+					<slot />
+				</div>
+			</transition>
+		</portal>
 	</div>
 </template>
 
@@ -17,17 +19,17 @@ import { defineComponent, ref } from '@vue/composition-api';
 export default defineComponent({
 	model: {
 		prop: 'active',
-		event: 'toggle'
+		event: 'toggle',
 	},
 	props: {
 		active: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		persistent: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	setup(props, { emit }) {
 		const className = ref<string>(null);
@@ -49,81 +51,87 @@ export default defineComponent({
 				className.value = null;
 			}, 200);
 		}
-	}
+	},
 });
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/mixins/breakpoint';
+
 .v-dialog {
 	--v-dialog-z-index: 100;
 
 	display: contents;
+}
 
-	.container {
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: var(--v-dialog-z-index);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-		opacity: 0;
-		transition: opacity var(--medium) var(--transition);
-		pointer-events: none;
+.container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 500;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	transition: opacity var(--medium) var(--transition);
 
-		.v-card {
-			--v-card-min-width: 400px;
-			--v-card-padding: 24px;
-		}
-
-		.v-sheet {
-			--v-sheet-padding: 24px;
-			--v-sheet-max-width: 560px;
-		}
-
-		.v-overlay {
-			--v-overlay-z-index: 1;
-		}
-
-		.content {
-			position: relative;
-			z-index: 2;
-			max-height: 90%;
-			transform: translateY(50px);
-			opacity: 0;
-			transition: var(--medium) var(--transition-in);
-			transition-property: opacity, transform;
-		}
-
-		&.active {
-			opacity: 1;
-			pointer-events: all;
-
-			.content {
-				transform: translateY(0);
-				opacity: 1;
-			}
-		}
-
-		&.nudge {
-			animation: nudge 200ms;
-		}
+	::v-deep .v-card {
+		--v-card-min-width: 540px;
+		--v-card-padding: 20px;
+		--v-card-background-color: var(--background-page);
 	}
 
-	@keyframes nudge {
-		0% {
-			transform: scale(1);
-		}
+	::v-deep .v-sheet {
+		--v-sheet-padding: 24px;
+		--v-sheet-max-width: 560px;
+	}
 
-		50% {
-			transform: scale(1.05);
-		}
+	.v-overlay {
+		--v-overlay-z-index: 1;
+	}
 
-		100% {
-			transform: scale(1);
-		}
+	&.nudge {
+		animation: nudge 200ms;
+	}
+
+	::v-deep > * {
+		z-index: 2;
+		box-shadow: 0px 4px 12px rgba(38, 50, 56, 0.1);
+	}
+}
+
+@keyframes nudge {
+	0% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.02);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+.dialog-enter-active,
+.dialog-leave-active {
+	transition: opacity var(--slow) var(--transition);
+
+	::v-deep > *:not(.v-overlay) {
+		transform: translateY(0px);
+		transition: transform var(--slow) var(--transition-in);
+	}
+}
+
+.dialog-enter,
+.dialog-leave-to {
+	opacity: 0;
+
+	::v-deep > *:not(.v-overlay) {
+		transform: translateY(50px);
+		transition: transform var(--slow) var(--transition-out);
 	}
 }
 </style>

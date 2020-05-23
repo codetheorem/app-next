@@ -8,7 +8,7 @@
 		:disabled="disabled"
 	>
 		<span class="switch" />
-		<span class="label">
+		<span class="label type-label">
 			<slot name="label">{{ label }}</slot>
 		</span>
 	</button>
@@ -20,25 +20,25 @@ import { defineComponent, computed } from '@vue/composition-api';
 export default defineComponent({
 	model: {
 		prop: 'inputValue',
-		event: 'change'
+		event: 'change',
 	},
 	props: {
 		value: {
 			type: String,
-			default: null
+			default: null,
 		},
 		inputValue: {
 			type: [Boolean, Array],
-			default: false
+			default: false,
 		},
 		label: {
 			type: String,
-			default: null
+			default: null,
 		},
 		disabled: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	setup(props, { emit }) {
 		const isChecked = computed<boolean>(() => {
@@ -66,16 +66,18 @@ export default defineComponent({
 				emit('change', !isChecked.value);
 			}
 		}
-	}
+	},
 });
 </script>
 
+<style>
+body {
+	--v-switch-color: var(--foreground-normal);
+}
+</style>
+
 <style lang="scss" scoped>
-@import '@/styles/mixins/type-styles';
-
 .v-switch {
-	--v-switch-color: var(--input-foreground-color);
-
 	display: flex;
 	align-items: center;
 	font-size: 0;
@@ -90,7 +92,7 @@ export default defineComponent({
 		width: 44px;
 		height: 24px;
 		vertical-align: middle;
-		border: var(--input-border-width) solid var(--input-border-color);
+		border: var(--border-width) solid var(--border-normal);
 		border-radius: 12px;
 		transition: var(--fast) var(--transition);
 		transition-property: background-color border;
@@ -106,14 +108,14 @@ export default defineComponent({
 			display: block;
 			width: 16px;
 			height: 16px;
-			background-color: var(--input-border-color);
+			background-color: var(--border-normal);
 			border-radius: 8px;
 			transition: transform var(--fast) var(--transition);
 			content: '';
 		}
 
 		&:hover {
-			border-color: var(--input-border-color-hover);
+			border-color: var(--border-normal);
 		}
 	}
 
@@ -122,7 +124,7 @@ export default defineComponent({
 		border-color: var(--v-switch-color);
 
 		&::after {
-			background-color: var(--background-color);
+			background-color: var(--background-page);
 			transform: translateX(20px);
 		}
 	}
@@ -130,28 +132,26 @@ export default defineComponent({
 	.label:not(:empty) {
 		margin-left: 8px;
 		vertical-align: middle;
-
-		@include type-body-sans;
 	}
 
 	&:disabled {
 		cursor: not-allowed;
 
 		.switch {
-			background-color: var(--input-background-color-disabled);
-			border-color: var(--input-border-color);
+			background-color: var(--background-normal-alt);
+			border-color: var(--border-normal);
 
 			&::after {
-				background-color: var(--input-border-color);
+				background-color: var(--border-normal);
 			}
 
 			&:hover {
-				border-color: var(--input-border-color);
+				border-color: var(--border-normal);
 			}
 		}
 
 		.label {
-			color: var(--foreground-color-secondary);
+			color: var(--foreground-subdued);
 		}
 	}
 }

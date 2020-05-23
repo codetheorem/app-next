@@ -1,14 +1,19 @@
 <template>
-	<div class="drawer-detail">
+	<div class="drawer-detail" :class="{ open: drawerOpen }">
 		<button class="toggle" @click="toggle" :class="{ open: active }">
 			<div class="icon">
-				<v-icon :name="icon" />
+				<v-badge bordered :value="badge" :disabled="!badge">
+					<v-icon :name="icon" outline />
+				</v-badge>
 			</div>
 			<div class="title" v-show="drawerOpen">
 				{{ title }}
 			</div>
+			<div v-if="close" class="close" @click.stop="drawerOpen = !drawerOpen">
+				<v-icon name="close" />
+			</div>
 		</button>
-		<transition-expand>
+		<transition-expand class="scroll-container">
 			<div v-show="active">
 				<div class="content">
 					<slot />
@@ -19,52 +24,95 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject } from '@vue/composition-api';
-import { useGroupable } from '@/compositions/groupable';
+import { defineComponent, toRefs } from '@vue/composition-api';
+import useAppStore from '@/stores/app';
+import { useGroupable } from '@/composables/groupable';
 
 export default defineComponent({
 	props: {
 		icon: {
 			type: String,
-			required: true
+			required: true,
 		},
 		title: {
 			type: String,
-			required: true
-		}
+			required: true,
+		},
+		badge: {
+			type: [String, Number],
+			default: null,
+		},
+		close: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	setup(props) {
-		const { active, toggle } = useGroupable(props.title);
-		const drawerOpen = inject('drawer-open', ref(false));
+		const { active, toggle } = useGroupable(props.title, 'drawer-detail');
+		const appStore = useAppStore();
+		const { drawerOpen } = toRefs(appStore.state);
 		return { active, toggle, drawerOpen };
-	}
+	},
 });
 </script>
 
+<style>
+body {
+	--drawer-detail-icon-color: var(--foreground-normal);
+}
+</style>
+
 <style lang="scss" scoped>
 .drawer-detail {
+	--v-badge-offset-x: 2px;
+	--v-badge-offset-y: 4px;
+	--v-badge-border-color: var(--background-normal-alt);
+
+	display: contents;
+
 	.toggle {
 		position: relative;
+		flex-shrink: 0;
 		width: 100%;
 		height: 64px;
-		color: var(--foreground-color);
-		transition: background-color var(--fast) var(--transition);
+		color: var(--foreground-normal);
+		background-color: var(--background-normal-alt);
 
-		&:not(.open):hover {
-			background-color: var(--background-color-hover);
+		.icon {
+			--v-icon-color: var(--drawer-detail-icon-color);
+
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 64px;
+			height: 100%;
 		}
 
-		&.open {
-			background-color: var(--background-color-active);
+		.close {
+			position: absolute;
+			top: 0;
+			right: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 64px;
+			height: 64px;
+			color: var(--foreground-subdued);
+			opacity: 0;
+			transition: opacity var(--fast) var(--transition), color var(--fast) var(--transition);
+			pointer-events: none;
+
+			&:hover {
+				color: var(--foreground-normal);
+			}
 		}
 	}
 
-	.icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 64px;
-		height: 100%;
+	&.open {
+		.toggle .close {
+			opacity: 1;
+			pointer-events: auto;
+		}
 	}
 
 	.title {
@@ -76,8 +124,20 @@ export default defineComponent({
 		transform: translateY(-50%);
 	}
 
+	.scroll-container {
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+
 	.content {
-		padding: 12px;
+		padding: 16px;
+		::v-deep {
+			.format-markdown {
+				a {
+					color: var(--primary);
+				}
+			}
+		}
 	}
 }
 </style>

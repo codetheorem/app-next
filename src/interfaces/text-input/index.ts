@@ -1,15 +1,43 @@
 import InterfaceTextInput from './text-input.vue';
 import { defineInterface } from '@/interfaces/define';
-import formatTitle from '@directus/format-title';
 
-export default defineInterface({
+export default defineInterface(({ i18n }) => ({
 	id: 'text-input',
-	register: ({ i18n }) => ({
-		name: i18n.t('interfaces.text-input.text-input'),
-		icon: 'box',
-		component: InterfaceTextInput,
-		display: value => {
-			return formatTitle(value);
-		}
-	})
-});
+	name: i18n.t('text_input'),
+	icon: 'text_fields',
+	component: InterfaceTextInput,
+	options: [
+		{
+			field: 'placeholder',
+			name: 'Placeholder',
+			width: 'half',
+			interface: 'text-input',
+		},
+		{
+			field: 'iconLeft',
+			name: 'Icon Left',
+			width: 'half',
+			interface: 'icon',
+		},
+		{
+			field: 'iconRight',
+			name: 'Icon Right',
+			width: 'half',
+			interface: 'icon',
+		},
+		{
+			field: 'font',
+			name: 'Font',
+			width: 'half',
+			interface: 'dropdown',
+			default: 'sans-serif',
+			options: {
+				choices: [
+					{ text: 'Sans Serif', value: 'sans-serif' },
+					{ text: 'Monospace', value: 'monospace' },
+					{ text: 'Serif', value: 'serif' },
+				],
+			},
+		},
+	],
+}));

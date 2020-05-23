@@ -21,22 +21,24 @@ export type FilterOperator =
 	| 'has';
 
 export type Filter = {
+	key: string;
 	field: string;
 	operator: FilterOperator;
 	value: string;
+	locked?: boolean;
 };
 
 export type CollectionPreset = {
-	id: number;
+	id?: number;
 	title: string | null;
 	user: number | null;
 	role: number | null;
 	collection: string;
-	search_query: null;
-	filters: Filter[] | null;
-	view_type: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	search_query: string | null;
+	filters: readonly Filter[] | null;
+	view_type: string | null;
+
 	view_query: { [view_type: string]: any } | null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 	view_options: { [view_type: string]: any } | null;
 };

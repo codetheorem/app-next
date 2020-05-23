@@ -9,13 +9,13 @@
 The colors can be changed via the css variables `--v-slider-color`, `--v-slider-fill-color` and `--v-slider-thumb-color`.
 
 ```html
-<v-slider/>
+<v-slider />
 <style>
-.v-slider {
-    --v-slider-color: var(--red-400);
-	--v-slider-fill-color: var(--red-700);
-	--v-slider-thumb-color: var(--orange-500);
-}
+	.v-slider {
+		--v-slider-color: var(--red-400);
+		--v-slider-fill-color: var(--red-700);
+		--v-slider-thumb-color: var(--orange-500);
+	}
 </style>
 ```
 

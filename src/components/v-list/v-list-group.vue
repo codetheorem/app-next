@@ -1,15 +1,15 @@
 <template>
 	<div class="v-list-group">
-		<v-list-item class="activator" @click="toggle">
-			<slot name="activator" />
+		<v-list-item :active="active" class="activator" :to="to" @click.stop="onClick">
+			<slot name="activator" :active="groupActive" />
 
-			<v-list-item-icon class="activator-icon" :class="{ active }">
-				<v-icon name="chevron_left" />
+			<v-list-item-icon class="activator-icon" :class="{ active: groupActive }">
+				<v-icon name="chevron_right" @click.stop.prevent="toggle" />
 			</v-list-item-icon>
 		</v-list-item>
 
 		<transition-expand>
-			<div class="items" v-show="active">
+			<div class="items" v-show="groupActive">
 				<slot />
 			</div>
 		</transition-expand>
@@ -18,25 +18,42 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from '@vue/composition-api';
-import { useGroupableParent, useGroupable } from '@/compositions/groupable';
+import { useGroupableParent, useGroupable } from '@/composables/groupable';
 
 export default defineComponent({
 	props: {
 		multiple: {
 			type: Boolean,
-			default: true
-		}
+			default: true,
+		},
+		to: {
+			type: String,
+			default: null,
+		},
+		active: {
+			type: Boolean,
+			default: false,
+		},
 	},
-	setup(props) {
-		const { active, toggle } = useGroupable();
+	setup(props, { listeners, emit }) {
+		const { active: groupActive, toggle } = useGroupable();
+
 		useGroupableParent(
 			{},
 			{
-				multiple: toRefs(props).multiple
+				multiple: toRefs(props).multiple,
 			}
 		);
-		return { active, toggle };
-	}
+
+		return { groupActive, toggle, onClick };
+
+		function onClick(event: MouseEvent) {
+			if (props.to) return null;
+			if (listeners.click) return emit('click', event);
+
+			toggle();
+		}
+	},
 });
 </script>
 
@@ -47,7 +64,7 @@ export default defineComponent({
 		transition: transform var(--medium) var(--transition);
 
 		&.active {
-			transform: rotate(-90deg);
+			transform: rotate(90deg);
 		}
 	}
 

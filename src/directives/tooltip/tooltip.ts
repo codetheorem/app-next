@@ -5,7 +5,7 @@ const Tooltip: DirectiveOptions = {
 	bind(element, binding) {
 		element.addEventListener('mouseenter', onEnterTooltip(element, binding));
 		element.addEventListener('mouseleave', onLeaveTooltip());
-	}
+	},
 };
 
 export default Tooltip;
@@ -20,7 +20,7 @@ export function onEnterTooltip(element: HTMLElement, binding: DirectiveBinding) 
 			animateIn(tooltip);
 			updateTooltip(element, binding, tooltip);
 		} else {
-			tooltipTimer = setTimeout(() => {
+			tooltipTimer = window.setTimeout(() => {
 				animateIn(tooltip);
 				updateTooltip(element, binding, tooltip);
 			}, 600);

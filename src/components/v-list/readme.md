@@ -19,27 +19,29 @@
 | `lines`    | Limits list items to three lines of text (1 of title, 2 of subtitle). Only works in webkit enabled browsers | `null`  | `Number as PropType<1 or 2 or 3>` |
 
 ## Events
+
 n/a
 
 ## Slots
+
 | Slot      | Description  | Data |
-|-----------|--------------|------|
+| --------- | ------------ | ---- |
 | _default_ | List content |      |
 
 ## CSS Variables
+
 | Variable                           | Default                          |
-|------------------------------------|----------------------------------|
+| ---------------------------------- | -------------------------------- |
 | `--v-list-padding`                 | `8px 0`                          |
 | `--v-list-max-height`              | `none`                           |
 | `--v-list-max-width`               | `none`                           |
 | `--v-list-min-width`               | `none`                           |
 | `--v-list-min-height`              | `none`                           |
-| `--v-list-color`                   | `var(--foreground-color)`        |
-| `--v-list-color-hover`             | `var(--foreground-color)`        |
-| `--v-list-color-active`            | `var(--foreground-color)`        |
-| `--v-list-background-color`        | `var(--background-color)`        |
-| `--v-list-background-color-hover`  | `var(--background-color-hover)`  |
-| `--v-list-background-color-active` | `var(--background-color-active)` |
+| `--v-list-color`                   | `var(--foreground-normal)`        |
+| `--v-list-color-hover`             | `var(--foreground-normal)`        |
+| `--v-list-color-active`            | `var(--foreground-normal)`        |
+| `--v-list-background-color-hover`  | `var(--background-normal-alt)`  |
+| `--v-list-background-color-active` | `var(--background-normal-alt)` |
 
 ---
 
@@ -56,23 +58,30 @@ A wrapper for list items that formats children nicely. Can be used on its own or
 ```
 
 ## Props
-| Prop    | Description                                                          | Default |
-|---------|----------------------------------------------------------------------|---------|
-| `dense` | Removes some padding to make the individual list item shorter        | `false` |
-| `lines` | Sets if the list item will support `1`, `2`, or `3` lines of content | `null`  |
-| `to`    | Render as vue router-link with to link                               | `null`  |
+
+| Prop       | Description                                                          | Default |
+|------------|----------------------------------------------------------------------|---------|
+| `dense`    | Removes some padding to make the individual list item shorter        | `false` |
+| `lines`    | Sets if the list item will support `1`, `2`, or `3` lines of content | `null`  |
+| `to`       | Render as vue router-link with to link                               | `null`  |
+| `disabled` | Disable the list item                                                | `false` |
+| `active`   | Enable the list item's active state                                  | `false` |
+| `exact`    | Set the `exact` prop on router-link. Used with `to`                  | `false` |
 
 ## Events
+
 n/a
 
 ## Slots
+
 | Slot      | Description       | Data |
-|-----------|-------------------|------|
+| --------- | ----------------- | ---- |
 | _default_ | List item content |      |
 
 ## CSS Variables
+
 | Variable                                    | Default                                                                 |
-|---------------------------------------------|-------------------------------------------------------------------------|
+| ------------------------------------------- | ----------------------------------------------------------------------- |
 | `--v-list-item-one-line-min-height`         | `48px`                                                                  |
 | `--v-list-item-two-line-min-height`         | `60px`                                                                  |
 | `--v-list-item-three-line-min-height`       | `76px`                                                                  |
@@ -86,13 +95,11 @@ n/a
 | `--v-list-item-max-height`                  | `auto`                                                                  |
 | `--v-list-item-border-radius`               | `0`                                                                     |
 | `--v-list-item-margin-bottom`               | `0`                                                                     |
-| `--v-list-item-color`                       | `var(--v-list-color, var(--foreground-color))`                          |
-| `--v-list-item-color-hover`                 | `var(--v-list-color-hover, var(--foreground-color))`                    |
-| `--v-list-item-color-active`                | `var(--v-list-color-active, var(--foreground-color))`                   |
-| `--v-list-item-background-color`            | `var(--v-list-background-color, var(--background-color))`               |
-| `--v-list-item-background-color-hover`      | `var(--v-list-background-color-hover, var(--background-color-hover))`   |
-| `--v-list-item-background-color-active`     | `var(--v-list-background-color-active, var(--background-color-active))` |
-
+| `--v-list-item-color`                       | `var(--v-list-color, var(--foreground-normal))`                          |
+| `--v-list-item-color-hover`                 | `var(--v-list-color-hover, var(--foreground-normal))`                    |
+| `--v-list-item-color-active`                | `var(--v-list-color-active, var(--foreground-normal))`                   |
+| `--v-list-item-background-color-hover`      | `var(--v-list-background-color-hover, var(--background-normal-alt))`   |
+| `--v-list-item-background-color-active`     | `var(--v-list-background-color-active, var(--background-normal-alt))` |
 
 ---
 
@@ -107,19 +114,23 @@ A wrapper for the main text content of a list item. It adds some padding and hel
 ```
 
 ## Props
+
 n/a
 
 ## Events
+
 n/a
 
 ## Slots
+
 | Slot      | Description               | Data |
-|-----------|---------------------------|------|
+| --------- | ------------------------- | ---- |
 | _default_ | List item content content |      |
 
 ## CSS Variables
+
 | Variable                        | Default  |
-|---------------------------------|----------|
+| ------------------------------- | -------- |
 | `--v-list-item-content-padding` | `12px 0` |
 
 ---
@@ -135,17 +146,21 @@ Wrapper that adds typographic styling and margin for the subtitle/description of
 ```
 
 ## Props
+
 n/a
 
 ## Events
+
 n/a
 
 ## Slots
+
 | Slot      | Description             | Data |
-|-----------|-------------------------|------|
+| --------- | ----------------------- | ---- |
 | _default_ | List item title content |      |
 
 ## CSS Variables
+
 n/a
 
 ---
@@ -161,17 +176,21 @@ Wrapper that adds typographic styling and margin for the subtitle/description of
 ```
 
 ## Props
+
 n/a
 
 ## Events
+
 n/a
 
 ## Slots
+
 | Slot      | Description                | Data |
-|-----------|----------------------------|------|
+| --------- | -------------------------- | ---- |
 | _default_ | List item subtitle content |      |
 
 ## CSS Variables
+
 n/a
 
 ---
@@ -189,19 +208,23 @@ Wrapper for icon, action, or avatar type elements in a list item. Can be used on
 ```
 
 ## Props
+
 | Prop     | Description                                                         | Default |
-|----------|---------------------------------------------------------------------|---------|
+| -------- | ------------------------------------------------------------------- | ------- |
 | `center` | Whether to center the element (good for action elements or avatars) | `false` |
 
 ## Events
+
 n/a
 
 ## Slots
+
 | Slot      | Description            | Data |
-|-----------|------------------------|------|
+| --------- | ---------------------- | ---- |
 | _default_ | List item icon content |      |
 
 ## CSS Variables
+
 n/a
 
 ---
@@ -247,17 +270,23 @@ Provides the ability to make a collapsable (sub)group of list items, within a li
 ```
 
 ## Props
-| Prop | Description | Default |
-|------|-------------|---------|
-| `multiple` | Allow multiple subgroups to be open at the same time | `true` |
+
+| Prop       | Description                                                                     | Default |
+|------------|---------------------------------------------------------------------------------|---------|
+| `multiple` | Allow multiple subgroups to be open at the same time                            | `true`  |
+| `to`       | Where to link to. This will only make the chevron toggle the group active state |         |
+| `active`   | Render the activitor item in the active state                                   | `false` |
 
 ## Events
+
 n/a
 
 ## Slots
+
 | Slot      | Description   | Data |
-|-----------|---------------|------|
+| --------- | ------------- | ---- |
 | _default_ | Group content |      |
 
 ## CSS Variables
+
 n/a

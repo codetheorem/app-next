@@ -1,25 +1,71 @@
 <template>
-	<div id="app">
+	<div id="app" :style="brandStyle">
 		<transition name="fade">
-			<div class="hydrating" v-show="hydrating">
+			<div class="hydrating" v-if="hydrating">
 				<v-progress-circular indeterminate />
 			</div>
 		</transition>
-		<router-view />
+		<router-view v-if="!hydrating" />
+
+		<portal-target name="outlet" multiple />
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from '@vue/composition-api';
+import { defineComponent, toRefs, watch, computed } from '@vue/composition-api';
 import { useAppStore } from '@/stores/app';
+import { useUserStore } from '@/stores/user';
+import { useProjectsStore } from '@/stores/projects';
+import useWindowSize from '@/composables/use-window-size';
+import setFavicon from '@/utils/set-favicon';
 
 export default defineComponent({
 	setup() {
 		const appStore = useAppStore();
-		const { hydrating } = toRefs(appStore.state);
+		const userStore = useUserStore();
+		const projectsStore = useProjectsStore();
 
-		return { hydrating };
-	}
+		const { hydrating, drawerOpen } = toRefs(appStore.state);
+
+		const brandStyle = computed(() => {
+			return {
+				'--brand': projectsStore.currentProject.value?.color || 'var(--primary)',
+			};
+		});
+
+		watch(() => projectsStore.currentProject.value?.color, setFavicon);
+
+		const { width } = useWindowSize();
+
+		watch(width, (newWidth, oldWidth) => {
+			if (newWidth === null || newWidth === 0) return;
+			if (newWidth === oldWidth) return;
+
+			if (newWidth >= 1424) {
+				if (drawerOpen.value === false) drawerOpen.value = true;
+			} else {
+				if (drawerOpen.value === true) drawerOpen.value = false;
+			}
+		});
+
+		watch(
+			() => userStore.state.currentUser,
+			(newUser) => {
+				document.body.classList.remove('dark');
+				document.body.classList.remove('light');
+				document.body.classList.remove('auto');
+
+				if (newUser !== undefined && newUser !== null) {
+					document.body.classList.add(newUser.theme);
+				} else {
+					// Default to light mode
+					document.body.classList.add('light');
+				}
+			}
+		);
+
+		return { hydrating, brandStyle };
+	},
 });
 </script>
 
@@ -44,7 +90,9 @@ export default defineComponent({
 .fade-leave-active {
 	transition: opacity var(--medium) var(--transition);
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+.fade-enter,
+.fade-leave-to {
 	opacity: 0;
 }
 </style>

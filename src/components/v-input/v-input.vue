@@ -1,21 +1,48 @@
 <template>
-	<div class="v-input">
+	<div
+		class="v-input"
+		@click="$emit('click', $event)"
+		:class="{ 'full-width': fullWidth, 'has-click': hasClick, disabled: disabled }"
+	>
 		<div v-if="$slots['prepend-outer']" class="prepend-outer">
 			<slot name="prepend-outer" :value="value" :disabled="disabled" />
 		</div>
-		<div class="input" :class="{ disabled, monospace, 'full-width': fullWidth }">
+		<div class="input" :class="{ disabled, active }">
 			<div v-if="$slots.prepend" class="prepend">
 				<slot name="prepend" :value="value" :disabled="disabled" />
 			</div>
 			<span v-if="prefix" class="prefix">{{ prefix }}</span>
-			<input
-				v-bind="$attrs"
-				v-focus="autofocus"
-				v-on="_listeners"
-				:disabled="disabled"
-				:value="value"
-			/>
+			<slot name="input">
+				<input
+					v-bind="$attrs"
+					v-focus="autofocus"
+					v-on="_listeners"
+					:type="type"
+					:min="min"
+					:max="max"
+					:step="step"
+					:disabled="disabled"
+					:value="value"
+					ref="input"
+				/>
+			</slot>
 			<span v-if="suffix" class="suffix">{{ suffix }}</span>
+			<span v-if="type === 'number' && !hideArrows">
+				<v-icon
+					:class="{ disabled: max !== null && parseInt(value, 10) >= max }"
+					name="keyboard_arrow_up"
+					class="step-up"
+					@click="stepUp"
+					:disabled="disabled"
+				/>
+				<v-icon
+					:class="{ disabled: min !== null && parseInt(value, 10) <= min }"
+					name="keyboard_arrow_down"
+					class="step-down"
+					@click="stepDown"
+					:disabled="disabled"
+				/>
+			</span>
 			<div v-if="$slots.append" class="append">
 				<slot name="append" :value="value" :disabled="disabled" />
 			</div>
@@ -27,59 +54,188 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from '@vue/composition-api';
+import { defineComponent, computed, ref } from '@vue/composition-api';
+import slugify from '@sindresorhus/slugify';
 
 export default defineComponent({
 	inheritAttrs: false,
 	props: {
 		autofocus: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		disabled: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		prefix: {
 			type: String,
-			default: null
+			default: null,
 		},
 		suffix: {
 			type: String,
-			default: null
-		},
-		monospace: {
-			type: Boolean,
-			default: false
+			default: null,
 		},
 		fullWidth: {
 			type: Boolean,
-			default: false
+			default: true,
 		},
 		value: {
 			type: [String, Number],
-			default: null
-		}
+			default: null,
+		},
+		slug: {
+			type: Boolean,
+			default: false,
+		},
+		slugSeparator: {
+			type: String,
+			default: '-',
+		},
+		type: {
+			type: String,
+			default: 'text',
+		},
+		// For number inputs only
+		hideArrows: {
+			type: Boolean,
+			default: false,
+		},
+		max: {
+			type: Number,
+			default: null,
+		},
+		min: {
+			type: Number,
+			default: null,
+		},
+		step: {
+			type: Number,
+			default: 1,
+		},
+		active: {
+			type: Boolean,
+			default: false,
+		},
+		dbSafe: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	setup(props, { emit, listeners }) {
+		const input = ref<HTMLInputElement>(null);
+
 		const _listeners = computed(() => ({
 			...listeners,
-			input: emitValue
+			input: emitValue,
+			keydown: processValue,
 		}));
 
-		return { _listeners };
+		const hasClick = computed(() => {
+			return listeners.click !== undefined;
+		});
+
+		return { _listeners, hasClick, stepUp, stepDown, input };
+
+		function processValue(event: KeyboardEvent) {
+			const key = event.key.toLowerCase();
+			const systemKeys = ['meta', 'shift', 'alt', 'backspace', 'tab'];
+			const value = (event.target as HTMLInputElement).value;
+
+			if (props.slug === true) {
+				const slugSafeCharacters = 'abcdefghijklmnopqrstuvwxyz01234567890-_~ '.split('');
+
+				const isAllowed = slugSafeCharacters.includes(key) || systemKeys.includes(key);
+
+				if (isAllowed === false) {
+					event.preventDefault();
+				}
+
+				if (key === ' ' && value.endsWith(props.slugSeparator)) {
+					event.preventDefault();
+				}
+			}
+
+			if (props.slug === true) {
+				const dbSafeCharacters = 'abcdefghijklmnopqrstuvwxyz01234567890-_~ '.split('');
+
+				const isAllowed = dbSafeCharacters.includes(key) || systemKeys.includes(key);
+
+				if (isAllowed === false) {
+					event.preventDefault();
+				}
+
+				// Prevent leading number
+				if (value.length === 0 && '0123456789'.split('').includes(key)) {
+					event.preventDefault();
+				}
+			}
+			emit('keydown', event);
+		}
 
 		function emitValue(event: InputEvent) {
-			emit('input', (event.target as HTMLInputElement).value);
+			let value = (event.target as HTMLInputElement).value;
+
+			if (props.slug === true) {
+				const endsWithSpace = value.endsWith(' ');
+				value = slugify(value, { separator: props.slugSeparator });
+				if (endsWithSpace) value += props.slugSeparator;
+			}
+
+			if (props.dbSafe === true) {
+				value = value.toLowerCase();
+				value = value.replace(/\s/g, '_');
+				// Replace é -> e etc
+				value = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+			}
+
+			emit('input', value);
 		}
-	}
+
+		function stepUp() {
+			if (!input.value) return;
+			if (props.disabled === true) return;
+			if (props.max !== null && props.value >= props.max) return;
+
+			input.value.stepUp();
+
+			if (input.value.value) {
+				return emit('input', input.value.value);
+			}
+		}
+
+		function stepDown() {
+			if (!input.value) return;
+			if (props.disabled === true) return;
+			if (props.min !== null && props.value <= props.min) return;
+
+			input.value.stepDown();
+
+			if (input.value.value) {
+				return emit('input', input.value.value);
+			} else {
+				return emit('input', props.min || 0);
+			}
+		}
+	},
 });
 </script>
 
+<style>
+body {
+	--v-input-font-family: var(--family-sans-serif);
+	--v-input-placeholder-color: var(--foreground-subdued);
+}
+</style>
+
 <style lang="scss" scoped>
 .v-input {
+	--arrow-color: var(--border-normal);
+	--v-icon-color: var(--foreground-subdued);
+
 	display: flex;
 	align-items: center;
+	width: max-content;
 	height: var(--input-height);
 
 	.prepend-outer {
@@ -88,62 +244,78 @@ export default defineComponent({
 
 	.input {
 		display: flex;
+		flex-grow: 1;
 		align-items: center;
 		height: 100%;
 		padding: var(--input-padding);
-		color: var(--input-foreground-color);
-		background-color: var(--input-background-color);
-		border: var(--input-border-width) solid var(--input-border-color);
-		border-radius: var(--input-border-radius);
+		color: var(--foreground-normal);
+		font-family: var(--v-input-font-family);
+		background-color: var(--background-page);
+		border: var(--border-width) solid var(--border-normal);
+		border-radius: var(--border-radius);
 		transition: border-color var(--fast) var(--transition);
 
 		.prepend {
 			margin-right: 8px;
 		}
 
-		&:not(.disabled):hover {
-			color: var(--input-foreground-color-hover);
-			background-color: var(--input-background-color-hover);
-			border-color: var(--input-border-color-hover);
+		.step-up {
+			margin-bottom: -8px;
 		}
 
-		&:not(.disabled):focus-within {
-			color: var(--input-foreground-color-focus);
-			background-color: var(--input-background-color-focus);
-			border-color: var(--input-border-color-focus);
+		.step-down {
+			margin-top: -8px;
+		}
+
+		.step-up,
+		.step-down {
+			--v-icon-color: var(--arrow-color);
+
+			display: block;
+
+			&:hover:not(.disabled) {
+				--arrow-color: var(--primary);
+			}
+
+			&:active:not(.disabled) {
+				transform: scale(0.9);
+			}
+
+			&.disabled {
+				--arrow-color: var(--border-normal);
+
+				cursor: auto;
+			}
+		}
+
+		&:hover {
+			--arrow-color: var(--border-normal-alt);
+
+			color: var(--foreground-normal);
+			background-color: var(--background-page);
+			border-color: var(--border-normal-alt);
+		}
+
+		&:focus-within,
+		&.active {
+			--arrow-color: var(--border-normal-alt);
+
+			color: var(--foreground-normal);
+			background-color: var(--background-page);
+			border-color: var(--primary);
 		}
 
 		&.disabled {
-			color: var(--input-foreground-color-disabled);
-			background-color: var(--input-background-color-disabled);
-			border-color: var(--input-border-color-disabled);
-		}
+			--arrow-color: var(--border-normal);
 
-		&.full-width {
-			width: 100%;
-		}
-
-		input {
-			flex-grow: 1;
-			height: 100%;
-			background-color: transparent;
-			border: none;
-			appearance: none;
-
-			&::placeholder {
-				color: var(--input-foreground-color-empty);
-			}
-		}
-
-		&.monospace {
-			input {
-				font-family: var(--family-monospace);
-			}
+			color: var(--foreground-subdued);
+			background-color: var(--background-subdued);
+			border-color: var(--border-normal);
 		}
 
 		.prefix,
 		.suffix {
-			color: var(--input-foreground-color-empty);
+			color: var(--foreground-subdued);
 		}
 
 		.append {
@@ -151,8 +323,57 @@ export default defineComponent({
 		}
 	}
 
-	.append-outer {
-		margin-left: 8px;
+	input {
+		flex-grow: 1;
+		width: 20px; // allows flex to grow/shrink to allow for slots
+		height: 100%;
+		font-family: var(--v-input-font-family);
+		background-color: transparent;
+		border: none;
+		appearance: none;
+
+		&::placeholder {
+			color: var(--v-input-placeholder-color);
+		}
+
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			margin: 0;
+			-webkit-appearance: none;
+		}
+
+		/* Firefox */
+		&[type='number'] {
+			-moz-appearance: textfield;
+		}
+	}
+
+	&.full-width {
+		width: 100%;
+
+		.input {
+			width: 100%;
+		}
+	}
+
+	&.has-click {
+		cursor: pointer;
+
+		&.disabled {
+			cursor: auto;
+		}
+
+		input {
+			pointer-events: none;
+			.prefix,
+			.suffix {
+				color: var(--foreground-subdued);
+			}
+		}
+
+		.append-outer {
+			margin-left: 8px;
+		}
 	}
 }
 </style>

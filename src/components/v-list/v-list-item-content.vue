@@ -1,13 +1,17 @@
-<template functional>
+<template>
 	<div class="v-list-item-content">
 		<slot></slot>
 	</div>
 </template>
 
+<style>
+body {
+	--v-list-item-content-padding: 9px 0;
+}
+</style>
+
 <style lang="scss" scoped>
 .v-list-item-content {
-	--v-list-item-content-padding: 12px 0;
-
 	display: flex;
 	flex-basis: 0;
 	flex-grow: 1;
@@ -28,7 +32,8 @@
 			flex-basis: 100%;
 			flex-grow: 1;
 			flex-shrink: 0;
-			line-height: 1.1;
+			line-height: 1;
+
 			&:not(:last-child) {
 				margin-bottom: 2px;
 			}
@@ -37,7 +42,7 @@
 
 	.v-list.dense &,
 	.v-list-item.dense & {
-		--v-list-item-content-padding: 8px 0;
+		--v-list-item-content-padding: 4px 0;
 	}
 }
 </style>

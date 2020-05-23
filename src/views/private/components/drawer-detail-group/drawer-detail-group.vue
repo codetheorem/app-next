@@ -1,5 +1,5 @@
 <template>
-	<v-item-group class="drawer-detail-group" v-model="openDetail">
+	<v-item-group class="drawer-detail-group" v-model="openDetail" scope="drawer-detail">
 		<slot />
 	</v-item-group>
 </template>
@@ -11,8 +11,8 @@ export default defineComponent({
 	props: {
 		drawerOpen: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	setup(props) {
 		// By syncing the opened item here, we can force close the module once the drawer closes
@@ -20,7 +20,7 @@ export default defineComponent({
 
 		watch(
 			() => props.drawerOpen,
-			newOpenState => {
+			(newOpenState) => {
 				if (newOpenState === false) {
 					openDetail.value = [];
 				}
@@ -28,8 +28,14 @@ export default defineComponent({
 		);
 
 		return {
-			openDetail
+			openDetail,
 		};
-	}
+	},
 });
 </script>
+
+<style lang="scss" scoped>
+.drawer-detail-group {
+	display: contents;
+}
+</style>

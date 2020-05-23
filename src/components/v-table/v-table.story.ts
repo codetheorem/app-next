@@ -11,13 +11,15 @@ import { defineComponent } from '@vue/composition-api';
 
 Vue.component('v-table', VTable);
 
+import RawValue from '../../../.storybook/raw-value.vue';
+
 export default {
 	title: 'Components / Table',
 	component: VTable,
 	decorators: [withKnobs, withPadding],
 	parameters: {
-		notes: markdown
-	}
+		notes: markdown,
+	},
 };
 
 export const simple = () => ({
@@ -26,35 +28,35 @@ export const simple = () => ({
 			headers: [
 				{
 					text: 'Name',
-					value: 'name'
+					value: 'name',
 				},
 				{
 					text: 'Phone',
-					value: 'tel'
-				}
+					value: 'tel',
+				},
 			],
 			items: [
 				{
 					name: 'Amsterdam',
-					tel: '(020) 333-0987'
+					tel: '(020) 333-0987',
 				},
 				{
 					name: 'Beverly Hills',
-					tel: '(123) 333-0987'
+					tel: '(123) 333-0987',
 				},
 				{
 					name: 'New Haven',
-					tel: '(203) 687-9900'
+					tel: '(203) 687-9900',
 				},
 				{
 					name: 'Hong Kong',
-					tel: '(430) 709-4011'
+					tel: '(430) 709-4011',
 				},
 				{
 					name: 'Ahmedabad',
-					tel: '(330) 777-3240'
-				}
-			]
+					tel: '(330) 777-3240',
+				},
+			],
 		};
 	},
 	template: `
@@ -62,7 +64,7 @@ export const simple = () => ({
 		:headers="headers"
 		:items="items"
 	/>
-	`
+	`,
 });
 
 export const alignment = () => ({
@@ -72,46 +74,46 @@ export const alignment = () => ({
 				{
 					text: 'Name',
 					value: 'name',
-					align: 'left'
+					align: 'left',
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					align: 'center'
+					align: 'center',
 				},
 				{
 					text: 'Contact',
 					value: 'contact',
-					align: 'right'
-				}
+					align: 'right',
+				},
 			],
 			items: [
 				{
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
-			]
+					contact: 'Helenka Killely',
+				},
+			],
 		};
 	},
 	template: `
@@ -119,7 +121,7 @@ export const alignment = () => ({
 		:headers="headers"
 		:items="items"
 	/>
-	`
+	`,
 });
 
 export const customRow = () => ({
@@ -128,44 +130,44 @@ export const customRow = () => ({
 			headers: [
 				{
 					text: 'Name',
-					value: 'name'
+					value: 'name',
 				},
 				{
 					text: 'Phone',
-					value: 'tel'
+					value: 'tel',
 				},
 				{
 					text: 'Contact',
-					value: 'contact'
-				}
+					value: 'contact',
+				},
 			],
 			items: [
 				{
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
-			]
+					contact: 'Helenka Killely',
+				},
+			],
 		};
 	},
 	template: `
@@ -177,7 +179,7 @@ export const customRow = () => ({
 			<v-button x-small>{{ item.name }}</v-button>
 		</template>
 	</v-table>
-	`
+	`,
 });
 
 export const customHeader = () => ({
@@ -186,44 +188,44 @@ export const customHeader = () => ({
 			headers: [
 				{
 					text: 'Name',
-					value: 'name'
+					value: 'name',
 				},
 				{
 					text: 'Phone',
-					value: 'tel'
+					value: 'tel',
 				},
 				{
 					text: 'Contact',
-					value: 'contact'
-				}
+					value: 'contact',
+				},
 			],
 			items: [
 				{
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
-			]
+					contact: 'Helenka Killely',
+				},
+			],
 		};
 	},
 	template: `
@@ -235,7 +237,7 @@ export const customHeader = () => ({
 			<v-icon name="star" />
 		</template>
 	</v-table>
-	`
+	`,
 });
 
 export const sorting = () => ({
@@ -244,49 +246,49 @@ export const sorting = () => ({
 			headers: [
 				{
 					text: 'Name',
-					value: 'name'
+					value: 'name',
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					sortable: false
+					sortable: false,
 				},
 				{
 					text: 'Contact',
-					value: 'contact'
-				}
+					value: 'contact',
+				},
 			],
 			items: [
 				{
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
+					contact: 'Helenka Killely',
+				},
 			],
 			sort: {
 				by: 'name',
-				desc: false
-			}
+				desc: false,
+			},
 		};
 	},
 	template: `
@@ -302,7 +304,7 @@ sort: {{ sort }}
 </pre>
 		<p style="margin-top: 2rem;">Defaults to first sortable column that's passed in (\`name\` in this example)</p>
 	</div>
-	`
+	`,
 });
 
 export const selectable = () => ({
@@ -311,51 +313,51 @@ export const selectable = () => ({
 			headers: [
 				{
 					text: 'Name',
-					value: 'name'
+					value: 'name',
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					sortable: false
+					sortable: false,
 				},
 				{
 					text: 'Contact',
-					value: 'contact'
-				}
+					value: 'contact',
+				},
 			],
 			items: [
 				{
 					id: 1,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 2,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 3,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 4,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 5,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
+					contact: 'Helenka Killely',
+				},
 			],
-			selection: []
+			selection: [],
 		};
 	},
 	template: `
@@ -371,7 +373,7 @@ export const selectable = () => ({
 selection: {{ selection }}
 		</pre>
 	</div>
-	`
+	`,
 });
 
 export const fixedHeader = () =>
@@ -380,17 +382,17 @@ export const fixedHeader = () =>
 			const headers = [
 				{
 					text: 'Name',
-					value: 'name'
+					value: 'name',
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					sortable: false
+					sortable: false,
 				},
 				{
 					text: 'Contact',
-					value: 'contact'
-				}
+					value: 'contact',
+				},
 			];
 
 			const items = [
@@ -398,122 +400,122 @@ export const fixedHeader = () =>
 					id: 1,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 2,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 3,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 4,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 5,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
+					contact: 'Helenka Killely',
 				},
 				{
 					id: 6,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 7,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 8,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 9,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 10,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
+					contact: 'Helenka Killely',
 				},
 				{
 					id: 11,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 12,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 13,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 14,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 15,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
+					contact: 'Helenka Killely',
 				},
 				{
 					id: 16,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 17,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 18,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 19,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 20,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
+					contact: 'Helenka Killely',
+				},
 			];
 
 			return { headers, items };
@@ -522,7 +524,7 @@ export const fixedHeader = () =>
 			<v-sheet>
 				<v-table style="--v-table-height: 200px" :headers="headers" :items="items" fixed-header />
 			</v-sheet>
-		`
+		`,
 	});
 
 export const loading = () => ({
@@ -531,50 +533,50 @@ export const loading = () => ({
 			headers: [
 				{
 					text: 'Name',
-					value: 'name'
+					value: 'name',
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					sortable: false
+					sortable: false,
 				},
 				{
 					text: 'Contact',
-					value: 'contact'
-				}
+					value: 'contact',
+				},
 			],
 			items: [
 				{
 					id: 1,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 2,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 3,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 4,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 5,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
-			]
+					contact: 'Helenka Killely',
+				},
+			],
 		};
 	},
 	template: `
@@ -585,7 +587,7 @@ export const loading = () => ({
 			loading
 		/>
 	</div>
-	`
+	`,
 });
 
 export const loadingNoRows = () => ({
@@ -594,19 +596,19 @@ export const loadingNoRows = () => ({
 			headers: [
 				{
 					text: 'Name',
-					value: 'name'
+					value: 'name',
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					sortable: false
+					sortable: false,
 				},
 				{
 					text: 'Contact',
-					value: 'contact'
-				}
+					value: 'contact',
+				},
 			],
-			items: []
+			items: [],
 		};
 	},
 	template: `
@@ -618,7 +620,7 @@ export const loadingNoRows = () => ({
 			loading-text="Loading items from \`movies\` collection..."
 		/>
 	</div>
-	`
+	`,
 });
 
 loadingNoRows.title = 'Loading (No Rows)';
@@ -630,51 +632,51 @@ export const columnWidths = () => ({
 				{
 					text: 'Name',
 					value: 'name',
-					width: 150
+					width: 150,
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					width: 500
+					width: 500,
 				},
 				{
 					text: 'Contact',
 					value: 'contact',
-					width: 250
-				}
+					width: 250,
+				},
 			],
 			items: [
 				{
 					id: 1,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 2,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 3,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 4,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 5,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
-			]
+					contact: 'Helenka Killely',
+				},
+			],
 		};
 	},
 	template: `
@@ -684,7 +686,7 @@ export const columnWidths = () => ({
 			:items="items"
 		/>
 	</div>
-	`
+	`,
 });
 
 export const resizable = () => ({
@@ -693,51 +695,51 @@ export const resizable = () => ({
 			headers: [
 				{
 					text: 'Name',
-					value: 'name'
+					value: 'name',
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					width: 150
+					width: 150,
 				},
 				{
 					text: 'Contact',
 					value: 'contact',
-					width: 250
-				}
+					width: 250,
+				},
 			],
 			items: [
 				{
 					id: 1,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 2,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 3,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 4,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 5,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
-			]
+					contact: 'Helenka Killely',
+				},
+			],
 		};
 	},
 	template: `
@@ -751,7 +753,7 @@ export const resizable = () => ({
 headers: {{ headers }}
 </pre>
 	</div>
-	`
+	`,
 });
 
 export const serverSort = () => ({
@@ -761,56 +763,56 @@ export const serverSort = () => ({
 				{
 					text: 'Name',
 					value: 'name',
-					width: 150
+					width: 150,
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					width: 150
+					width: 150,
 				},
 				{
 					text: 'Contact',
 					value: 'contact',
-					width: 250
-				}
+					width: 250,
+				},
 			],
 			items: [
 				{
 					id: 1,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 2,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 3,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 4,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 5,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
+					contact: 'Helenka Killely',
+				},
 			],
 			sort: {
 				by: 'id',
-				desc: false
+				desc: false,
 			},
-			loading: false
+			loading: false,
 		};
 	},
 	methods: {
@@ -829,7 +831,7 @@ export const serverSort = () => ({
 				(this as any).sort = sort;
 				(this as any).loading = false;
 			}, 2000);
-		}
+		},
 	},
 	template: `
 		<v-table
@@ -840,69 +842,70 @@ export const serverSort = () => ({
 			:sort="sort"
 			@update:sort="onSort"
 		/>
-	`
+	`,
 });
 
 export const dragNDrop = () => ({
+	components: { RawValue },
 	data() {
 		return {
 			headers: [
 				{
 					text: 'Name',
 					value: 'name',
-					width: 150
+					width: 150,
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					width: 150
+					width: 150,
 				},
 				{
 					text: 'Contact',
 					value: 'contact',
-					width: 250
-				}
+					width: 250,
+				},
 			],
 			items: [
 				{
 					id: 1,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 2,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 3,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 4,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 5,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
+					contact: 'Helenka Killely',
+				},
 			],
 			sort: {
 				by: '$manual',
-				desc: false
-			}
+				desc: false,
+			},
 		};
 	},
 	methods: {
-		onDrop: action('drop')
+		onDrop: action('drop'),
 	},
 	template: `
 	<div>
@@ -910,15 +913,12 @@ export const dragNDrop = () => ({
 			:headers.sync="headers"
 			:items.sync="items"
 			:sort.sync="sort"
-			@drop="onDrop"
 			item-key="id"
 			show-manual-sort
 		/>
-				<pre style="max-width: max-content; margin-top: 20px; background-color: #eee; font-family: monospace; padding: 0.5rem; border-radius: 8px;">
-items: {{ items }}
-		</pre>
+		<raw-value label="items">{{ items }}</raw-value>
 	</div>
-	`
+	`,
 });
 
 export const rowClick = () => ({
@@ -928,55 +928,55 @@ export const rowClick = () => ({
 				{
 					text: 'Name',
 					value: 'name',
-					width: 150
+					width: 150,
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					width: 150
+					width: 150,
 				},
 				{
 					text: 'Contact',
 					value: 'contact',
-					width: 250
-				}
+					width: 250,
+				},
 			],
 			items: [
 				{
 					id: 1,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 2,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 3,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 4,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 5,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
-			]
+					contact: 'Helenka Killely',
+				},
+			],
 		};
 	},
 	methods: {
-		onClick: action('click:row')
+		onClick: action('click:row'),
 	},
 	template: `
 	<div>
@@ -987,7 +987,7 @@ export const rowClick = () => ({
 			@click:row="onClick"
 		/>
 	</div>
-	`
+	`,
 });
 
 export const rowHeight = () => ({
@@ -997,57 +997,57 @@ export const rowHeight = () => ({
 				{
 					text: 'Name',
 					value: 'name',
-					width: 150
+					width: 150,
 				},
 				{
 					text: 'Phone',
 					value: 'tel',
-					width: 150
+					width: 150,
 				},
 				{
 					text: 'Contact',
 					value: 'contact',
-					width: 250
-				}
+					width: 250,
+				},
 			],
 			items: [
 				{
 					id: 1,
 					name: 'Amsterdam',
 					tel: '(020) 333-0987',
-					contact: 'Mariann Rumble'
+					contact: 'Mariann Rumble',
 				},
 				{
 					id: 2,
 					name: 'Beverly Hills',
 					tel: '(123) 333-0987',
-					contact: 'Kathy Baughan'
+					contact: 'Kathy Baughan',
 				},
 				{
 					id: 3,
 					name: 'New Haven',
 					tel: '(203) 687-9900',
-					contact: 'Fleur Tebbet'
+					contact: 'Fleur Tebbet',
 				},
 				{
 					id: 4,
 					name: 'Hong Kong',
 					tel: '(430) 709-4011',
-					contact: 'Rodolph Tofful'
+					contact: 'Rodolph Tofful',
 				},
 				{
 					id: 5,
 					name: 'Ahmedabad',
 					tel: '(330) 777-3240',
-					contact: 'Helenka Killely'
-				}
-			]
+					contact: 'Helenka Killely',
+				},
+			],
 		};
 	},
 	props: {
 		rowHeight: {
-			default: number('Row height', 48)
-		}
+			default: number('Row height', 48),
+		},
 	},
 	template: `
 	<div>
@@ -1058,5 +1058,54 @@ export const rowHeight = () => ({
 			:row-height="rowHeight"
 		/>
 	</div>
-	`
+	`,
+});
+
+export const itemAppendSlot = () => ({
+	data() {
+		return {
+			headers: [
+				{
+					text: 'Name',
+					value: 'name',
+				},
+				{
+					text: 'Phone',
+					value: 'tel',
+				},
+			],
+			items: [
+				{
+					name: 'Amsterdam',
+					tel: '(020) 333-0987',
+				},
+				{
+					name: 'Beverly Hills',
+					tel: '(123) 333-0987',
+				},
+				{
+					name: 'New Haven',
+					tel: '(203) 687-9900',
+				},
+				{
+					name: 'Hong Kong',
+					tel: '(430) 709-4011',
+				},
+				{
+					name: 'Ahmedabad',
+					tel: '(330) 777-3240',
+				},
+			],
+		};
+	},
+	template: `
+	<v-table
+		:headers="headers"
+		:items="items"
+	>
+		<template #item-append="{ item }">
+			<v-button small>{{ item.name }}</v-button>
+		</template>
+	</v-table>
+	`,
 });

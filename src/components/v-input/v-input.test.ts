@@ -21,8 +21,8 @@ describe('Input', () => {
 				'prepend-outer': '<div>prepend-outer</div>',
 				prepend: '<div>prepend</div>',
 				append: '<div>append</div>',
-				'append-outer': '<div>append-outer</div>'
-			}
+				'append-outer': '<div>append-outer</div>',
+			},
 		});
 
 		expect(component.find('.v-input > .prepend-outer > div ').html()).toBe(
@@ -42,7 +42,7 @@ describe('Input', () => {
 	it('Renders prefix / suffix', async () => {
 		component.setProps({
 			prefix: 'Prefix',
-			suffix: 'Suffix'
+			suffix: 'Suffix',
 		});
 
 		await component.vm.$nextTick();
@@ -54,12 +54,11 @@ describe('Input', () => {
 	it('Sets the correct classes based on props', async () => {
 		component.setProps({
 			disabled: true,
-			monospace: true
 		});
 
 		await component.vm.$nextTick();
 
-		expect(component.find('.input').classes()).toEqual(['input', 'disabled', 'monospace']);
+		expect(component.find('.input').classes()).toEqual(['input', 'disabled']);
 	});
 
 	it('Emits just the value for the input event', async () => {

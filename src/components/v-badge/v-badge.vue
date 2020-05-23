@@ -1,6 +1,6 @@
 <template>
 	<div class="v-badge" :class="{ dot, bordered }">
-		<span class="badge" :class="{ dot, bordered, left, bottom }">
+		<span v-if="!disabled" class="badge" :class="{ dot, bordered, left, bottom }">
 			<v-icon v-if="icon" :name="icon" :color="color" x-small />
 			<span v-else>{{ value }}</span>
 		</span>
@@ -15,54 +15,62 @@ import { defineComponent } from '@vue/composition-api';
 export default defineComponent({
 	props: {
 		value: {
-			type: String,
-			default: null
+			type: [String, Number],
+			default: null,
 		},
 		dot: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		left: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		bottom: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		icon: {
 			type: String,
-			default: null
+			default: null,
 		},
 		bordered: {
 			type: Boolean,
-			default: false
-		}
-	}
+			default: false,
+		},
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
+	},
 });
 </script>
 
-<style lang="scss" scoped>
-.v-badge {
+<style>
+body {
 	--v-badge-color: var(--white);
 	--v-badge-background-color: var(--danger);
-	--v-badge-border-color: var(--background-color);
+	--v-badge-border-color: var(--background-page);
 	--v-badge-offset-x: 0px;
 	--v-badge-offset-y: 0px;
-	--v-badge-size: 20px;
+	--v-badge-size: 16px;
+}
+</style>
 
+<style lang="scss" scoped>
+.v-badge {
 	position: relative;
 	display: inline-block;
 
 	&.bordered {
-		--v-badge-size: 24px;
+		--v-badge-size: 20px;
 	}
 
 	&.dot {
-		--v-badge-size: 12px;
+		--v-badge-size: 8px;
 
 		&.bordered {
-			--v-badge-size: 16px;
+			--v-badge-size: 12px;
 		}
 	}
 
@@ -70,7 +78,7 @@ export default defineComponent({
 		position: absolute;
 		top: calc(var(--v-badge-size) / -2 + var(--v-badge-offset-y));
 		right: calc(var(--v-badge-size) / -2 + var(--v-badge-offset-x));
-		z-index: 10;
+		z-index: 1;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -79,7 +87,8 @@ export default defineComponent({
 		height: var(--v-badge-size);
 		padding: 0 4px;
 		color: var(--v-badge-color);
-		font-size: 12px;
+		font-weight: 600;
+		font-size: 10px;
 		background-color: var(--v-badge-background-color);
 		border-radius: calc(var(--v-badge-size) / 2);
 

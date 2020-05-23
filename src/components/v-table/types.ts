@@ -8,12 +8,12 @@ export type HeaderRaw = {
 	align?: Alignment;
 	sortable?: boolean;
 	width?: number | null;
+	[key: string]: any;
 };
 
 export type Header = Required<HeaderRaw>;
 
 export type Item = {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[key: string]: any;
 };
 

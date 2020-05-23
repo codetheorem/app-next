@@ -29,7 +29,7 @@ export default defineComponent({
 	setup() {
 		const active = ref(false);
 		return { active };
-	}
+	},
 });
 </script>
 
@@ -82,7 +82,7 @@ export default defineComponent({
 		height: 100%;
 		padding: inherit;
 		padding-left: 8px;
-		background-color: var(--background-color);
+		background-color: var(--background-page);
 
 		.expand {
 			transform: rotate(180deg);
@@ -96,7 +96,7 @@ export default defineComponent({
 	}
 
 	@include breakpoint(medium) {
-		.action-buttons {
+		.action-buttons ::v-deep {
 			> * {
 				display: inherit !important;
 			}

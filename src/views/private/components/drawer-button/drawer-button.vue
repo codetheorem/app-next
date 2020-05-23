@@ -2,10 +2,11 @@
 	<component
 		class="drawer-button"
 		:is="to ? 'router-link' : 'button'"
+		:class="{ active }"
 		@click="$emit('click', $event)"
 	>
 		<div class="icon">
-			<v-icon :name="icon" />
+			<v-icon :name="icon" outline />
 		</div>
 		<div class="title" v-if="drawerOpen">
 			<slot />
@@ -14,38 +15,41 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from '@vue/composition-api';
+import { defineComponent, toRefs } from '@vue/composition-api';
+import useAppStore from '@/stores/app';
 
 export default defineComponent({
 	props: {
 		to: {
 			type: String,
-			default: null
+			default: null,
 		},
 		icon: {
 			type: String,
-			default: 'box'
-		}
+			default: 'box',
+		},
+		active: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	setup() {
-		const drawerOpen = inject('drawer-open', ref(false));
+		const appStore = useAppStore();
+		const { drawerOpen } = toRefs(appStore.state);
 
 		return { drawerOpen };
-	}
+	},
 });
 </script>
 
 <style lang="scss" scoped>
 .drawer-button {
 	position: relative;
+	flex-shrink: 0;
 	width: 100%;
 	height: 64px;
-	color: var(--foreground-color);
-	transition: background-color var(--fast) var(--transition);
-
-	&:hover {
-		background-color: var(--background-color-hover);
-	}
+	color: var(--foreground-normal);
+	background-color: var(--background-normal-alt);
 
 	.icon {
 		display: flex;
@@ -64,12 +68,8 @@ export default defineComponent({
 		transform: translateY(-50%);
 	}
 
-	.fade-enter-active,
-	.fade-leave-active {
-		transition: opacity var(--medium) var(--transition);
-	}
-	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-		opacity: 0;
+	&.active {
+		background-color: var(--background-normal-alt);
 	}
 }
 </style>

@@ -3,15 +3,16 @@ import VueCompositionAPI from '@vue/composition-api';
 import { Route } from 'vue-router';
 import {
 	onBeforeEach,
+	onAfterEach,
 	onBeforeEnterProjectChooser,
 	replaceRoutes,
 	defaultRoutes,
-	onBeforeEnterLogout
 } from './router';
 import api from '@/api';
 import * as auth from '@/auth';
 import { useProjectsStore } from '@/stores/projects';
 import { hydrate } from '@/hydrate';
+import useUserStore from '@/stores/user';
 
 jest.mock('@/auth');
 jest.mock('@/hydrate');
@@ -24,7 +25,7 @@ const route: Route = {
 	hash: '',
 	params: {},
 	fullPath: '',
-	matched: []
+	matched: [],
 };
 
 describe('Router', () => {
@@ -44,7 +45,7 @@ describe('Router', () => {
 
 		const fromRoute = {
 			...route,
-			name: null
+			name: null,
 		};
 
 		const callback = jest.fn();
@@ -76,7 +77,7 @@ describe('Router', () => {
 
 		const toRoute = {
 			...route,
-			path: '/install'
+			path: '/install',
 		};
 		const fromRoute = route;
 		const callback = jest.fn();
@@ -94,8 +95,8 @@ describe('Router', () => {
 		const toRoute = {
 			...route,
 			params: {
-				project: 'my-project'
-			}
+				project: 'my-project',
+			},
 		};
 		const fromRoute = route;
 		const callback = jest.fn();
@@ -112,8 +113,8 @@ describe('Router', () => {
 			...route,
 			path: '/test',
 			params: {
-				project: 'my-project'
-			}
+				project: 'my-project',
+			},
 		};
 		const fromRoute = route;
 		const callback = jest.fn();
@@ -130,8 +131,8 @@ describe('Router', () => {
 			...route,
 			path: '/',
 			params: {
-				project: 'my-project'
-			}
+				project: 'my-project',
+			},
 		};
 		const fromRoute = route;
 		const callback = jest.fn();
@@ -149,15 +150,15 @@ describe('Router', () => {
 
 		projectsStore.state.projects = [
 			{
-				key: 'my-project'
-			}
+				key: 'my-project',
+			},
 		] as any;
 
 		const to = {
 			...route,
 			params: {
-				project: 'my-project'
-			}
+				project: 'my-project',
+			},
 		};
 
 		const from = { ...route, name: null };
@@ -174,16 +175,16 @@ describe('Router', () => {
 		const projectsStore = useProjectsStore({});
 		projectsStore.state.projects = [
 			{
-				key: 'my-project'
-			}
+				key: 'my-project',
+			},
 		] as any;
 		jest.spyOn(projectsStore, 'getProjects').mockResolvedValue();
 
 		const to = {
 			...route,
 			params: {
-				project: 'my-project'
-			}
+				project: 'my-project',
+			},
 		};
 
 		const from = { ...route, name: null };
@@ -201,12 +202,12 @@ describe('Router', () => {
 		const toRoute = {
 			...route,
 			meta: {
-				public: true
-			}
+				public: true,
+			},
 		};
 		const fromRoute = {
 			...route,
-			name: null
+			name: null,
 		};
 		const next = jest.fn();
 
@@ -221,16 +222,16 @@ describe('Router', () => {
 		const projectsStore = useProjectsStore({});
 		projectsStore.state.projects = [
 			{
-				key: 'my-project'
-			}
+				key: 'my-project',
+			},
 		] as any;
 		jest.spyOn(projectsStore, 'getProjects').mockResolvedValue();
 
 		const to = {
 			...route,
 			params: {
-				project: 'my-project'
-			}
+				project: 'my-project',
+			},
 		};
 
 		const from = { ...route, name: null };
@@ -256,22 +257,53 @@ describe('Router', () => {
 		});
 	});
 
-	describe('onBeforeEnterLogout', () => {
-		it('Calls logout and redirects to login page', async () => {
-			const to = { ...route, path: '/my-project/logout', params: { project: 'my-project' } };
-			const from = route;
-			const next = jest.fn();
-			await onBeforeEnterLogout(to, from, next);
-			expect(auth.logout).toHaveBeenCalled();
-			expect(next).toHaveBeenCalledWith('/my-project/login');
-		});
-	});
-
 	describe('replaceRoutes', () => {
 		it('Calls the handler with the default routes', async () => {
 			const handler = jest.fn(() => []);
 			replaceRoutes(handler);
 			expect(handler).toHaveBeenCalledWith(defaultRoutes);
+		});
+	});
+
+	describe('onAfterEach', () => {
+		it('Calls the userStore trackPage method after some time', () => {
+			jest.useFakeTimers();
+			const userStore = useUserStore({});
+
+			jest.spyOn(userStore, 'trackPage');
+
+			const to = {
+				fullPath: '/test',
+				meta: {
+					public: false,
+				},
+			} as any;
+
+			onAfterEach(to);
+
+			jest.runAllTimers();
+
+			expect(userStore.trackPage).toHaveBeenCalledWith('/test');
+		});
+
+		it('Does not track the page for public pages', () => {
+			jest.useFakeTimers();
+			const userStore = useUserStore({});
+
+			jest.spyOn(userStore, 'trackPage');
+
+			const to = {
+				fullPath: '/test',
+				meta: {
+					public: true,
+				},
+			} as any;
+
+			onAfterEach(to);
+
+			jest.runAllTimers();
+
+			expect(userStore.trackPage).not.toHaveBeenCalledWith('/test');
 		});
 	});
 });

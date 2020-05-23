@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import { merge } from 'lodash';
+import { RequestError } from '@/api';
 
 import enUSBase from './en-US/index.json';
 import enUSInterfaces from './en-US/interfaces.json';
+import enUSDisplays from './en-US/displays.json';
 import enUSLayouts from './en-US/layouts.json';
 import defaultDateTimeFormats from './en-US/date-format.json';
 
@@ -13,12 +15,12 @@ export const i18n = new VueI18n({
 	locale: 'en-US',
 	fallbackLocale: 'en-US',
 	messages: {
-		'en-US': merge(enUSBase, enUSInterfaces, enUSLayouts)
+		'en-US': merge(enUSBase, enUSInterfaces, enUSDisplays, enUSLayouts),
 	},
 	dateTimeFormats: {
-		'en-US': defaultDateTimeFormats
+		'en-US': defaultDateTimeFormats,
 	},
-	silentTranslationWarn: true
+	silentTranslationWarn: true,
 });
 
 export const availableLanguages = {
@@ -52,7 +54,7 @@ export const availableLanguages = {
 	'zh-TW': 'Taiwanese Mandarin (Taiwan)',
 	'tr-TR': 'Turkish (Turkey)',
 	'uk-UA': 'Ukrainian (Ukraine)',
-	'vi-VN': 'Vietnamese (Vietnam)'
+	'vi-VN': 'Vietnamese (Vietnam)',
 };
 
 export type Language = keyof typeof availableLanguages;
@@ -72,10 +74,11 @@ export async function setLanguage(lang: Language): Promise<boolean> {
 		const translations = await Promise.all([
 			import(`@/lang/${lang}/index.json`),
 			import(`@/lang/${lang}/interfaces.json`),
-			import(`@/lang/${lang}/layouts.json`)
+			import(`@/lang/${lang}/displays.json`),
+			import(`@/lang/${lang}/layouts.json`),
 		]);
 
-		translations.forEach(msgs => i18n.mergeLocaleMessage(lang, msgs));
+		translations.forEach((msgs) => i18n.mergeLocaleMessage(lang, msgs));
 		loadedLanguages.push(lang);
 
 		// The date-format json file may or may not exist, as it's not handled by Crowdin.
@@ -98,3 +101,21 @@ export async function setLanguage(lang: Language): Promise<boolean> {
 }
 
 export default i18n;
+
+export function translateAPIError(error: RequestError | number) {
+	const defaultMsg = i18n.t('unexpected_error');
+
+	let code = error;
+
+	if (typeof error === 'object') {
+		code = error?.response?.data?.error?.code;
+	}
+
+	if (!error) return defaultMsg;
+	if (!code === undefined) return defaultMsg;
+	const key = `errors.${code}`;
+
+	const exists = i18n.te(key);
+	if (exists === false) return defaultMsg;
+	return i18n.t(key);
+}

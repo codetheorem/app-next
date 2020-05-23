@@ -3,15 +3,21 @@
 		:is="component"
 		active-class="active"
 		class="v-list-item"
+		:exact="exact"
 		:to="to"
 		:class="{
+			active,
 			dense,
 			link: isClickable,
 			'three-line': lines === 3,
 			'two-line': lines === 2,
-			'one-line': lines === 1
+			'one-line': lines === 1,
+			disabled,
+			dashed,
 		}"
-		v-on="$listeners"
+		:href="href"
+		:download="download"
+		v-on="disabled === false && $listeners"
 	>
 		<slot></slot>
 	</component>
@@ -25,54 +31,91 @@ export default defineComponent({
 	props: {
 		dense: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		lines: {
 			type: Number as PropType<1 | 2 | 3>,
-			default: null
+			default: null,
 		},
 		to: {
 			type: [String, Object] as PropType<string | Location>,
-			default: null
-		}
+			default: null,
+		},
+		href: {
+			type: String,
+			default: null,
+		},
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
+		active: {
+			type: Boolean,
+			default: false,
+		},
+		dashed: {
+			type: Boolean,
+			default: false,
+		},
+		exact: {
+			type: Boolean,
+			default: false,
+		},
+		download: {
+			type: String,
+			default: null,
+		},
 	},
 	setup(props, { listeners }) {
-		const component = computed<string>(() => (props.to ? 'router-link' : 'li'));
-		const isClickable = computed(() => Boolean(props.to || listeners.click !== undefined));
+		const component = computed<string>(() => {
+			if (props.to) return 'router-link';
+			if (props.href) return 'a';
+			return 'li';
+		});
+
+		const isClickable = computed(() =>
+			Boolean(props.to || props.href || listeners.click !== undefined)
+		);
+
 		return { component, isClickable };
-	}
+	},
 });
 </script>
 
-<style lang="scss" scoped>
-.v-list-item {
-	$this: &;
-
-	--v-list-item-one-line-min-height: 48px;
-	--v-list-item-two-line-min-height: 60px;
-	--v-list-item-three-line-min-height: 76px;
-	--v-list-item-one-line-min-height-dense: 40px;
-	--v-list-item-two-line-min-height-dense: 48px;
-	--v-list-item-three-line-min-height-dense: 64px;
+<style>
+body {
+	--v-list-item-one-line-min-height: 40px;
+	--v-list-item-two-line-min-height: 52px;
+	--v-list-item-three-line-min-height: 64px;
+	--v-list-item-one-line-min-height-dense: 32px;
+	--v-list-item-two-line-min-height-dense: 36px;
+	--v-list-item-three-line-min-height-dense: 52px;
 	--v-list-item-padding: 0 16px 0 calc(16px + var(--v-list-item-indent, 0px));
+	--v-list-item-padding-dense: 0 8px 0 calc(8px + var(--v-list-item-indent, 0px));
+	--v-list-item-margin-dense: 2px 0;
 	--v-list-item-min-width: none;
 	--v-list-item-max-width: none;
 	--v-list-item-min-height: var(--v-list-item-one-line-min-height);
 	--v-list-item-max-height: auto;
-	--v-list-item-border-radius: 0;
+	--v-list-item-border-radius: var(--border-radius);
 	--v-list-item-margin-bottom: 0;
-	--v-list-item-color: var(--v-list-color, var(--foreground-color));
-	--v-list-item-color-hover: var(--v-list-color-hover, var(--foreground-color));
-	--v-list-item-color-active: var(--v-list-color-active, var(--foreground-color));
-	--v-list-item-background-color: var(--v-list-background-color, var(--background-color));
+	--v-list-item-color: var(--v-list-color, var(--foreground-normal));
+	--v-list-item-color-hover: var(--v-list-color-hover, var(--foreground-normal));
+	--v-list-item-color-active: var(--v-list-color-active, var(--foreground-normal));
 	--v-list-item-background-color-hover: var(
 		--v-list-background-color-hover,
-		var(--background-color-hover)
+		var(--background-normal-alt)
 	);
 	--v-list-item-background-color-active: var(
 		--v-list-background-color-active,
-		var(--background-color-active)
+		var(--background-normal-alt)
 	);
+}
+</style>
+
+<style lang="scss" scoped>
+.v-list-item {
+	$this: &;
 
 	position: relative;
 	display: flex;
@@ -89,8 +132,21 @@ export default defineComponent({
 	overflow: hidden;
 	color: var(--v-list-item-color);
 	text-decoration: none;
-	background-color: var(--v-list-item-background-color);
 	border-radius: var(--v-list-item-border-radius);
+
+	&.dashed {
+		&::after {
+			// Borders normally render outside the element, this is a way of showing it as inner
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: calc(100% - 4px);
+			height: calc(100% - 4px);
+			border: 2px dashed var(--border-normal);
+			content: '';
+			pointer-events: none;
+		}
+	}
 
 	&.link {
 		cursor: pointer;
@@ -98,17 +154,26 @@ export default defineComponent({
 		transition-property: background-color, color;
 		user-select: none;
 
-		&:hover {
+		&:not(.disabled):hover {
 			color: var(--v-list-item-color-hover);
 			background-color: var(--v-list-item-background-color-hover);
 		}
 
-		&:active,
-		&.active {
+		&:not(.disabled):active {
 			color: var(--v-list-item-color-active);
 			background-color: var(--v-list-item-background-color-active);
 		}
 	}
+
+	&.active {
+		color: var(--v-list-item-color-active);
+		background-color: var(--v-list-item-background-color-active);
+	}
+
+	&.disabled {
+		--v-list-item-color: var(--foreground-subdued);
+	}
+
 	@at-root {
 		.v-list,
 		#{$this},
@@ -123,8 +188,14 @@ export default defineComponent({
 			&.three-line {
 				--v-list-item-min-height: var(--v-list-item-three-line-min-height);
 			}
-			&.dense {
+		}
+
+		.v-list.dense {
+			& #{$this} {
 				--v-list-item-min-height: var(--v-list-item-one-line-min-height-dense);
+
+				margin: var(--v-list-item-margin-dense);
+				padding: var(--v-list-item-padding-dense);
 				&.one-line {
 					--v-list-item-min-height: var(--v-list-item-one-line-min-height-dense);
 				}
@@ -136,12 +207,13 @@ export default defineComponent({
 				}
 			}
 		}
+
 		.v-list.nav {
 			& #{$this} {
 				--v-list-item-padding: 0 8px;
 				--v-list-item-border-radius: 4px;
 				&:not(:last-child):not(:only-child) {
-					--v-list-item-margin-bottom: 8px;
+					--v-list-item-margin-bottom: 4px;
 				}
 			}
 			&.dense #{$this},

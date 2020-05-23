@@ -11,21 +11,19 @@ export default defineComponent({
 	props: {
 		center: {
 			type: Boolean,
-			default: false
-		}
-	}
+			default: false,
+		},
+	},
 });
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/mixins/type-styles';
-
 .v-list-item-icon {
 	$this: &;
 
 	display: inline-flex;
 	align-self: center;
-	margin: 12px 0;
+	margin: 8px 0;
 
 	&:not(:only-child) {
 		&:first-child {
@@ -48,10 +46,11 @@ export default defineComponent({
 					}
 				}
 			}
+
 			&.dense {
 				#{$this} {
-					margin-top: 8px;
-					margin-bottom: 8px;
+					margin-top: 4px;
+					margin-bottom: 4px;
 					&:not(:only-child) {
 						&:first-child {
 							margin-right: 8px;
@@ -61,6 +60,10 @@ export default defineComponent({
 						}
 					}
 				}
+			}
+
+			&.dense:not(.nav) #{$this} {
+				color: var(--foreground-subdued);
 			}
 		}
 	}

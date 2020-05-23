@@ -10,12 +10,12 @@ export default {
 	component: PublicView,
 	decorators: [withKnobs],
 	parameters: {
-		notes: markdown
-	}
+		notes: markdown,
+	},
 };
 
 export const basic = () => `
 <public-view>
-	<h1 class="type-heading-large" style="margin-bottom: 2rem">Directus</h1>
+	<h1 class="type-title" style="margin-bottom: 2rem">Directus</h1>
 	Hello from the default slot!
 </public-view>`;
