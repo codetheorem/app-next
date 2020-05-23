@@ -12,9 +12,9 @@ the value.
 ```
 
 ## Props
-| Prop        | Description                | Default   |
-|-------------|----------------------------|-----------|
-| `icon-name` | Name of the icon to render | `subject` |
+| Prop        | Description                | Default     | Type     |
+|-------------|----------------------------|-------------|----------|
+| `icon-name` | Name of the icon to render | `'subject'` | `String` |
 
 ## Events
 n/a
