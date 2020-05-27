@@ -1,11 +1,19 @@
 <template>
-	<textrea ref="markdownEl" />
+	<textarea ref="markdownEl" :value="value" />
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, computed } from '@vue/composition-api';
+import SimpleMDE from 'simplemde';
+import 'simplemde/dist/simplemde.min.css';
 
-import SimpleMDE from 'SimpleMDE';
+import {
+	defineComponent,
+	PropType,
+	ref,
+	computed,
+	onMounted,
+	onUnmounted,
+} from '@vue/composition-api';
 
 export default defineComponent({
 	props: {
@@ -18,20 +26,22 @@ export default defineComponent({
 			default: () => [
 				'bold',
 				'italic',
-				'underline',
-				'removeformat',
-				'link',
-				'bullist',
-				'numlist',
-				'blockquote',
-				'h1',
-				'h2',
-				'h3',
-				'image',
-				'media',
-				'hr',
+				'strikethrough',
+				'heading',
+				'heading-1',
+				'heading-2',
+				'heading-3',
 				'code',
-				'fullscreen',
+				'quote',
+				'unordered-list',
+				'ordered-list',
+				'clean-block',
+				'link',
+				'image',
+				'table',
+				'horizontal-rule',
+				'preview',
+				'guide',
 			],
 		},
 		font: {
@@ -48,45 +58,39 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const markdownEl = ref<any>(null);
-
-		const _value = computed({
-			get() {
-				return props.value;
-			},
-			set(newValue: string) {
-				emit('input', newValue);
-			},
-		});
+		const markdownEl = ref<HTMLTextAreaElement>(null);
+		const simplemde = ref<SimpleMDE>(null);
 
 		const editorOptions = computed(() => {
-			const styleFormats = null;
-
-			let toolbarString = props.toolbar.join(' ');
-
-			if (styleFormats) {
-				toolbarString += ' styleselect';
-			}
-
 			return {
-				element: markdownEl.value,
 				initialValue: props.value,
+				toolbar: props.toolbar,
 				tabSize: 4,
 
 				...(props.simpleMDEOverrides || {}),
 			};
 		});
-		markdownEl;
-		return { markdownEl, _value };
+
+		onMounted(() => {
+			if (markdownEl.value) {
+				const el = markdownEl.value;
+				simplemde.value = new SimpleMDE({
+					...editorOptions.value,
+					element: el,
+				});
+				const instance = simplemde.value;
+				instance.codemirror.on('change', () => {
+					emit('input', instance.value());
+				});
+			}
+		});
+
+		onUnmounted(() => {
+			if (simplemde.value) simplemde.value.toTextArea();
+			simplemde.value = null;
+		});
+
+		return { markdownEl };
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.body {
-	padding: 20px;
-}
-
-@import '~tinymce/skins/ui/oxide/skin.css';
-@import './tinymce-overrides.css';
-</style>
