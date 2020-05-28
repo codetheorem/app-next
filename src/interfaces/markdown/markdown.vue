@@ -1,5 +1,7 @@
 <template>
-	<textarea ref="markdownEl" :value="value" />
+	<div class="interface-markdown" :class="font">
+		<textarea ref="markdownEl" :value="value" />
+	</div>
 </template>
 
 <script lang="ts">
@@ -94,3 +96,19 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.interface-markdown {
+	&.monospace {
+		font-family: var(--family-monospace);
+	}
+
+	&.serif {
+		font-family: var(--family-serif);
+	}
+
+	&.sans-serif {
+		font-family: var(--family-sans-serif);
+	}
+}
+</style>
