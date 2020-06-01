@@ -28,21 +28,35 @@
 		</template>
 
 		<div class="content" :class="width">
-			<template v-for="(group, index) in filteredIcons">
-				<div :key="'icon-group-' + group.name" class="icons" v-if="group.icons.length > 0">
-					<v-icon
-						v-for="icon in group.icons"
-						:key="icon"
-						:name="icon"
-						:class="{ active: icon === value }"
-						@click="setIcon(icon)"
-					/>
-				</div>
-				<v-divider
-					:key="'divider-' + group.name"
-					v-if="group.icons.length > 0 && index !== filteredIcons.length - 1"
-				/>
-			</template>
+			<DynamicScroller
+				:items="filteredIcons"
+				:min-item-size="24"
+				class="scroller"
+				key-field="name"
+			>
+				<template v-slot="{ item, index, active }">
+					<DynamicScrollerItem
+						:item="item"
+						:active="active"
+						:size-dependencies="[item.icons]"
+						:data-index="index"
+					>
+						<div :key="'icon-group-' + item.name" class="icons">
+							<v-icon
+								v-for="icon in item.icons"
+								:key="icon"
+								:name="icon"
+								:class="{ active: icon === value }"
+								@click="setIcon(icon)"
+							/>
+						</div>
+						<v-divider
+							:key="'divider-' + item.name"
+							v-if="item.icons.length > 0 && index !== filteredIcons.length - 1"
+						/>
+					</DynamicScrollerItem>
+				</template>
+			</DynamicScroller>
 		</div>
 	</v-menu>
 </template>
@@ -51,6 +65,7 @@
 import icons from './icons.json';
 import { defineComponent, ref, computed } from '@vue/composition-api';
 import formatTitle from '@directus/format-title';
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
 export default defineComponent({
 	props: {
@@ -71,19 +86,21 @@ export default defineComponent({
 		const searchQuery = ref('');
 
 		const filteredIcons = computed(() => {
-			return icons.map((group) => {
-				if (searchQuery.value.length === 0) return group;
+			return icons
+				.map((group) => {
+					if (searchQuery.value.length === 0) return group;
 
-				const icons = group.icons.filter((icon) =>
-					icon.includes(searchQuery.value.toLowerCase())
-				);
+					const icons = group.icons.filter((icon) =>
+						icon.includes(searchQuery.value.toLowerCase())
+					);
 
-				return {
-					...group,
-					icons: icons,
-					length: icons.length,
-				};
-			});
+					return {
+						...group,
+						icons: icons,
+						length: icons.length,
+					};
+				})
+				.filter((group) => group.icons.length !== 0);
 		});
 
 		return {

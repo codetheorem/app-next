@@ -31,6 +31,7 @@
     "cropperjs": "^1.5.7",
     "date-fns": "^2.14.0",
     "diff": "^4.0.2",
+    "intersection-observer": "^0.10.0",
     "lodash": "^4.17.15",
     "marked": "^1.1.0",
     "micromustache": "^7.1.0",
@@ -45,6 +46,7 @@
     "vue": "^2.6.11",
     "vue-i18n": "^8.18.1",
     "vue-router": "^3.3.2",
+    "vue-virtual-scroller": "^1.0.10",
     "vuedraggable": "^2.23.2"
   },
   "devDependencies": {
