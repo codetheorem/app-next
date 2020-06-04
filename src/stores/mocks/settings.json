@@ -1,0 +1,216 @@
+{
+	"settings": [
+		{ "id": 1, "key": "project_name", "value": "Thumper" },
+		{ "id": 2, "key": "project_url", "value": "https://thumper.dev" },
+		{
+			"id": 3,
+			"key": "project_logo",
+			"value": {
+				"id": 1,
+				"storage": "local",
+				"filename_disk": "19acff06-4969-5c75-9cd5-dc3f27506de2.svg",
+				"filename_download": "thumper-logo-square.svg",
+				"title": "Thumper Logo Square",
+				"type": "image/svg+xml",
+				"uploaded_by": 1,
+				"uploaded_on": "2019-12-03 00:10:04",
+				"charset": "us-ascii",
+				"filesize": 1565,
+				"width": null,
+				"height": null,
+				"duration": 0,
+				"embed": null,
+				"folder": null,
+				"description": "",
+				"location": "",
+				"tags": [],
+				"checksum": "bd8090dd11af407b55a30480ced3d071",
+				"private_hash": "4mdcnw05da80wo8w",
+				"metadata": null,
+				"data": {
+					"full_url": "http://localhost:8080/uploads/thumper/originals/19acff06-4969-5c75-9cd5-dc3f27506de2.svg",
+					"url": "/uploads/thumper/originals/19acff06-4969-5c75-9cd5-dc3f27506de2.svg",
+					"asset_url": "/thumper/assets/4mdcnw05da80wo8w",
+					"thumbnails": null,
+					"embed": null
+				}
+			}
+		},
+		{ "id": 4, "key": "project_color", "value": "#4CAF50" },
+		{
+			"id": 5,
+			"key": "project_foreground",
+			"value": {
+				"id": 2,
+				"storage": "local",
+				"filename_disk": "f28c49b0-2b4f-571e-bf62-593107cbf2ec.svg",
+				"filename_download": "thumper-logo.svg",
+				"title": "Thumper Logo",
+				"type": "image/svg+xml",
+				"uploaded_by": 1,
+				"uploaded_on": "2019-12-03 00:10:11",
+				"charset": "us-ascii",
+				"filesize": 6413,
+				"width": null,
+				"height": null,
+				"duration": 0,
+				"embed": null,
+				"folder": null,
+				"description": "",
+				"location": "",
+				"tags": [],
+				"checksum": "21e5bd2bda00792c5e66a662ade2c23d",
+				"private_hash": "49wvnyf678ow48sg",
+				"metadata": null,
+				"data": {
+					"full_url": "http://localhost:8080/uploads/thumper/originals/f28c49b0-2b4f-571e-bf62-593107cbf2ec.svg",
+					"url": "/uploads/thumper/originals/f28c49b0-2b4f-571e-bf62-593107cbf2ec.svg",
+					"asset_url": "/thumper/assets/49wvnyf678ow48sg",
+					"thumbnails": null,
+					"embed": null
+				}
+			}
+		},
+		{
+			"id": 6,
+			"key": "project_background",
+			"value": {
+				"id": 20,
+				"storage": "local",
+				"filename_disk": "03a06753-6794-4b9a-803b-3e1cd15e0742.jpg",
+				"filename_download": "foliage.jpg",
+				"title": "Foliage",
+				"type": "image/jpeg",
+				"uploaded_by": 1,
+				"uploaded_on": "2019-12-06 00:17:21",
+				"charset": "binary",
+				"filesize": 245619,
+				"width": 1280,
+				"height": 1919,
+				"duration": 0,
+				"embed": null,
+				"folder": null,
+				"description": "",
+				"location": "",
+				"tags": [],
+				"checksum": "608bc5e800c41f94dfac800f13ff6759",
+				"private_hash": "8xxsxlo1dwcgwosk",
+				"metadata": null,
+				"data": {
+					"full_url": "http://localhost:8080/uploads/thumper/originals/03a06753-6794-4b9a-803b-3e1cd15e0742.jpg",
+					"url": "/uploads/thumper/originals/03a06753-6794-4b9a-803b-3e1cd15e0742.jpg",
+					"asset_url": "/thumper/assets/8xxsxlo1dwcgwosk",
+					"thumbnails": [
+						{
+							"key": "directus-small-crop",
+							"url": "http://localhost:8080/thumper/assets/8xxsxlo1dwcgwosk?key=directus-small-crop",
+							"relative_url": "/thumper/assets/8xxsxlo1dwcgwosk?key=directus-small-crop",
+							"dimension": "64x64",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"key": "directus-small-contain",
+							"url": "http://localhost:8080/thumper/assets/8xxsxlo1dwcgwosk?key=directus-small-contain",
+							"relative_url": "/thumper/assets/8xxsxlo1dwcgwosk?key=directus-small-contain",
+							"dimension": "64x64",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"key": "directus-medium-crop",
+							"url": "http://localhost:8080/thumper/assets/8xxsxlo1dwcgwosk?key=directus-medium-crop",
+							"relative_url": "/thumper/assets/8xxsxlo1dwcgwosk?key=directus-medium-crop",
+							"dimension": "300x300",
+							"width": 300,
+							"height": 300
+						},
+						{
+							"key": "directus-medium-contain",
+							"url": "http://localhost:8080/thumper/assets/8xxsxlo1dwcgwosk?key=directus-medium-contain",
+							"relative_url": "/thumper/assets/8xxsxlo1dwcgwosk?key=directus-medium-contain",
+							"dimension": "300x300",
+							"width": 300,
+							"height": 300
+						},
+						{
+							"key": "directus-large-crop",
+							"url": "http://localhost:8080/thumper/assets/8xxsxlo1dwcgwosk?key=directus-large-crop",
+							"relative_url": "/thumper/assets/8xxsxlo1dwcgwosk?key=directus-large-crop",
+							"dimension": "800x600",
+							"width": 800,
+							"height": 600
+						},
+						{
+							"key": "directus-large-contain",
+							"url": "http://localhost:8080/thumper/assets/8xxsxlo1dwcgwosk?key=directus-large-contain",
+							"relative_url": "/thumper/assets/8xxsxlo1dwcgwosk?key=directus-large-contain",
+							"dimension": "800x600",
+							"width": 800,
+							"height": 600
+						},
+						{
+							"key": "ben",
+							"url": "http://localhost:8080/thumper/assets/8xxsxlo1dwcgwosk?key=ben",
+							"relative_url": "/thumper/assets/8xxsxlo1dwcgwosk?key=ben",
+							"dimension": "400x100",
+							"width": 400,
+							"height": 100
+						},
+						{
+							"key": "rijk",
+							"url": "http://localhost:8080/thumper/assets/8xxsxlo1dwcgwosk?key=rijk",
+							"relative_url": "/thumper/assets/8xxsxlo1dwcgwosk?key=rijk",
+							"dimension": "400x100",
+							"width": 400,
+							"height": 100
+						}
+					],
+					"embed": null
+				}
+			}
+		},
+		{ "id": 7, "key": "default_limit", "value": 200 },
+		{ "id": 8, "key": "sort_null_last", "value": true },
+		{ "id": 9, "key": "password_policy", "value": null },
+		{ "id": 10, "key": "auto_sign_out", "value": 10080 },
+		{ "id": 11, "key": "login_attempts_allowed", "value": 25 },
+		{ "id": 12, "key": "trusted_proxies", "value": "" },
+		{ "id": 13, "key": "file_naming", "value": "uuid" },
+		{ "id": 15, "key": "file_mimetype_whitelist", "value": "" },
+		{ "id": 16, "key": "thumbnail_dimensions", "value": "200x200" },
+		{
+			"id": 17,
+			"key": "thumbnail_quality_tags",
+			"value": "{\"poor\": 25, \"good\": 50, \"better\":  75, \"best\": 100}"
+		},
+		{
+			"id": 18,
+			"key": "thumbnail_actions",
+			"value": "{\"contain\":{\"options\":{\"resizeCanvas\":false,\"position\":\"center\",\"resizeRelative\":false,\"canvasBackground\":\"ccc\"}},\"crop\":{\"options\":{\"position\":\"center\"}}}"
+		},
+		{ "id": 19, "key": "thumbnail_not_found_location", "value": "" },
+		{ "id": 20, "key": "thumbnail_cache_ttl", "value": "86400" },
+		{ "id": 21, "key": "youtube_api_key", "value": "" },
+		{ "id": 22, "key": "telemetry", "value": true },
+		{ "id": 23, "key": "default_locale", "value": "en-US" },
+		{
+			"id": 24,
+			"key": "asset_whitelist_system",
+			"value": "[{\"key\":\"directus-small-crop\",\"width\":64,\"height\":64,\"fit\":\"crop\",\"quality\":80},{\"key\":\"directus-small-contain\",\"width\":64,\"height\":64,\"fit\":\"contain\",\"quality\":80},{\"key\":\"directus-medium-crop\",\"width\":300,\"height\":300,\"fit\":\"crop\",\"quality\":80},{\"key\":\"directus-medium-contain\",\"width\":300,\"height\":300,\"fit\":\"contain\",\"quality\":80},{\"key\":\"directus-large-crop\",\"width\":800,\"height\":600,\"fit\":\"crop\",\"quality\":80},{\"key\":\"directus-large-contain\",\"width\":800,\"height\":600,\"fit\":\"contain\",\"quality\":80}]"
+		},
+		{
+			"id": 25,
+			"key": "asset_whitelist",
+			"value": "[{\"key\":\"ben\",\"fit\":\"crop\",\"width\":\"400\",\"height\":\"100\"},{\"key\":\"rijk\",\"fit\":\"contain\",\"width\":\"400\",\"height\":\"100\"}]"
+		},
+		{ "id": 26, "key": "app_url", "value": "" },
+		{
+			"id": 27,
+			"key": "project_public_note",
+			"value": "**Welcome to the Directus Public Demo!**\n\nYou can sign in with `admin@example.com` and `password`. Occasionally users break things, but don’t worry… the whole server resets each hour."
+		},
+		{ "id": 28, "key": "asset_url_naming", "value": "private_hash" },
+		{ "id": 29, "key": "auth_token_ttl", "value": 20 }
+	]
+}

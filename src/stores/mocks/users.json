@@ -1,0 +1,109 @@
+{
+	"currentUser": {
+		"id": 1,
+		"status": "active",
+		"first_name": "Admin",
+		"last_name": "User",
+		"email": "admin@example.com",
+		"token": "admin",
+		"timezone": "America/New_York",
+		"locale": "en-US",
+		"locale_options": null,
+		"avatar": {
+			"data": {
+				"full_url": "http://localhost:8080/uploads/thumper/originals/a88c3b72-ac58-5436-a4ec-b2858531333a.jpg",
+				"url": "/uploads/thumper/originals/a88c3b72-ac58-5436-a4ec-b2858531333a.jpg",
+				"asset_url": "/thumper/assets/pnw7s9lqy68048g0",
+				"thumbnails": [
+					{
+						"key": "directus-small-crop",
+						"url": "http://localhost:8080/thumper/assets/pnw7s9lqy68048g0?key=directus-small-crop",
+						"relative_url": "/thumper/assets/pnw7s9lqy68048g0?key=directus-small-crop",
+						"dimension": "64x64",
+						"width": 64,
+						"height": 64
+					},
+					{
+						"key": "directus-small-contain",
+						"url": "http://localhost:8080/thumper/assets/pnw7s9lqy68048g0?key=directus-small-contain",
+						"relative_url": "/thumper/assets/pnw7s9lqy68048g0?key=directus-small-contain",
+						"dimension": "64x64",
+						"width": 64,
+						"height": 64
+					},
+					{
+						"key": "directus-medium-crop",
+						"url": "http://localhost:8080/thumper/assets/pnw7s9lqy68048g0?key=directus-medium-crop",
+						"relative_url": "/thumper/assets/pnw7s9lqy68048g0?key=directus-medium-crop",
+						"dimension": "300x300",
+						"width": 300,
+						"height": 300
+					},
+					{
+						"key": "directus-medium-contain",
+						"url": "http://localhost:8080/thumper/assets/pnw7s9lqy68048g0?key=directus-medium-contain",
+						"relative_url": "/thumper/assets/pnw7s9lqy68048g0?key=directus-medium-contain",
+						"dimension": "300x300",
+						"width": 300,
+						"height": 300
+					},
+					{
+						"key": "directus-large-crop",
+						"url": "http://localhost:8080/thumper/assets/pnw7s9lqy68048g0?key=directus-large-crop",
+						"relative_url": "/thumper/assets/pnw7s9lqy68048g0?key=directus-large-crop",
+						"dimension": "800x600",
+						"width": 800,
+						"height": 600
+					},
+					{
+						"key": "directus-large-contain",
+						"url": "http://localhost:8080/thumper/assets/pnw7s9lqy68048g0?key=directus-large-contain",
+						"relative_url": "/thumper/assets/pnw7s9lqy68048g0?key=directus-large-contain",
+						"dimension": "800x600",
+						"width": 800,
+						"height": 600
+					},
+					{
+						"key": "ben",
+						"url": "http://localhost:8080/thumper/assets/pnw7s9lqy68048g0?key=ben",
+						"relative_url": "/thumper/assets/pnw7s9lqy68048g0?key=ben",
+						"dimension": "400x100",
+						"width": 400,
+						"height": 100
+					},
+					{
+						"key": "rijk",
+						"url": "http://localhost:8080/thumper/assets/pnw7s9lqy68048g0?key=rijk",
+						"relative_url": "/thumper/assets/pnw7s9lqy68048g0?key=rijk",
+						"dimension": "400x100",
+						"width": 400,
+						"height": 100
+					}
+				],
+				"embed": null
+			}
+		},
+		"company": "",
+		"title": "",
+		"email_notifications": true,
+		"last_access_on": "2020-06-03 23:50:24",
+		"last_page": "/thumper/collections/",
+		"external_id": null,
+		"2fa_secret": null,
+		"theme": "auto",
+		"role": {
+			"id": 1,
+			"name": "Administrator",
+			"description": "Admins have access to all managed data within the system by default",
+			"ip_whitelist": [],
+			"external_id": null,
+			"enforce_2fa": null,
+			"module_listing": [],
+			"collection_listing": null,
+			"nav_override": null
+		},
+		"password_reset_token": null
+	},
+	"loading": false,
+	"error": null
+}

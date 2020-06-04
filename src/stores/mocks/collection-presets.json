@@ -1,0 +1,302 @@
+{
+	"collectionPresets": [
+		{
+			"id": 4,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "staff",
+			"search_query": "Rinaldo",
+			"filters": [{ "field": "first_name", "operator": "contains", "value": "" }],
+			"view_type": "tabular",
+			"view_query": { "tabular": { "fields": "status,first_name,last_name,email", "sort": "id" } },
+			"view_options": {
+				"tabular": {
+					"widths": { "status": 31, "first_name": 137, "last_name": 143, "email": 243, "user": 200 }
+				}
+			},
+			"translation": null
+		},
+		{
+			"id": 5,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "staff",
+			"search_query": null,
+			"filters": null,
+			"view_type": "tabular",
+			"view_query": null,
+			"view_options": { "tabular": { "widths": { "status": 33, "first_name": 136, "last_name": 200 } } },
+			"translation": null
+		},
+		{
+			"id": 6,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "staff",
+			"search_query": null,
+			"filters": null,
+			"view_type": "tabular",
+			"view_query": { "tabular": { "fields": "status,first_name,last_name,email", "sort": "first_name" } },
+			"view_options": {
+				"tabular": { "widths": { "status": 31, "first_name": 125, "last_name": 143, "email": 243 } }
+			},
+			"translation": null
+		},
+		{
+			"id": 7,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "directus_activity",
+			"search_query": null,
+			"filters": null,
+			"view_type": "timeline",
+			"view_query": { "timeline": { "sort": "-action_on" } },
+			"view_options": {
+				"timeline": {
+					"date": "action_on",
+					"title": "{{ action }} by {{ action_by.first_name }} {{ action_by.last_name }} (#{{ item }})",
+					"content": "collection",
+					"color": "action"
+				}
+			},
+			"translation": null
+		},
+		{
+			"id": 10,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "directus_webhooks",
+			"search_query": null,
+			"filters": null,
+			"view_type": "tabular",
+			"view_query": { "tabular": { "fields": "status,http_action,url,collection,directus_action" } },
+			"view_options": {
+				"tabular": {
+					"widths": { "status": 32, "http_action": 72, "url": 200, "collection": 200, "directus_action": 200 }
+				}
+			},
+			"translation": null
+		},
+		{
+			"id": 11,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "news",
+			"search_query": null,
+			"filters": null,
+			"view_type": "tabular",
+			"view_query": { "tabular": { "fields": "status,title,author,tags" } },
+			"view_options": { "tabular": { "widths": { "status": 29, "title": 204, "author": 200 } } },
+			"translation": null
+		},
+		{
+			"id": 12,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "customers",
+			"search_query": null,
+			"filters": [
+				{ "field": "rating", "operator": "eq", "value": "5" },
+				{ "field": "status", "operator": "eq", "value": "published" }
+			],
+			"view_type": "tabular",
+			"view_query": { "tabular": { "fields": "status,first_name,last_name,rating,created_by,description" } },
+			"view_options": {
+				"tabular": {
+					"widths": {
+						"status": 30,
+						"first_name": 128,
+						"last_name": 153,
+						"rating": 144,
+						"created_by": 170,
+						"description": 338
+					}
+				}
+			},
+			"translation": null
+		},
+		{
+			"id": 13,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "mailing_list",
+			"search_query": null,
+			"filters": null,
+			"view_type": "tabular",
+			"view_query": { "tabular": { "sort": "first_name" } },
+			"view_options": {
+				"tabular": { "widths": { "status": 29, "email": 271, "first_name": 200, "last_name": 200 } }
+			},
+			"translation": null
+		},
+		{
+			"id": 18,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "locations",
+			"search_query": null,
+			"filters": null,
+			"view_type": "cards",
+			"view_query": { "tabular": { "fields": "status,name,image,address" }, "cards": { "sort": "name" } },
+			"view_options": {
+				"tabular": {
+					"widths": { "status": 27, "name": 158, "image": 104, "address": 229 },
+					"spacing": "comfortable"
+				},
+				"cards": { "src": "interior_image", "title": "name", "subtitle": "phone" }
+			},
+			"translation": null
+		},
+		{
+			"id": 19,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "services",
+			"search_query": null,
+			"filters": null,
+			"view_type": "tabular",
+			"view_query": null,
+			"view_options": { "tabular": { "widths": { "status": 27, "name": 159, "description": 200 } } },
+			"translation": null
+		},
+		{
+			"id": 21,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "tickets",
+			"search_query": null,
+			"filters": null,
+			"view_type": "tabular",
+			"view_query": { "tabular": { "fields": "status,customer,subject,priority" } },
+			"view_options": {
+				"tabular": {
+					"widths": { "status": 117, "customer": 200, "subject": 432, "priority": 200 },
+					"spacing": "comfortable"
+				}
+			},
+			"translation": null
+		},
+		{
+			"id": 22,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "products",
+			"search_query": null,
+			"filters": [{ "field": "this_is_a_longer_name", "operator": "lte", "value": "" }],
+			"view_type": "tabular",
+			"view_query": null,
+			"view_options": null,
+			"translation": null
+		},
+		{
+			"id": 23,
+			"title": null,
+			"user": 1,
+			"role": null,
+			"collection": "directus_files",
+			"search_query": null,
+			"filters": null,
+			"view_type": "cards",
+			"view_query": { "cards": { "sort": "filesize" } },
+			"view_options": {
+				"cards": { "title": "title", "subtitle": "type", "content": "description", "src": "data" }
+			},
+			"translation": null
+		},
+		{
+			"id": 1,
+			"title": null,
+			"user": null,
+			"role": null,
+			"collection": "directus_activity",
+			"search_query": null,
+			"filters": null,
+			"view_type": "timeline",
+			"view_query": { "timeline": { "sort": "-action_on" } },
+			"view_options": {
+				"timeline": {
+					"date": "action_on",
+					"title": "{{ action_by.first_name }} {{ action_by.last_name }} ({{ action }})",
+					"content": "action_by",
+					"color": "action"
+				}
+			},
+			"translation": null
+		},
+		{
+			"id": 2,
+			"title": null,
+			"user": null,
+			"role": null,
+			"collection": "directus_files",
+			"search_query": null,
+			"filters": null,
+			"view_type": "cards",
+			"view_query": null,
+			"view_options": {
+				"cards": { "title": "title", "subtitle": "type", "content": "description", "src": "data" }
+			},
+			"translation": null
+		},
+		{
+			"id": 3,
+			"title": null,
+			"user": null,
+			"role": null,
+			"collection": "directus_users",
+			"search_query": null,
+			"filters": null,
+			"view_type": "cards",
+			"view_query": null,
+			"view_options": {
+				"cards": {
+					"title": "first_name",
+					"subtitle": "last_name",
+					"content": "title",
+					"src": "avatar",
+					"icon": "person"
+				}
+			},
+			"translation": null
+		},
+		{
+			"id": 20,
+			"title": "VIP Customers",
+			"user": null,
+			"role": null,
+			"collection": "customers",
+			"search_query": null,
+			"filters": [
+				{ "field": "rating", "operator": "eq", "value": "5" },
+				{ "field": "status", "operator": "eq", "value": "published" }
+			],
+			"view_type": "tabular",
+			"view_query": { "tabular": { "fields": "status,first_name,last_name,rating,created_by,description" } },
+			"view_options": {
+				"tabular": {
+					"widths": {
+						"status": 30,
+						"first_name": 128,
+						"last_name": 153,
+						"rating": 144,
+						"created_by": 170,
+						"description": 338
+					}
+				}
+			},
+			"translation": null
+		}
+	]
+}

@@ -1,0 +1,40 @@
+{
+	"needsInstall": false,
+	"error": null,
+	"projects": [
+		{
+			"key": "thumper",
+			"api": {
+				"version": "8.7.2",
+				"requires2FA": false,
+				"database": "mysql",
+				"project_name": "Thumper",
+				"project_logo": {
+					"full_url": "http://localhost:8080/uploads/thumper/originals/19acff06-4969-5c75-9cd5-dc3f27506de2.svg",
+					"url": "/uploads/thumper/originals/19acff06-4969-5c75-9cd5-dc3f27506de2.svg",
+					"asset_url": "/thumper/assets/4mdcnw05da80wo8w"
+				},
+				"project_color": "#4CAF50",
+				"project_foreground": {
+					"full_url": "http://localhost:8080/uploads/thumper/originals/f28c49b0-2b4f-571e-bf62-593107cbf2ec.svg",
+					"url": "/uploads/thumper/originals/f28c49b0-2b4f-571e-bf62-593107cbf2ec.svg",
+					"asset_url": "/thumper/assets/49wvnyf678ow48sg"
+				},
+				"project_background": {
+					"full_url": "http://localhost:8080/uploads/thumper/originals/03a06753-6794-4b9a-803b-3e1cd15e0742.jpg",
+					"url": "/uploads/thumper/originals/03a06753-6794-4b9a-803b-3e1cd15e0742.jpg",
+					"asset_url": "/thumper/assets/8xxsxlo1dwcgwosk"
+				},
+				"telemetry": true,
+				"default_locale": "en-US",
+				"project_public_note": "**Welcome to the Directus Public Demo!**\n\nYou can sign in with `admin@example.com` and `password`. Occasionally users break things, but don’t worry… the whole server resets each hour."
+			},
+			"server": {
+				"max_upload_size": 20971520,
+				"general": { "php_version": "7.2.24-0ubuntu0.18.04.4", "php_api": "apache2handler" }
+			},
+			"authenticated": true
+		}
+	],
+	"currentProjectKey": "thumper"
+}
