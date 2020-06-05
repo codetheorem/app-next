@@ -27,37 +27,22 @@
 			</v-input>
 		</template>
 
-		<div class="content" :class="width">
-			<DynamicScroller
-				:items="filteredIcons"
-				:min-item-size="24"
-				class="scroller"
-				key-field="name"
-			>
-				<template v-slot="{ item, index, active }">
-					<DynamicScrollerItem
-						:item="item"
-						:active="active"
-						:size-dependencies="[item.icons]"
-						:data-index="index"
-					>
-						<div :key="'icon-group-' + item.name" class="icons">
-							<v-icon
-								v-for="icon in item.icons"
-								:key="icon"
-								:name="icon"
-								:class="{ active: icon === value }"
-								@click="setIcon(icon)"
-							/>
-						</div>
-						<v-divider
-							:key="'divider-' + item.name"
-							v-if="item.icons.length > 0 && index !== filteredIcons.length - 1"
-						/>
-					</DynamicScrollerItem>
-				</template>
-			</DynamicScroller>
-		</div>
+		<VirtualCollection
+			:collection="filteredIcons"
+			:cellSizeAndPositionGetter="cellSizeAndPositionGetter"
+			:height="500"
+			:width="280"
+			class="icons"
+		>
+			<v-icon
+				slot="cell"
+				slot-scope="{ data }"
+				:key="data.icon"
+				:name="data.icon"
+				:class="{ active: data.icon === value }"
+				@click="setIcon(data.icon)"
+			/>
+		</VirtualCollection>
 	</v-menu>
 </template>
 
@@ -65,7 +50,6 @@
 import icons from './icons.json';
 import { defineComponent, ref, computed } from '@vue/composition-api';
 import formatTitle from '@directus/format-title';
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
 export default defineComponent({
 	props: {
@@ -84,23 +68,23 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const searchQuery = ref('');
+		const flattenedIcons = icons.reduce(
+			(acc, group) =>
+				acc.concat(
+					group.icons.map((icon) => {
+						return { data: { icon: icon } };
+					})
+				),
+			[] as { data: { icon: string } }[]
+		);
 
 		const filteredIcons = computed(() => {
-			return icons
-				.map((group) => {
-					if (searchQuery.value.length === 0) return group;
-
-					const icons = group.icons.filter((icon) =>
-						icon.includes(searchQuery.value.toLowerCase())
-					);
-
-					return {
-						...group,
-						icons: icons,
-						length: icons.length,
-					};
-				})
-				.filter((group) => group.icons.length !== 0);
+			if (searchQuery.value.length === 0) {
+				return flattenedIcons;
+			}
+			return flattenedIcons.filter((icon) =>
+				icon.data.icon.includes(searchQuery.value.toLowerCase())
+			);
 		});
 
 		return {
@@ -109,7 +93,17 @@ export default defineComponent({
 			searchQuery,
 			filteredIcons,
 			formatTitle,
+			cellSizeAndPositionGetter,
 		};
+
+		function cellSizeAndPositionGetter(item: string, itemIndex: number) {
+			return {
+				width: 24,
+				height: 24,
+				x: (itemIndex % 10) * 30,
+				y: 30 * Math.floor(itemIndex / 10),
+			};
+		}
 
 		function setIcon(icon: string) {
 			emit('input', icon);
@@ -138,10 +132,6 @@ export default defineComponent({
 }
 
 .icons {
-	display: grid;
-	grid-gap: 8px;
-	grid-template-columns: repeat(auto-fit, 24px);
-	justify-content: center;
 	padding: 20px 0;
 	color: var(--foreground-subdued);
 }

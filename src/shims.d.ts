@@ -18,7 +18,7 @@ declare module 'vuedraggable' {
 	export default Vue;
 }
 
-declare module 'vue-virtual-scroller' {
+declare module 'vue-virtual-collection' {
 	import Vue, { ComponentOptions, PluginObject, Component } from 'vue';
 	interface PluginOptions {
 		installComponents?: boolean;
@@ -27,13 +27,7 @@ declare module 'vue-virtual-scroller' {
 
 	const plugin: PluginObject<PluginOptions> & { version: string };
 
-	export const RecycleScroller: Component<any, any, any, any>;
-	export const DynamicScroller: Component<any, any, any, any>;
-	export const DynamicScrollerItem: Component<any, any, any, any>;
-
-	export function IdState(options?: {
-		idProp?: (vm: any) => any;
-	}): ComponentOptions<Vue> | typeof Vue;
+	export const VirtualCollection: Component<any, any, any, any>;
 
 	export default plugin;
 }
