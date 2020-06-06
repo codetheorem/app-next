@@ -28,6 +28,7 @@
 		</template>
 
 		<VirtualCollection
+			class="content"
 			ref="virtualEl"
 			:collection="filteredIcons"
 			:cellSizeAndPositionGetter="cellSizeAndPositionGetter"
@@ -94,11 +95,11 @@ export default defineComponent({
 		const winSize = useWindowSize();
 
 		const vElWidth = computed<number>(() => {
-			return elSize.width.value;
+			return elSize.width.value || 294;
 		});
 
 		const vElHeight = computed<number>(() => {
-			return elSize.height.value || winSize.width.value * 0.3;
+			return (elSize.height.value || winSize.width.value * 0.3 || 500) - 16;
 		});
 
 		return {
@@ -117,8 +118,8 @@ export default defineComponent({
 			return {
 				width: 24,
 				height: 24,
-				x: (itemIndex % 10) * 30,
-				y: 30 * Math.floor(itemIndex / 10),
+				x: (itemIndex % 8) * (vElWidth.value / 9),
+				y: 32 * Math.floor(itemIndex / 8),
 			};
 		}
 
@@ -131,10 +132,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .content {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
 	height: 100%;
 	padding: 8px;
 
