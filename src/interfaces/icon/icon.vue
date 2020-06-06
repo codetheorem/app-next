@@ -28,11 +28,11 @@
 		</template>
 
 		<VirtualCollection
+			ref="virtualEl"
 			:collection="filteredIcons"
 			:cellSizeAndPositionGetter="cellSizeAndPositionGetter"
-			:height="500"
-			:width="280"
-			class="icons"
+			:height="vElHeight"
+			:width="vElWidth"
 		>
 			<v-icon
 				slot="cell"
@@ -50,6 +50,8 @@
 import icons from './icons.json';
 import { defineComponent, ref, computed } from '@vue/composition-api';
 import formatTitle from '@directus/format-title';
+import useElementSize from '@/composables/use-element-size';
+import useWindowSize from '@/composables/use-window-size';
 
 export default defineComponent({
 	props: {
@@ -68,6 +70,7 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const searchQuery = ref('');
+		const virtualEl = ref<HTMLElement>(null);
 		const flattenedIcons = icons.reduce(
 			(acc, group) =>
 				acc.concat(
@@ -87,12 +90,26 @@ export default defineComponent({
 			);
 		});
 
+		const elSize = useElementSize(virtualEl);
+		const winSize = useWindowSize();
+
+		const vElWidth = computed<number>(() => {
+			return elSize.width.value;
+		});
+
+		const vElHeight = computed<number>(() => {
+			return elSize.height.value || winSize.width.value * 0.3;
+		});
+
 		return {
 			icons,
 			setIcon,
 			searchQuery,
 			filteredIcons,
 			formatTitle,
+			virtualEl,
+			vElWidth,
+			vElHeight,
 			cellSizeAndPositionGetter,
 		};
 
@@ -114,6 +131,11 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	padding: 8px;
 
 	.v-icon:hover {
