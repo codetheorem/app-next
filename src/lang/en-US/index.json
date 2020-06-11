@@ -602,7 +602,7 @@
 
 	"presets_notice": "Note: All layout options are configured in the orange info sidebar components to the right.",
 	"bookmark_name": "Bookmark Name",
-	"preset_name_placeholder": "Name of bookmark...",
+	"preset_name_placeholder": "Only used for creating bookmarks...",
 	"editing_preset": "Editing Preset",
 	"layout_preview": "Layout Preview",
 	"layout_setup": "Layout Setup",
