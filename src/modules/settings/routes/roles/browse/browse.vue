@@ -92,7 +92,7 @@ export default defineComponent({
 				text: '',
 				value: 'icon',
 				sortable: false,
-				width: 50,
+				width: 42,
 				align: 'left',
 			},
 			{
