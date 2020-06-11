@@ -3,32 +3,33 @@ import { defineInterface } from '@/interfaces/define';
 
 export default defineInterface(({ i18n }) => ({
 	id: 'textarea',
-	name: i18n.t('interfaces.textarea.textarea'),
+	name: i18n.t('textarea'),
 	icon: 'text_fields',
 	component: InterfaceTextarea,
 	options: [
 		{
 			field: 'placeholder',
-			name: 'Placeholder',
+			name: i18n.t('placeholder'),
 			width: 'half',
 			interface: 'text-input',
 		},
 		{
 			field: 'trim',
-			name: 'Trim',
+			name: i18n.t('trim'),
 			width: 'half',
 			interface: 'switch',
 		},
 		{
 			field: 'font',
-			name: 'Font',
+			name: i18n.t('font'),
 			width: 'half',
 			interface: 'dropdown',
+			default: 'sans-serif',
 			options: {
-				items: [
-					{ itemText: 'Sans', itemValue: 'sans-serif' },
-					{ itemText: 'Mono', itemValue: 'monospace' },
-					{ itemText: 'Serif', itemValue: 'serif' },
+				choices: [
+					{ text: i18n.t('sans_serif'), value: 'sans-serif' },
+					{ text: i18n.t('monospace'), value: 'monospace' },
+					{ text: i18n.t('serif'), value: 'serif' },
 				],
 			},
 		},
