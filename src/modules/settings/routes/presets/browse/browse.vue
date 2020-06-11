@@ -76,7 +76,7 @@
 
 				<template #item.name="{ item }">
 					<span :class="{ default: item.name === null }">
-						{{ item.name === null ? $t('default') : item.name }}
+						{{ item.name === null ? $t('default_preset') : item.name }}
 					</span>
 				</template>
 			</v-table>

@@ -768,6 +768,7 @@
   "db_update_failed": "The database couldn't be updated.",
   "db_updated": "Database successfully updated",
   "default": "Default",
+  "default_preset": "Default Preset",
   "delete": "Delete",
   "delete_forever": "Delete Forever",
   "delete_are_you_sure": "This action is permanent and can not be undone. Are you sure you would like to proceed?",
