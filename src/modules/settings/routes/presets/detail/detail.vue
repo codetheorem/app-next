@@ -527,12 +527,17 @@ export default defineComponent({
 
 .layout {
 	--content-padding: 0px;
+	--content-padding-bottom: 32px;
 
+	width: 100%;
 	margin-top: 48px;
+	overflow: auto;
 }
 
 .layout-drawer {
 	--drawer-detail-icon-color: var(--warning);
+	--drawer-detail-color: var(--warning);
+	--drawer-detail-color-active: var(--warning);
 }
 
 .subdued {
