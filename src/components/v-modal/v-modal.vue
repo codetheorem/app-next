@@ -238,6 +238,11 @@ body {
 		}
 	}
 
+	@media (min-height: 1080px) {
+		// 760px (above) but 160px top/bottom
+		max-height: calc(100% - 320px);
+	}
+
 	@include breakpoint(medium) {
 		width: calc(100% - 64px);
 		height: calc(100% - 64px);
