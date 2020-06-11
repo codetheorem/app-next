@@ -1,5 +1,11 @@
 <template>
-	<v-select :value="value" :disabled="disabled" :items="items" @input="$emit('input', $event)" />
+	<v-select
+		:value="value"
+		:disabled="disabled"
+		:placeholder="$t('choose_a_collection')"
+		:items="items"
+		@input="$emit('input', $event)"
+	/>
 </template>
 
 <script lang="ts">
