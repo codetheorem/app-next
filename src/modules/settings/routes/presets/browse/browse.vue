@@ -227,13 +227,6 @@ export default defineComponent({
 		function useTable() {
 			const headers: Header[] = [
 				{
-					text: i18n.t('collection'),
-					value: 'collection',
-					align: 'left',
-					sortable: true,
-					width: 200,
-				},
-				{
 					text: i18n.t('scope'),
 					value: 'scope',
 					align: 'left',
@@ -241,15 +234,22 @@ export default defineComponent({
 					width: 200,
 				},
 				{
-					text: i18n.t('layout'),
-					value: 'layout',
+					text: i18n.t('name'),
+					value: 'name',
 					align: 'left',
 					sortable: true,
 					width: 200,
 				},
 				{
-					text: i18n.t('name'),
-					value: 'name',
+					text: i18n.t('collection'),
+					value: 'collection',
+					align: 'left',
+					sortable: true,
+					width: 200,
+				},
+				{
+					text: i18n.t('layout'),
+					value: 'layout',
 					align: 'left',
 					sortable: true,
 					width: 200,
