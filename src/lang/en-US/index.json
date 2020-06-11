@@ -600,7 +600,7 @@
 	"editing_file": "Editing File: {title}",
 	"changes_are_immediate_and_permanent": "Changes are immediate and permanent",
 
-	"presets_notice": "Note: All layout options are configured in the orange info sidebar components to the right.",
+	"presets_notice": "Note: Layout options are configured in the orange info sidebar components to the right.",
 	"bookmark_name": "Bookmark Name",
 	"preset_name_placeholder": "Only used for creating bookmarks...",
 	"editing_preset": "Editing Preset",
