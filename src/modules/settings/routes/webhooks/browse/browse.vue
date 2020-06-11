@@ -102,13 +102,16 @@ export default defineComponent({
 			viewOptions.value = {
 				widths: {
 					status: 50,
+					name: 120,
+					directus_action: 180,
+					collection: 220,
 				},
 			};
 		}
 
 		if (viewQuery.value === null && viewType.value === 'tabular') {
 			viewQuery.value = {
-				fields: ['status', 'http_action', 'url'],
+				fields: ['status', 'name', 'directus_action', 'collection'],
 			};
 		}
 
