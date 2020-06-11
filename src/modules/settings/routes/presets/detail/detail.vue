@@ -425,9 +425,29 @@ export default defineComponent({
 
 			const fields = computed(() => [
 				{
+					field: 'scope',
+					name: i18n.t('scope'),
+					interface: 'dropdown',
+					required: true,
+					options: {
+						choices: scopeChoices.value,
+					},
+					width: 'half',
+				},
+				{
+					field: 'name',
+					name: i18n.t('bookmark_name'),
+					interface: 'text-input',
+					width: 'half',
+					options: {
+						placeholder: i18n.t('preset_name_placeholder'),
+					},
+				},
+				{
 					field: 'collection',
 					name: i18n.t('collection'),
 					interface: 'dropdown',
+					required: true,
 					options: {
 						choices: collectionsStore.state.collections
 							.map((collection) => ({
@@ -444,18 +464,10 @@ export default defineComponent({
 					width: 'half',
 				},
 				{
-					field: 'scope',
-					name: i18n.t('scope'),
-					interface: 'dropdown',
-					options: {
-						choices: scopeChoices.value,
-					},
-					width: 'half',
-				},
-				{
 					field: 'layout',
 					name: i18n.t('layout'),
 					interface: 'dropdown',
+					required: true,
 					options: {
 						choices: layouts.map((layout) => ({
 							text: layout.name,
@@ -465,12 +477,12 @@ export default defineComponent({
 					width: 'half',
 				},
 				{
-					field: 'name',
-					name: i18n.t('name'),
-					interface: 'text-input',
-					width: 'half',
+					field: 'notice',
+					name: i18n.t('page_info'),
+					interface: 'notice',
+					width: 'full',
 					options: {
-						placeholder: i18n.t('preset_name_placeholder'),
+						text: i18n.t('presets_notice'),
 					},
 				},
 				{
