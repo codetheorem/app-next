@@ -524,7 +524,7 @@ export default defineComponent({
 }
 
 .layout {
-	--content-padding: 0;
+	--content-padding: 0px;
 
 	margin-top: 48px;
 }
