@@ -166,6 +166,14 @@ export default defineComponent({
 	overflow: hidden;
 	font-family: var(--family-monospace);
 	white-space: nowrap;
+	transform: translateY(1px);
+
+	.v-icon {
+		transition: color var(--fast) var(--transition);
+		&:hover {
+			color: var(--primary);
+		}
+	}
 
 	::v-deep {
 		> * {
