@@ -17,3 +17,23 @@ declare module 'vuedraggable' {
 	import Vue from 'vue';
 	export default Vue;
 }
+
+declare module 'jsonlint-mod' {
+	const x: any;
+	export default x;
+}
+
+declare module 'jshint' {
+	const x: any;
+	export default x;
+}
+
+declare module 'csslint' {
+	const x: any;
+	export default x;
+}
+
+declare module 'js-yaml' {
+	const x: any;
+	export default x;
+}

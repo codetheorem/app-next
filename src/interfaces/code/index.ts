@@ -8,11 +8,14 @@ const choices = CodeMirror.modeInfo.map((e) => ({
 	value: e.mode,
 }));
 
+choices.push({ text: 'JSON', value: 'JSON' });
+
 export default defineInterface(({ i18n }) => ({
 	id: 'code',
 	name: i18n.t('code'),
 	icon: 'code',
 	component: InterfaceCode,
+	types: ['string', 'json', 'array'],
 	options: [
 		{
 			field: 'template',
